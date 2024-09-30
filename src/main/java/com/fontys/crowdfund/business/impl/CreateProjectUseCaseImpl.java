@@ -2,7 +2,7 @@ package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserIdValidator;
 import com.fontys.crowdfund.business.CreateProjectUseCase;
-import com.fontys.crowdfund.business.exception.PcnAlreadyExistsException;
+import com.fontys.crowdfund.business.exception.ProjectException;
 import com.fontys.crowdfund.domain.CreateProjectRequest;
 import com.fontys.crowdfund.domain.CreateProjectResponse;
 import com.fontys.crowdfund.persistence.UserRepository;
@@ -22,7 +22,7 @@ public class CreateProjectUseCaseImpl implements CreateProjectUseCase {
     @Override
     public CreateProjectResponse createProject(CreateProjectRequest request) {
         if (projectRepository.existsById(request.getId())) {
-            throw new PcnAlreadyExistsException();
+            throw new ProjectException("PROJECT ALREADY EXISTS");
         }
 
         //userIdValidator.validateId(request.getUserId());

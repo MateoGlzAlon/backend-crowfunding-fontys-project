@@ -16,7 +16,6 @@ public class GetProjectUseCaseImpl implements GetProjectUseCase {
 
     @Override
     public Optional<Project> getProject(long projectId) {
-        System.out.println(ProjectConverter.class);
         return projectRepository.findById(projectId).map(ProjectConverter::convert);
     }
 }
