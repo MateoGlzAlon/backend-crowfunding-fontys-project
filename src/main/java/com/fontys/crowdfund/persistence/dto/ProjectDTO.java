@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.domain;
+package com.fontys.crowdfund.persistence.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,17 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
-    private long id;
+public class ProjectDTO {
+    private Long id;
     private String name;
     private String description;
     private String location;
     private String type;
     private Date created;
-    private User owner;
-    private List<Payment> fundings;
+
+    // Owner is represented by the userId in DTO
+    private long userId;
+
+    // Funding amounts can be included or summarized here
+    private List<PaymentDTO> fundings;
 }

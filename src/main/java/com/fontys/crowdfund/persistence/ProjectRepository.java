@@ -1,20 +1,27 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import com.fontys.crowdfund.persistence.dto.ProjectDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProjectRepository {
-    boolean existsById(long id);
 
-    List<ProjectEntity> findAllByUserEmail(String userCode);
+    // Check if a project exists by its ID
+    boolean existsById(Long id);
 
-    ProjectEntity save(ProjectEntity project);
+    // Find all projects by user email
+    List<ProjectDTO> findAllByUserEmail(String userEmail);
 
-    void deleteById(long projectId);
+    // Save a project (create or update)
+    ProjectDTO save(ProjectDTO project);
 
-    List<ProjectEntity> findAll();
+    // Delete a project by its ID
+    void deleteById(Long projectId);
 
-    Optional<ProjectEntity> findById(long projectId);
+    // Find all projects
+    List<ProjectDTO> findAll();
+
+    // Find a project by its ID
+    Optional<ProjectDTO> findById(Long projectId);
 }

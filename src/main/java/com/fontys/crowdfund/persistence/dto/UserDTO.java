@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.domain;
+package com.fontys.crowdfund.persistence.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAllProjectsRequest {
-    private String userCode;
+public class UserDTO {
+    private long id;
+    private String name;
+    private String email;
 }

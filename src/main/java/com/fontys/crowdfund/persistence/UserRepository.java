@@ -1,20 +1,27 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.dto.UserDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
+
+    // Check if a user exists by email
     boolean existsByEmail(String email);
 
+    // Check if a user exists by ID
     boolean existsById(long userId);
 
-    Optional<UserEntity> findById(long userId);
+    // Find a user by ID
+    Optional<UserDTO> findById(long userId);
 
-    UserEntity save(UserEntity user);
+    // Save a user (create or update)
+    UserDTO save(UserDTO user);
 
-    List<UserEntity> findAll();
+    // Find all users
+    List<UserDTO> findAll();
 
+    // Get the count of users
     int count();
 }

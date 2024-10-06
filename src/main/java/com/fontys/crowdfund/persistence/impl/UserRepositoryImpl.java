@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.persistence.impl;
 
 import com.fontys.crowdfund.persistence.UserRepository;
-import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.dto.UserDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class FakeUserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl implements UserRepository {
     private static long NEXT_ID = 1;
 
-    private final List<UserEntity> savedUsers;
+    private final List<UserDTO> savedUsers;
 
-    public FakeUserRepositoryImpl() {
+    public UserRepositoryImpl() {
         this.savedUsers = new ArrayList<>();
     }
 
@@ -34,15 +34,15 @@ public class FakeUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findById(long userId) {
+    public Optional<UserDTO> findById(long userId) {
         return this.savedUsers
                 .stream()
                 .filter(userEntity -> userEntity.getId() == userId)
-                .findFirst(); // This will return Optional<UserEntity>
+                .findFirst(); // This will return Optional<UserDTO>
     }
 
     @Override
-    public UserEntity save(UserEntity user) {
+    public UserDTO save(UserDTO user) {
         user.setId(NEXT_ID);
         NEXT_ID++;
         this.savedUsers.add(user);
@@ -50,7 +50,7 @@ public class FakeUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserEntity> findAll() {
+    public List<UserDTO> findAll() {
         return Collections.unmodifiableList(savedUsers);
     }
 
