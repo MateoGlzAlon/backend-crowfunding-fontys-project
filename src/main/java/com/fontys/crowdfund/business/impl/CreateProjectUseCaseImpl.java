@@ -35,7 +35,7 @@ public class CreateProjectUseCaseImpl implements CreateProjectUseCase {
     }
 
     private ProjectEntity saveNewProject(CreateProjectRequest request) {
-        UserEntity userEntity = userRepository.findById(request.getUserId());
+        UserEntity userEntity = userRepository.findById(request.getUserId()).stream().findFirst().orElse(null);
 
         ProjectEntity newProject = ProjectEntity.builder()
                 .user(userEntity)

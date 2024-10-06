@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class FakeUserRepositoryImpl implements UserRepository {
@@ -33,12 +34,11 @@ public class FakeUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserEntity findById(long userId) {
+    public Optional<UserEntity> findById(long userId) {
         return this.savedUsers
                 .stream()
                 .filter(userEntity -> userEntity.getId() == userId)
-                .findFirst()
-                .orElse(null);
+                .findFirst(); // This will return Optional<UserEntity>
     }
 
     @Override

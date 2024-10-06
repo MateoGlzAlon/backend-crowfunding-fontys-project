@@ -16,7 +16,6 @@ public class GetUserUseCaseImpl implements GetUserUseCase {
 
     @Override
     public Optional<User> getUser(long userId) {
-        return null;
-//        return userRepository.findById(userId).map(UserConverter::convert);
+        return userRepository.findById(userId).map(UserConverter::convert);
     }
 }

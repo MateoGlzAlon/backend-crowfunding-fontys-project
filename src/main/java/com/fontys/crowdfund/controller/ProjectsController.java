@@ -30,8 +30,6 @@ public class ProjectsController {
         return ResponseEntity.ok().body(projectOptional.get());
     }
 
-
-
     @GetMapping
     public ResponseEntity<GetAllProjectsResponse> getAllProjects(@RequestParam(value = "user", required = false) String userCode) {
         GetAllProjectsRequest request = GetAllProjectsRequest.builder().userCode(userCode).build();
@@ -52,8 +50,7 @@ public class ProjectsController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateProject(@PathVariable("id") long id,
-                                              @RequestBody @Valid UpdateProjectRequest request) {
+    public ResponseEntity<Void> updateProject(@PathVariable("id") long id, @RequestBody @Valid UpdateProjectRequest request) {
         request.setId(id);
         updateProjectUseCase.updateProject(request);
         return ResponseEntity.noContent().build();

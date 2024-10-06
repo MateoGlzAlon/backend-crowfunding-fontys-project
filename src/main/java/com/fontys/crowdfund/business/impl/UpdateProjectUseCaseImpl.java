@@ -34,7 +34,7 @@ public class UpdateProjectUseCaseImpl implements UpdateProjectUseCase {
     }
 
     private void updateFields(UpdateProjectRequest request, ProjectEntity project) {
-        UserEntity userEntity = userRepository.findById(request.getUserId());
+        UserEntity userEntity = userRepository.findById(request.getUserId()).stream().findFirst().orElse(null);
         project.setUser(userEntity);
         project.setName(request.getName());
 

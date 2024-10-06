@@ -37,8 +37,6 @@ class CrowdfundingApplicationTests {
 				.type("Schools")
 				.build();
 
-
-
 	}
 
 	@Test
@@ -57,6 +55,7 @@ class CrowdfundingApplicationTests {
 	}
 
 	@Test
+
 	void testProjectSaveInRepository() {
 
 		//ProjectEntity projectEntity = ProjectEntity.builder().id(Long(2)).name("Project 2").user(user1).build();
