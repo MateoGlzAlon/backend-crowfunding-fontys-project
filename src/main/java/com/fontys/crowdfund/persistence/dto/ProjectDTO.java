@@ -20,9 +20,7 @@ public class ProjectDTO {
     private String type;
     private Date created;
 
-    // Owner is represented by the userId in DTO
-    private long userId;
+    // Owner is represented by the email in DTO
+    private String userEmail;
 
-    // Funding amounts can be included or summarized here
-    private List<PaymentDTO> fundings;
 }

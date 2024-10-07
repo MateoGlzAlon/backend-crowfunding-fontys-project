@@ -1,7 +1,9 @@
-package com.yourapp.controller;
+package com.fontys.crowdfund.controller.impl;
 
+import com.fontys.crowdfund.controller.UserController;
 import com.fontys.crowdfund.persistence.dto.UserDTO;
 import com.fontys.crowdfund.business.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@AllArgsConstructor
+
 public class UserControllerImpl implements UserController {
 
     private UserService userService;

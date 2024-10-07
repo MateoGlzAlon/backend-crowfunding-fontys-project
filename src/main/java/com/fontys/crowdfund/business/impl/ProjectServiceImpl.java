@@ -4,38 +4,38 @@ import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.persistence.dto.ProjectDTO;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import com.fontys.crowdfund.model.User;
 
 import com.fontys.crowdfund.model.Project;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-    private ProjectRepository projectRepository;
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+
 
     // Get all projects and convert them to DTOs
     public List<ProjectDTO> getAllProjects() {
-        return projectRepository.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return new ArrayList<>(projectRepository.findAll());
     }
 
     // Get project by ID
     public ProjectDTO getProjectById(long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
-        return convertToDTO(project);
+        return projectRepository.findById(id);
     }
 
     // Create a new project and link it to a user by userId
     public ProjectDTO createProject(ProjectDTO projectDTO) {
-        User owner = userRepository.findById(projectDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User owner = UserConverter.convert(userRepository.findByEmail(projectDTO.getUserEmail()));
 
         Project project = Project.builder()
                 .name(projectDTO.getName())
@@ -46,8 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .owner(owner)  // Linking project to the user
                 .build();
 
-        Project savedProject = projectRepository.save(project);
-        return convertToDTO(savedProject);
+        return projectRepository.save(convertToDTO(project));
     }
 
     // Convert Project entity to DTO
@@ -59,7 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .location(project.getLocation())
                 .type(project.getType())
                 .created(project.getCreated())
-                .userId(project.getOwner().getId())  // Converting owner relation
+                .userEmail(project.getOwner().getEmail())  // Converting owner relation
                 .build();
     }
 }

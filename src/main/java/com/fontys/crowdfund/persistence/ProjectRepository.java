@@ -1,5 +1,6 @@
 package com.fontys.crowdfund.persistence;
 
+import com.fontys.crowdfund.model.Project;
 import com.fontys.crowdfund.persistence.dto.ProjectDTO;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ProjectRepository {
     boolean existsById(Long id);
 
     // Find all projects by user email
-    List<ProjectDTO> findAllByUserEmail(String userEmail);
+    List<ProjectDTO> findAllProjectsByUserEmail(String userEmail);
 
     // Save a project (create or update)
     ProjectDTO save(ProjectDTO project);
@@ -23,5 +24,5 @@ public interface ProjectRepository {
     List<ProjectDTO> findAll();
 
     // Find a project by its ID
-    Optional<ProjectDTO> findById(Long projectId);
+    ProjectDTO findById(Long projectId);
 }

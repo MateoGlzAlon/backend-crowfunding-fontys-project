@@ -1,5 +1,6 @@
 package com.fontys.crowdfund.persistence.impl;
 
+import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.dto.UserDTO;
 import org.springframework.stereotype.Repository;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -23,29 +23,50 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsByEmail(String email) {
         return this.savedUsers
                 .stream()
-                .anyMatch(userEntity -> userEntity.getEmail().equals(email));
+                .anyMatch(userDTO -> userDTO.getEmail().equals(email));
     }
 
     @Override
     public boolean existsById(long userId) {
         return this.savedUsers
                 .stream()
-                .anyMatch(userEntity -> userEntity.getId() == userId);
+                .anyMatch(userDTO -> userDTO.getId() == userId);
     }
 
     @Override
-    public Optional<UserDTO> findById(long userId) {
+    public UserDTO findById(long userId) {
+
+        System.out.println("Find by ID : -- " + this.savedUsers);
+
+
         return this.savedUsers
                 .stream()
-                .filter(userEntity -> userEntity.getId() == userId)
-                .findFirst(); // This will return Optional<UserDTO>
+                .filter(userDTO -> userDTO.getId() == userId)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+    }
+
+    @Override
+    public UserDTO findByEmail(String userEmail) {
+
+        System.out.println("Find by Email : -- " + this.savedUsers);
+
+        for (UserDTO userDTO : this.savedUsers) {
+            System.out.println("EMAIL : |" + userDTO.getEmail() + "|");
+        }
+
+        return this.savedUsers
+                .stream()
+                .filter(userDTO -> userDTO.getEmail().equals(userEmail))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
     }
 
     @Override
     public UserDTO save(UserDTO user) {
         user.setId(NEXT_ID);
         NEXT_ID++;
-        this.savedUsers.add(user);
+        savedUsers.add(user);
         return user;
     }
 

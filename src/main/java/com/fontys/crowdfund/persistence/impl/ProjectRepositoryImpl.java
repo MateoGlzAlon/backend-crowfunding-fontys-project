@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class ProjectRepositoryImpl implements ProjectRepository {
     private static Long NEXT_ID = 1L;
     private final List<ProjectDTO> savedProjects;
+
 
     public ProjectRepositoryImpl() {
         this.savedProjects = new ArrayList<>();
@@ -26,12 +26,13 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<ProjectDTO> findAllByUserEmail(String userEmail) {
+    public List<ProjectDTO> findAllProjectsByUserEmail(String userEmail) {
         return this.savedProjects
                 .stream()
-                .filter(ProjectDTO -> ProjectDTO.getUser().getEmail().equals(userEmail))
+                .filter(projectDTO -> projectDTO.getUserEmail().equals(userEmail))
                 .toList();
     }
+
 
     @Override
     public ProjectDTO save(ProjectDTO project) {
@@ -54,9 +55,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public Optional<ProjectDTO> findById(Long projectId) {
+    public ProjectDTO findById(Long projectId) {
         return this.savedProjects.stream()
-                .filter(ProjectDTO -> ProjectDTO.getId().equals(projectId))
-                .findFirst();
+                .filter(projectDTO -> projectDTO.getId().equals(projectId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
     }
+
 }

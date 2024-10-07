@@ -1,9 +1,9 @@
 package com.fontys.crowdfund.persistence;
 
+import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.dto.UserDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserRepository {
 
@@ -14,7 +14,10 @@ public interface UserRepository {
     boolean existsById(long userId);
 
     // Find a user by ID
-    Optional<UserDTO> findById(long userId);
+    UserDTO findById(long userId);
+
+    // Find a user by ID
+    UserDTO findByEmail(String userEmail);
 
     // Save a user (create or update)
     UserDTO save(UserDTO user);
