@@ -31,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     // Get project by ID
-    public GetDTOProject getProjectById(long id) {
+    public GetDTOProject getProjectById(int id) {
         return projectRepository.findById(id);
     }
 

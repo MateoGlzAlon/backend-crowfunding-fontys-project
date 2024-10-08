@@ -8,13 +8,13 @@ import java.util.List;
 public interface ProjectRepository {
 
     // Check if a project exists by its ID
-    boolean existsById(Long id);
+    boolean existsById(int id);
 
     // Find all projects by user email
     List<GetDTOProject> findAllProjectsByUserEmail(String userEmail);
 
     // Find a project by its ID
-    GetDTOProject findById(Long projectId);
+    GetDTOProject findById(int projectId);
 
     // Delete a project by its ID
     void deleteById(Long projectId);

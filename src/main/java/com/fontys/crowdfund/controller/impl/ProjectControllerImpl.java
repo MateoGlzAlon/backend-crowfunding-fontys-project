@@ -26,7 +26,7 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetDTOProject> getProjectById(@PathVariable long id) {
+    public ResponseEntity<GetDTOProject> getProjectById(@PathVariable int id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
 

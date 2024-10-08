@@ -1,11 +1,16 @@
 package com.fontys.crowdfund;
 
+import com.fontys.crowdfund.model.Project;
+import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
+
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+
 
 @SpringBootTest
 class CrowdfundingApplicationTests {
@@ -37,27 +42,24 @@ class CrowdfundingApplicationTests {
 
 	@Test
 	void testUserEmailIsCorrect() {
-		assertEquals("example1@email.com", user1.getEmail(), "The user's email should be 'example1@email.com'");
+		assertEquals("Email does not match the user's", user1.getEmail(), "example1@email.com");
 	}
 
 	@Test
 	void testProjectOwnerIsCorrect() {
-		assertEquals("Mateo", project1.getOwner().getName(), "The project owner should be 'Mateo'");
+		assertEquals("Owner's name does not match the project's", project1.getOwner().getName(), "Mateo");
 	}
 
 	@Test
 	void testProjectDescriptionIsCorrect() {
-		assertEquals("Need fundings to keep the school in my village open", project1.getDescription(), "The project description should match the one provided");
+		assertEquals("Project description does not match the project's", project1.getDescription(),"Need fundings to keep the school in my village open");
 	}
 
 	@Test
-
 	void testProjectSaveInRepository() {
 
 		//ProjectEntity projectEntity = ProjectEntity.builder().id(Long(2)).name("Project 2").user(user1).build();
-
 		//projectRepository.save(project1);
-
 
 	}
 }

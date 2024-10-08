@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public class ProjectRepositoryImpl implements ProjectRepository {
-    private static Long NEXT_ID = 1L;
+    private static int NEXT_ID = 1;
     private final List<Project> savedProjects;
 
 
@@ -21,10 +21,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(int id) {
         return this.savedProjects
                 .stream()
-                .anyMatch(ProjectDTO -> ProjectDTO.getId().equals(id));
+                .anyMatch(ProjectDTO -> ProjectDTO.getId() ==  id);
     }
 
     @Override
@@ -51,11 +51,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public GetDTOProject save(Project project) {
-        if (project.getId() == null) {
             project.setId(NEXT_ID);
             NEXT_ID++;
             this.savedProjects.add(project);
-        }
 
         return GetDTOProject.builder()
                 .id(project.getId())
@@ -68,7 +66,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void deleteById(Long projectId) {
-        this.savedProjects.removeIf(ProjectDTO -> ProjectDTO.getId().equals(projectId));
+        this.savedProjects.removeIf(ProjectDTO -> ProjectDTO.getId() == projectId);
     }
 
     @Override
@@ -94,9 +92,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 
     @Override
-    public GetDTOProject findById(Long projectId) {
+    public GetDTOProject findById(int projectId) {
         Project project = this.savedProjects.stream()
-                .filter(projectDTO -> projectDTO.getId().equals(projectId))
+                .filter(projectDTO -> projectDTO.getId() == projectId)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
 

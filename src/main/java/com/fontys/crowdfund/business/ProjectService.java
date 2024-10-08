@@ -12,7 +12,7 @@ public interface ProjectService {
     List<GetDTOProject> getAllProjects();
 
     // Get project by ID
-    GetDTOProject getProjectById(long id);
+    GetDTOProject getProjectById(int id);
 
     // Create a new project and link it to a user by userId
     GetDTOProject createProject(PostDTOProject projectDTO);

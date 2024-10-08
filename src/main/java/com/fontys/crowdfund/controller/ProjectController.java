@@ -15,7 +15,7 @@ public interface ProjectController {
     ResponseEntity<List<GetDTOProject>> getAllProjects();
 
     // Get a project by its ID
-    ResponseEntity<GetDTOProject> getProjectById(@PathVariable long id);
+    ResponseEntity<GetDTOProject> getProjectById(@PathVariable int id);
 
     // Create a new project
     ResponseEntity<GetDTOProject> createProject(@RequestBody PostDTOProject projectDTO);

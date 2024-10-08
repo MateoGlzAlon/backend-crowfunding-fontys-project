@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetDTOProject {
 
-    private Long id;
+    private int id;
     private String name;
     private String userEmail;
     private float fundingGoal;
