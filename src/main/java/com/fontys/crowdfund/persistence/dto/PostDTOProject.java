@@ -1,27 +1,26 @@
-package com.fontys.crowdfund.model;
+package com.fontys.crowdfund.persistence.dto;
 
-import com.fontys.crowdfund.persistence.dto.PaymentDTO;
+import com.fontys.crowdfund.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
-
 @Data
 @Builder
-public class Project {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostDTOProject {
 
-    private Long id;
     private String name;
     private String description;
     private String location;
     private String type;
     private Date created;
-    private User owner;
-    //TO-DO
     private float fundingGoal;
-    private float moneyRaised;
-    private List<String> fundings;
+    private String userEmail;
 
 }

@@ -2,6 +2,8 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.ProjectController;
+import com.fontys.crowdfund.persistence.dto.GetDTOProject;
+import com.fontys.crowdfund.persistence.dto.PostDTOProject;
 import com.fontys.crowdfund.persistence.dto.ProjectDTO;
 import com.fontys.crowdfund.business.ProjectService;
 import lombok.AllArgsConstructor;
@@ -13,28 +15,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
-
+@AllArgsConstructor
 public class ProjectControllerImpl implements ProjectController {
 
     private final ProjectService projectService;
 
-    @Autowired
-    public ProjectControllerImpl(ProjectService projectService) {
-        this.projectService = projectService;
-    }
-
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+    public ResponseEntity<List<GetDTOProject>> getAllProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable long id) {
+    public ResponseEntity<GetDTOProject> getProjectById(@PathVariable long id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<GetDTOProject> createProject(@RequestBody PostDTOProject projectDTO) {
         return ResponseEntity.ok(projectService.createProject(projectDTO));
     }
 }

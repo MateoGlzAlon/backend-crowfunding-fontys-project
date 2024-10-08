@@ -2,10 +2,11 @@ package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserService;
 import com.fontys.crowdfund.model.User;
+import com.fontys.crowdfund.persistence.dto.GetDTOUser;
+import com.fontys.crowdfund.persistence.dto.PostDTOUser;
 import com.fontys.crowdfund.persistence.dto.UserDTO;
 import com.fontys.crowdfund.persistence.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,23 +20,24 @@ public class UserServiceImpl implements UserService {
 
     // Get all users and convert them to DTOs
     @Override
-    public List<UserDTO> getAllUsers() {
+    public List<GetDTOUser> getAllUsers() {
         return new ArrayList<>(userRepository.findAll());
     }
 
     // Get user by ID
     @Override
-    public UserDTO getUserById(long id) {
+    public GetDTOUser getUserById(long id) {
         return userRepository.findById(id);
     }
 
     // Create a new user
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public GetDTOUser createUser(PostDTOUser userDTO) {
         User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
-                .id(userDTO.getId())
+                .password(userDTO.getPassword())
+                .ownedProjects(new ArrayList<>())
                 .build();
 
         System.out.println("User Details:");
@@ -43,15 +45,8 @@ public class UserServiceImpl implements UserService {
         System.out.println("Email: " + user.getEmail());
         System.out.println("ID: " + user.getId());
 
-        return userRepository.save(convertToDTO(user));
+        return userRepository.save(user);
     }
 
-    // Convert User entity to DTO
-    private UserDTO convertToDTO(User user) {
-        return UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
-    }
+
 }

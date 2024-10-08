@@ -11,6 +11,9 @@ import com.fontys.crowdfund.model.User;
 
 import com.fontys.crowdfund.model.Project;
 
+import com.fontys.crowdfund.persistence.dto.GetDTOProject;
+import com.fontys.crowdfund.persistence.dto.PostDTOProject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,47 +21,38 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
 
-
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
 
     // Get all projects and convert them to DTOs
-    public List<ProjectDTO> getAllProjects() {
+    public List<GetDTOProject> getAllProjects() {
         return new ArrayList<>(projectRepository.findAll());
     }
 
     // Get project by ID
-    public ProjectDTO getProjectById(long id) {
+    public GetDTOProject getProjectById(long id) {
         return projectRepository.findById(id);
     }
 
     // Create a new project and link it to a user by userId
-    public ProjectDTO createProject(ProjectDTO projectDTO) {
-        User owner = UserConverter.convert(userRepository.findByEmail(projectDTO.getUserEmail()));
+    public GetDTOProject createProject(PostDTOProject postDTOProject) {
+        User owner = userRepository.findUserByEmail(postDTOProject.getUserEmail());
 
         Project project = Project.builder()
-                .name(projectDTO.getName())
-                .description(projectDTO.getDescription())
-                .location(projectDTO.getLocation())
-                .type(projectDTO.getType())
-                .created(projectDTO.getCreated())
+                .name(postDTOProject.getName())
+                .description(postDTOProject.getDescription())
+                .location(postDTOProject.getLocation())
+                .type(postDTOProject.getType())
+                .created(postDTOProject.getCreated())
+                .moneyRaised(0)
+                .fundingGoal(postDTOProject.getFundingGoal())
                 .owner(owner)  // Linking project to the user
+                .fundings(new ArrayList<>())
                 .build();
 
-        return projectRepository.save(convertToDTO(project));
+        return projectRepository.save(project);
     }
 
-    // Convert Project entity to DTO
-    private ProjectDTO convertToDTO(Project project) {
-        return ProjectDTO.builder()
-                .id(project.getId())
-                .name(project.getName())
-                .description(project.getDescription())
-                .location(project.getLocation())
-                .type(project.getType())
-                .created(project.getCreated())
-                .userEmail(project.getOwner().getEmail())  // Converting owner relation
-                .build();
-    }
+
 }

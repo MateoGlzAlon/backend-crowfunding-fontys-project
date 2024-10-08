@@ -1,6 +1,8 @@
 package com.fontys.crowdfund.persistence.impl;
 
+import com.fontys.crowdfund.model.Project;
 import com.fontys.crowdfund.persistence.ProjectRepository;
+import com.fontys.crowdfund.persistence.dto.GetDTOProject;
 import com.fontys.crowdfund.persistence.dto.ProjectDTO;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +13,7 @@ import java.util.List;
 @Repository
 public class ProjectRepositoryImpl implements ProjectRepository {
     private static Long NEXT_ID = 1L;
-    private final List<ProjectDTO> savedProjects;
+    private final List<Project> savedProjects;
 
 
     public ProjectRepositoryImpl() {
@@ -26,22 +28,42 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<ProjectDTO> findAllProjectsByUserEmail(String userEmail) {
-        return this.savedProjects
-                .stream()
-                .filter(projectDTO -> projectDTO.getUserEmail().equals(userEmail))
-                .toList();
+    public List<GetDTOProject> findAllProjectsByUserEmail(String userEmail) {
+
+        List<GetDTOProject> dtoProjects = new ArrayList<>();
+
+        for (Project project : this.savedProjects) {
+            if(project.getOwner().getEmail().equals(userEmail)) {
+                dtoProjects.add(GetDTOProject.builder()
+                        .id(project.getId())
+                        .userEmail(project.getOwner().getEmail())
+                        .name(project.getName())
+                        .moneyRaised(project.getMoneyRaised())
+                        .fundingGoal(project.getFundingGoal())
+                        .build());
+            }
+        }
+
+       return dtoProjects;
+
     }
 
 
     @Override
-    public ProjectDTO save(ProjectDTO project) {
+    public GetDTOProject save(Project project) {
         if (project.getId() == null) {
             project.setId(NEXT_ID);
             NEXT_ID++;
             this.savedProjects.add(project);
         }
-        return project;
+
+        return GetDTOProject.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .userEmail(project.getOwner().getEmail())
+                .moneyRaised(project.getMoneyRaised())
+                .fundingGoal(project.getFundingGoal())
+                .build();
     }
 
     @Override
@@ -50,16 +72,41 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<ProjectDTO> findAll() {
-        return Collections.unmodifiableList(this.savedProjects);
+    public List<GetDTOProject> findAll() {
+
+        List<GetDTOProject> dtoProjects = new ArrayList<>();
+
+        for (Project project : this.savedProjects) {
+            GetDTOProject dtoProject = GetDTOProject.builder()
+                    .id(project.getId())
+                    .name(project.getName())
+                    .userEmail(project.getOwner().getEmail())
+                    .moneyRaised(project.getMoneyRaised())
+                    .fundingGoal(project.getFundingGoal())
+                    .build();
+
+            dtoProjects.add(dtoProject);
+        }
+
+        // Return an unmodifiable list of DTOs
+        return Collections.unmodifiableList(dtoProjects);
     }
 
+
     @Override
-    public ProjectDTO findById(Long projectId) {
-        return this.savedProjects.stream()
+    public GetDTOProject findById(Long projectId) {
+        Project project = this.savedProjects.stream()
                 .filter(projectDTO -> projectDTO.getId().equals(projectId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
+
+        return GetDTOProject.builder().
+                id(project.getId())
+                .name(project.getName())
+                .userEmail(project.getOwner().getEmail())
+                .moneyRaised(project.getMoneyRaised())
+                .fundingGoal(project.getFundingGoal())
+                .build();
     }
 
 }
