@@ -17,7 +17,7 @@ public interface ProjectRepository {
     GetDTOProject findById(int projectId);
 
     // Delete a project by its ID
-    void deleteById(Long projectId);
+    GetDTOProject deleteById(int projectId);
 
     // Save a project (create or update)
     GetDTOProject save(Project project);

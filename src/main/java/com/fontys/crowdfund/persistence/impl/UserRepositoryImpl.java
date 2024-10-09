@@ -112,4 +112,19 @@ public class UserRepositoryImpl implements UserRepository {
     public int count() {
         return this.savedUsers.size();
     }
+
+    @Override
+    public GetDTOUser deleteById(int id) {
+        for (User user : this.savedUsers) {
+            if (user.getId() == id) {
+                this.savedUsers.remove(user);
+                return GetDTOUser.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .build();
+            }
+        }
+        return null; // or throw new ProjectNotFoundException("Project not found with id: " + projectId);
+    }
 }

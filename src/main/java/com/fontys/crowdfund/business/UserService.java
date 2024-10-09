@@ -17,4 +17,5 @@ public interface UserService {
     // Create a new user
     GetDTOUser createUser(PostDTOUser userDTO);
 
+    GetDTOUser deleteUser(int id);
 }

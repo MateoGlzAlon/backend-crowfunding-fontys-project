@@ -1,7 +1,9 @@
 package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserService;
+import com.fontys.crowdfund.exception.EmailAlreadyExists;
 import com.fontys.crowdfund.model.User;
+import com.fontys.crowdfund.persistence.dto.GetDTOProject;
 import com.fontys.crowdfund.persistence.dto.GetDTOUser;
 import com.fontys.crowdfund.persistence.dto.PostDTOUser;
 import com.fontys.crowdfund.persistence.dto.UserDTO;
@@ -33,6 +35,11 @@ public class UserServiceImpl implements UserService {
     // Create a new user
     @Override
     public GetDTOUser createUser(PostDTOUser userDTO) {
+
+        if(userRepository.existsByEmail(userDTO.getEmail())){
+            throw new EmailAlreadyExists();
+        }
+
         User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
@@ -40,13 +47,16 @@ public class UserServiceImpl implements UserService {
                 .ownedProjects(new ArrayList<>())
                 .build();
 
-        System.out.println("User Details:");
-        System.out.println("Name: " + user.getName());
-        System.out.println("Email: " + user.getEmail());
-        System.out.println("ID: " + user.getId());
-
         return userRepository.save(user);
     }
+
+    @Override
+    public GetDTOUser deleteUser(int id) {
+
+        return userRepository.deleteById(id);
+
+    }
+
 
 
 }

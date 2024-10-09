@@ -32,4 +32,9 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<GetDTOUser> createUser(@RequestBody PostDTOUser userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GetDTOUser> deleteProject(@PathVariable int id) {
+        return ResponseEntity.ok(userService.deleteUser(id));
+    }
 }

@@ -32,4 +32,6 @@ public interface UserRepository {
 
     // Get the count of users
     int count();
+
+    GetDTOUser deleteById(int id);
 }

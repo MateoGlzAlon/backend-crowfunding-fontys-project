@@ -65,9 +65,23 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public void deleteById(Long projectId) {
-        this.savedProjects.removeIf(ProjectDTO -> ProjectDTO.getId() == projectId);
+    public GetDTOProject deleteById(int projectId) {
+        for (Project project : this.savedProjects) {
+            if (project.getId() == projectId) {
+                this.savedProjects.remove(project);
+                return GetDTOProject.builder()
+                        .id(project.getId())
+                        .name(project.getName())
+                        .userEmail(project.getOwner().getEmail())
+                        .moneyRaised(project.getMoneyRaised())
+                        .fundingGoal(project.getFundingGoal())
+                        .build();
+            }
+        }
+        // Optionally return null or throw an exception if the project was not found
+        return null; // or throw new ProjectNotFoundException("Project not found with id: " + projectId);
     }
+
 
     @Override
     public List<GetDTOProject> findAll() {

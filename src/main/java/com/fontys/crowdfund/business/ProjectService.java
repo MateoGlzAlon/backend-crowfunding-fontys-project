@@ -17,4 +17,5 @@ public interface ProjectService {
     // Create a new project and link it to a user by userId
     GetDTOProject createProject(PostDTOProject projectDTO);
 
+    GetDTOProject deleteProject(int id);
 }

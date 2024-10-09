@@ -34,4 +34,9 @@ public class ProjectControllerImpl implements ProjectController {
     public ResponseEntity<GetDTOProject> createProject(@RequestBody PostDTOProject projectDTO) {
         return ResponseEntity.ok(projectService.createProject(projectDTO));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GetDTOProject> deleteProject(@PathVariable int id) {
+        return ResponseEntity.ok(projectService.deleteProject(id));
+    }
 }

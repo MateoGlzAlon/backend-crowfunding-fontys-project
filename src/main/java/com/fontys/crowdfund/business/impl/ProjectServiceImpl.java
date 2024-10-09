@@ -39,6 +39,8 @@ public class ProjectServiceImpl implements ProjectService {
     public GetDTOProject createProject(PostDTOProject postDTOProject) {
         User owner = userRepository.findUserByEmail(postDTOProject.getUserEmail());
 
+
+
         Project project = Project.builder()
                 .name(postDTOProject.getName())
                 .description(postDTOProject.getDescription())
@@ -52,6 +54,13 @@ public class ProjectServiceImpl implements ProjectService {
                 .build();
 
         return projectRepository.save(project);
+    }
+
+    @Override
+    public GetDTOProject deleteProject(int id) {
+
+        return projectRepository.deleteById(id);
+
     }
 
 
