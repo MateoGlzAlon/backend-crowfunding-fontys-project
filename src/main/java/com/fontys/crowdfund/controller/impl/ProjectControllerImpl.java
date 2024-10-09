@@ -39,4 +39,14 @@ public class ProjectControllerImpl implements ProjectController {
     public ResponseEntity<GetDTOProject> deleteProject(@PathVariable int id) {
         return ResponseEntity.ok(projectService.deleteProject(id));
     }
+
+    @GetMapping("/highlighted")
+    public ResponseEntity<List<GetDTOProject>> getCloseToFundingProjects() {
+        return ResponseEntity.ok(projectService.getCloseToFundingAllProjects());
+    }
+
+    @GetMapping("/new")
+    public ResponseEntity<List<GetDTOProject>> getNewProjects() {
+        return ResponseEntity.ok(projectService.getNewProjects());
+    }
 }

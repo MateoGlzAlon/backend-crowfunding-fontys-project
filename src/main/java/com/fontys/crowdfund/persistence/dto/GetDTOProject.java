@@ -20,5 +20,11 @@ public class GetDTOProject {
     private String userEmail;
     private float fundingGoal;
     private float moneyRaised;
+    private List<String> images;
+
+    private String description;
+    private String location;
+    private String type;
+    private Date dateCreated;
 
 }

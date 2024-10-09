@@ -16,12 +16,13 @@ public class Project {
     private String name;
     private String description;
     private String location;
-    private String type;
+        private String type;
     private Date created;
     private User owner;
     //TO-DO
     private float fundingGoal;
     private float moneyRaised;
     private List<String> fundings;
+    private List<String> images;
 
 }

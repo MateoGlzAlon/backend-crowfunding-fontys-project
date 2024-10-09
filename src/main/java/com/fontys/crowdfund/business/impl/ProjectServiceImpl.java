@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.ProjectService;
-import com.fontys.crowdfund.persistence.dto.ProjectDTO;
+import com.fontys.crowdfund.exception.ProjectAlreadyExists;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
 import lombok.AllArgsConstructor;
@@ -37,9 +37,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     // Create a new project and link it to a user by userId
     public GetDTOProject createProject(PostDTOProject postDTOProject) {
+
+        if(projectRepository.projectExists(postDTOProject.getName(), postDTOProject.getUserEmail())){
+            throw new ProjectAlreadyExists();
+        }
+
         User owner = userRepository.findUserByEmail(postDTOProject.getUserEmail());
-
-
 
         Project project = Project.builder()
                 .name(postDTOProject.getName())
@@ -51,6 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .fundingGoal(postDTOProject.getFundingGoal())
                 .owner(owner)  // Linking project to the user
                 .fundings(new ArrayList<>())
+                .images(postDTOProject.getImages())
                 .build();
 
         return projectRepository.save(project);
@@ -58,10 +62,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public GetDTOProject deleteProject(int id) {
-
         return projectRepository.deleteById(id);
-
     }
 
+    @Override
+    public List<GetDTOProject> getCloseToFundingAllProjects() {
+        return projectRepository.getCloseToFundingProjects();
+    }
 
+    @Override
+    public List<GetDTOProject> getNewProjects() {
+        return projectRepository.getNewProjects();
+    }
 }

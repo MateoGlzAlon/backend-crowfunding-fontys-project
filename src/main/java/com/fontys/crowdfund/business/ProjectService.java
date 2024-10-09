@@ -18,4 +18,8 @@ public interface ProjectService {
     GetDTOProject createProject(PostDTOProject projectDTO);
 
     GetDTOProject deleteProject(int id);
+
+    List<GetDTOProject> getCloseToFundingAllProjects();
+
+    List<GetDTOProject> getNewProjects();
 }

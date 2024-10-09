@@ -21,8 +21,12 @@ public interface ProjectRepository {
 
     // Save a project (create or update)
     GetDTOProject save(Project project);
-    // Find all projects
 
     List<GetDTOProject> findAll();
 
+    List<GetDTOProject> getCloseToFundingProjects();
+
+    boolean projectExists(String name, String userEmail);
+
+    List<GetDTOProject> getNewProjects();
 }

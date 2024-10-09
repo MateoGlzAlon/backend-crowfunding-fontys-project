@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ProjectRepositoryImpl implements ProjectRepository {
     private static int NEXT_ID = 1;
     private final List<Project> savedProjects;
-
 
     public ProjectRepositoryImpl() {
         this.savedProjects = new ArrayList<>();
@@ -24,44 +25,24 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public boolean existsById(int id) {
         return this.savedProjects
                 .stream()
-                .anyMatch(ProjectDTO -> ProjectDTO.getId() ==  id);
+                .anyMatch(project -> project.getId() == id);
     }
 
     @Override
     public List<GetDTOProject> findAllProjectsByUserEmail(String userEmail) {
-
-        List<GetDTOProject> dtoProjects = new ArrayList<>();
-
-        for (Project project : this.savedProjects) {
-            if(project.getOwner().getEmail().equals(userEmail)) {
-                dtoProjects.add(GetDTOProject.builder()
-                        .id(project.getId())
-                        .userEmail(project.getOwner().getEmail())
-                        .name(project.getName())
-                        .moneyRaised(project.getMoneyRaised())
-                        .fundingGoal(project.getFundingGoal())
-                        .build());
-            }
-        }
-
-       return dtoProjects;
-
+        return this.savedProjects.stream()
+                .filter(project -> project.getOwner().getEmail().equals(userEmail))
+                .map(this::convertToDTO) // Use the utility method for conversion
+                .collect(Collectors.toList());
     }
-
 
     @Override
     public GetDTOProject save(Project project) {
-            project.setId(NEXT_ID);
-            NEXT_ID++;
-            this.savedProjects.add(project);
-
-        return GetDTOProject.builder()
-                .id(project.getId())
-                .name(project.getName())
-                .userEmail(project.getOwner().getEmail())
-                .moneyRaised(project.getMoneyRaised())
-                .fundingGoal(project.getFundingGoal())
-                .build();
+        project.setId(NEXT_ID);
+        NEXT_ID++;
+        System.out.println("name: " + project.getName() + " | id: " + project.getId());
+        this.savedProjects.add(project);
+        return convertToDTO(project); // Convert and return the saved project
     }
 
     @Override
@@ -69,41 +50,43 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         for (Project project : this.savedProjects) {
             if (project.getId() == projectId) {
                 this.savedProjects.remove(project);
-                return GetDTOProject.builder()
-                        .id(project.getId())
-                        .name(project.getName())
-                        .userEmail(project.getOwner().getEmail())
-                        .moneyRaised(project.getMoneyRaised())
-                        .fundingGoal(project.getFundingGoal())
-                        .build();
+                return convertToDTO(project); // Use the utility method for conversion
             }
         }
-        // Optionally return null or throw an exception if the project was not found
-        return null; // or throw new ProjectNotFoundException("Project not found with id: " + projectId);
+        return null; // Optionally return null or throw an exception if the project was not found
     }
-
 
     @Override
     public List<GetDTOProject> findAll() {
-
-        List<GetDTOProject> dtoProjects = new ArrayList<>();
-
-        for (Project project : this.savedProjects) {
-            GetDTOProject dtoProject = GetDTOProject.builder()
-                    .id(project.getId())
-                    .name(project.getName())
-                    .userEmail(project.getOwner().getEmail())
-                    .moneyRaised(project.getMoneyRaised())
-                    .fundingGoal(project.getFundingGoal())
-                    .build();
-
-            dtoProjects.add(dtoProject);
-        }
-
-        // Return an unmodifiable list of DTOs
-        return Collections.unmodifiableList(dtoProjects);
+        return this.savedProjects.stream()
+                .map(this::convertToDTO) // Use the utility method for conversion
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<GetDTOProject> getCloseToFundingProjects() {
+        return this.savedProjects.stream()
+                .filter(project -> project.getMoneyRaised() < project.getFundingGoal()) // Filter projects
+                .sorted(Comparator.comparingDouble(project -> project.getFundingGoal() - project.getMoneyRaised())) // Sort by closeness to goal
+                .limit(5) // Limit the results to a maximum of 5 projects
+                .map(this::convertToDTO) // Use the utility method for conversion
+                .collect(Collectors.toList()); // Collect and return as a List
+    }
+
+    @Override
+    public boolean projectExists(String name, String userEmail) {
+        return this.savedProjects.stream()
+                .anyMatch(project -> project.getName().equals(name) && project.getOwner().getEmail().equals(userEmail));
+    }
+
+    @Override
+    public List<GetDTOProject> getNewProjects() {
+        return this.savedProjects.stream()
+                .sorted((project1, project2) -> project2.getCreated().compareTo(project1.getCreated())) // Sort by date in descending order
+                .limit(5) // Limit to the 5 most recent projects
+                .map(this::convertToDTO) // Use the utility method for conversion
+                .collect(Collectors.toList()); // Collect and return as a List
+    }
 
     @Override
     public GetDTOProject findById(int projectId) {
@@ -112,13 +95,22 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
 
-        return GetDTOProject.builder().
-                id(project.getId())
+        return convertToDTO(project); // Use the utility method for conversion
+    }
+
+    // Utility method to convert Project to GetDTOProject
+    private GetDTOProject convertToDTO(Project project) {
+        return GetDTOProject.builder()
+                .id(project.getId())
                 .name(project.getName())
+                .type(project.getType())
+                .description(project.getDescription())
+                .location(project.getLocation())
+                .dateCreated(project.getCreated())
                 .userEmail(project.getOwner().getEmail())
                 .moneyRaised(project.getMoneyRaised())
                 .fundingGoal(project.getFundingGoal())
+                .images(project.getImages())
                 .build();
     }
-
 }

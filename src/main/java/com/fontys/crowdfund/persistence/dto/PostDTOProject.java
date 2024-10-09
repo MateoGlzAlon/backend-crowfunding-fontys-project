@@ -22,5 +22,7 @@ public class PostDTOProject {
     private Date created;
     private float fundingGoal;
     private String userEmail;
+    private List<String> images;
+
 
 }
