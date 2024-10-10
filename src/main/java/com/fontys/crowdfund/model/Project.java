@@ -16,8 +16,8 @@ public class Project {
     private String name;
     private String description;
     private String location;
-        private String type;
-    private Date created;
+    private String type;
+    private Date dateCreated;
     private User owner;
     //TO-DO
     private float fundingGoal;

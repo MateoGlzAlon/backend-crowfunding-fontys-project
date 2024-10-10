@@ -40,7 +40,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public GetDTOProject save(Project project) {
         project.setId(NEXT_ID);
         NEXT_ID++;
-        System.out.println("name: " + project.getName() + " | id: " + project.getId());
         this.savedProjects.add(project);
         return convertToDTO(project); // Convert and return the saved project
     }
@@ -82,7 +81,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
     public List<GetDTOProject> getNewProjects() {
         return this.savedProjects.stream()
-                .sorted((project1, project2) -> project2.getCreated().compareTo(project1.getCreated())) // Sort by date in descending order
+                .sorted((project1, project2) -> project2.getDateCreated().compareTo(project1.getDateCreated())) // Sort by date in descending order
                 .limit(5) // Limit to the 5 most recent projects
                 .map(this::convertToDTO) // Use the utility method for conversion
                 .collect(Collectors.toList()); // Collect and return as a List
@@ -106,7 +105,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 .type(project.getType())
                 .description(project.getDescription())
                 .location(project.getLocation())
-                .dateCreated(project.getCreated())
+                .dateCreated(project.getDateCreated())
                 .userEmail(project.getOwner().getEmail())
                 .moneyRaised(project.getMoneyRaised())
                 .fundingGoal(project.getFundingGoal())

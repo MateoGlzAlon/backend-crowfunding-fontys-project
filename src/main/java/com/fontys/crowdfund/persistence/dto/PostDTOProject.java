@@ -19,7 +19,7 @@ public class PostDTOProject {
     private String description;
     private String location;
     private String type;
-    private Date created;
+    private Date dateCreated;
     private float fundingGoal;
     private String userEmail;
     private List<String> images;
