@@ -1,6 +1,5 @@
 package com.fontys.crowdfund.model;
 
-import com.fontys.crowdfund.persistence.dto.PaymentDTO;
 import lombok.Builder;
 import lombok.Data;
 

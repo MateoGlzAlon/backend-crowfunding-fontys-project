@@ -2,7 +2,7 @@ package com.fontys.crowdfund.persistence.impl;
 
 import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.UserRepository;
-import com.fontys.crowdfund.persistence.dto.GetDTOUser;
+import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    private static long NEXT_ID = 1;
+    private static int NEXT_ID = 1;
     private final List<User> savedUsers;
 
     public UserRepositoryImpl() {
@@ -26,14 +26,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean existsById(long userId) {
+    public boolean existsById(int userId) {
         return this.savedUsers
                 .stream()
                 .anyMatch(user -> user.getId() == userId);
     }
 
     @Override
-    public GetDTOUser findById(long userId) {
+    public OutputDTOUser findById(int userId) {
         User user = this.savedUsers
                 .stream()
                 .filter(u -> u.getId() == userId)
@@ -44,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public GetDTOUser findByEmail(String userEmail) {
+    public OutputDTOUser findByEmail(String userEmail) {
         User user = this.savedUsers
                 .stream()
                 .filter(u -> u.getEmail().equals(userEmail))
@@ -63,7 +63,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public GetDTOUser save(User user) {
+    public OutputDTOUser save(User user) {
         user.setId(NEXT_ID);
         NEXT_ID++;
         savedUsers.add(user);
@@ -71,7 +71,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<GetDTOUser> findAll() {
+    public List<OutputDTOUser> findAll() {
         return this.savedUsers.stream()
                 .map(this::convertToDTO) // Use the utility method for conversion
                 .collect(Collectors.toList());
@@ -83,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public GetDTOUser deleteById(int id) {
+    public OutputDTOUser deleteById(int id) {
         for (User user : this.savedUsers) {
             if (user.getId() == id) {
                 this.savedUsers.remove(user);
@@ -93,9 +93,9 @@ public class UserRepositoryImpl implements UserRepository {
         return null; // or throw new UserNotFoundException("User not found with ID: " + id);
     }
 
-    // Utility method to convert User to GetDTOUser
-    private GetDTOUser convertToDTO(User user) {
-        return GetDTOUser.builder()
+    // Utility method to convert User to OutputDTOUser
+    private OutputDTOUser convertToDTO(User user) {
+        return OutputDTOUser.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())

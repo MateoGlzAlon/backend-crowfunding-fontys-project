@@ -12,15 +12,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectDTO {
-    private int id;
+public class InputDTOProject {
+
     private String name;
     private String description;
     private String location;
     private String type;
-    private Date created;
-
-    // Owner is represented by the email in DTO
+    private Date dateCreated;
+    private float fundingGoal;
     private String userEmail;
+    private List<String> images;
+
 
 }

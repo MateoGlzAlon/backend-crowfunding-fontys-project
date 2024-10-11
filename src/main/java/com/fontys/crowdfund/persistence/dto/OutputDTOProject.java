@@ -1,6 +1,5 @@
 package com.fontys.crowdfund.persistence.dto;
 
-import com.fontys.crowdfund.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetDTOProject {
+public class OutputDTOProject {
 
     private int id;
     private String name;

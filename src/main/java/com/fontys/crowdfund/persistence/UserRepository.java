@@ -1,9 +1,7 @@
 package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.model.User;
-import com.fontys.crowdfund.persistence.dto.GetDTOUser;
-import com.fontys.crowdfund.persistence.dto.PostDTOUser;
-import com.fontys.crowdfund.persistence.dto.UserDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
 
 import java.util.List;
 
@@ -13,25 +11,25 @@ public interface UserRepository {
     boolean existsByEmail(String email);
 
     // Check if a user exists by ID
-    boolean existsById(long userId);
+    boolean existsById(int userId);
 
     // Find a user by ID
-    GetDTOUser findById(long userId);
+    OutputDTOUser findById(int userId);
 
-    // Find a GetDTOUser by ID
-    GetDTOUser findByEmail(String userEmail);
+    // Find a OutputDTOUser by ID
+    OutputDTOUser findByEmail(String userEmail);
 
     // Find a User by ID
     User findUserByEmail(String userEmail);
 
     // Save a user (create or update)
-    GetDTOUser save(User user);
+    OutputDTOUser save(User user);
 
     // Find all users
-    List<GetDTOUser> findAll();
+    List<OutputDTOUser> findAll();
 
     // Get the count of users
     int count();
 
-    GetDTOUser deleteById(int id);
+    OutputDTOUser deleteById(int id);
 }

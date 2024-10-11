@@ -1,21 +1,20 @@
 package com.fontys.crowdfund.business;
 
-import com.fontys.crowdfund.persistence.dto.GetDTOUser;
-import com.fontys.crowdfund.persistence.dto.PostDTOUser;
-import com.fontys.crowdfund.persistence.dto.UserDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTOUser;
 
 import java.util.List;
 
 public interface UserService {
 
     // Get all users and convert them to DTOs
-    List<GetDTOUser> getAllUsers();
+    List<OutputDTOUser> getAllUsers();
 
     // Get user by ID
-    GetDTOUser getUserById(long id);
+    OutputDTOUser getUserById(int id);
 
     // Create a new user
-    GetDTOUser createUser(PostDTOUser userDTO);
+    OutputDTOUser createUser(InputDTOUser userDTO);
 
-    GetDTOUser deleteUser(int id);
+    OutputDTOUser deleteUser(int id);
 }

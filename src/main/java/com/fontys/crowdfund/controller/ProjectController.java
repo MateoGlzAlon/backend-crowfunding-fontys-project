@@ -1,22 +1,30 @@
+// ProjectController.java
 package com.fontys.crowdfund.controller;
 
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.PostDTOProject;
-import com.fontys.crowdfund.persistence.dto.ProjectDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.InputDTOProject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public interface ProjectController {
 
-    // Get all projects
-    ResponseEntity<List<GetDTOProject>> getAllProjects();
+    @GetMapping
+    ResponseEntity<List<OutputDTOProject>> getAllProjects();
 
-    // Get a project by its ID
-    ResponseEntity<GetDTOProject> getProjectById(@PathVariable int id);
+    @GetMapping("/{id}")
+    ResponseEntity<OutputDTOProject> getProjectById(@PathVariable int id);
 
-    // Create a new project
-    ResponseEntity<GetDTOProject> createProject(@RequestBody PostDTOProject projectDTO);
+    @PostMapping
+    ResponseEntity<OutputDTOProject> createProject(@RequestBody InputDTOProject projectDTO);
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<OutputDTOProject> deleteProject(@PathVariable int id);
+
+    @GetMapping("/highlighted")
+    ResponseEntity<List<OutputDTOProject>> getCloseToFundingProjects();
+
+    @GetMapping("/new")
+    ResponseEntity<List<OutputDTOProject>> getNewProjects();
 }

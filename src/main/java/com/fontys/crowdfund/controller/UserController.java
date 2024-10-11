@@ -1,23 +1,24 @@
+// UserController.java
 package com.fontys.crowdfund.controller;
 
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.GetDTOUser;
-import com.fontys.crowdfund.persistence.dto.PostDTOUser;
-import com.fontys.crowdfund.persistence.dto.UserDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTOUser;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public interface UserController {
 
-    // Get all users
-    List<GetDTOUser> getAllUsers();
+    @GetMapping
+    List<OutputDTOUser> getAllUsers();
 
-    // Get a user by ID
-    ResponseEntity<GetDTOUser> getUserById(@PathVariable Long id);
+    @GetMapping("/{id}")
+    ResponseEntity<OutputDTOUser> getUserById(@PathVariable int id);
 
-    // Create a new user
-    ResponseEntity<GetDTOUser> createUser(@RequestBody PostDTOUser postDTOUser);
+    @PostMapping
+    ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO);
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<OutputDTOUser> deleteProject(@PathVariable int id);
 }

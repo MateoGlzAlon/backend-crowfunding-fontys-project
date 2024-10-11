@@ -1,9 +1,8 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.UserController;
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.GetDTOUser;
-import com.fontys.crowdfund.persistence.dto.PostDTOUser;
+import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTOUser;
 import com.fontys.crowdfund.business.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +17,27 @@ public class UserControllerImpl implements UserController {
 
     private UserService userService;
 
+    @Override
     @GetMapping
-    public List<GetDTOUser> getAllUsers() {
+    public List<OutputDTOUser> getAllUsers() {
         return userService.getAllUsers();
     }
 
+    @Override
     @GetMapping("/{id}")
-    public ResponseEntity<GetDTOUser> getUserById(@PathVariable Long id) {
+    public ResponseEntity<OutputDTOUser> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    @Override
     @PostMapping
-    public ResponseEntity<GetDTOUser> createUser(@RequestBody PostDTOUser userDTO) {
+    public ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
 
+    @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<GetDTOUser> deleteProject(@PathVariable int id) {
+    public ResponseEntity<OutputDTOUser> deleteProject(@PathVariable int id) {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 }

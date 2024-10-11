@@ -4,6 +4,7 @@ import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.exception.ProjectAlreadyExists;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +12,7 @@ import com.fontys.crowdfund.model.User;
 
 import com.fontys.crowdfund.model.Project;
 
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.PostDTOProject;
+import com.fontys.crowdfund.persistence.dto.InputDTOProject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +26,17 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     // Get all projects and convert them to DTOs
-    public List<GetDTOProject> getAllProjects() {
+    public List<OutputDTOProject> getAllProjects() {
         return new ArrayList<>(projectRepository.findAll());
     }
 
     // Get project by ID
-    public GetDTOProject getProjectById(int id) {
+    public OutputDTOProject getProjectById(int id) {
         return projectRepository.findById(id);
     }
 
     // Create a new project and link it to a user by userId
-    public GetDTOProject createProject(PostDTOProject postDTOProject) {
+    public OutputDTOProject createProject(InputDTOProject postDTOProject) {
 
         if(projectRepository.projectExists(postDTOProject.getName(), postDTOProject.getUserEmail())){
             throw new ProjectAlreadyExists();
@@ -63,17 +63,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public GetDTOProject deleteProject(int id) {
+    public OutputDTOProject deleteProject(int id) {
         return projectRepository.deleteById(id);
     }
 
     @Override
-    public List<GetDTOProject> getCloseToFundingAllProjects() {
+    public List<OutputDTOProject> getCloseToFundingAllProjects() {
         return projectRepository.getCloseToFundingProjects();
     }
 
     @Override
-    public List<GetDTOProject> getNewProjects() {
+    public List<OutputDTOProject> getNewProjects() {
         return projectRepository.getNewProjects();
     }
 }

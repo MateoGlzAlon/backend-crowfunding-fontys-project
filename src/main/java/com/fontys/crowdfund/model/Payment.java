@@ -13,7 +13,7 @@ public class Payment {
 
     private int projectId;
     private String backerEmail;
-    private float amountFunded;
-    private Date fundDate;
+    private double amountFunded;
+    private Date paymentDate;
 
 }

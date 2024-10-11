@@ -11,12 +11,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDTO {
-    private long id;
-    private double amount;
-    private Date date;
+public class InputDTOPayment {
 
-    // Payment is linked to user and project IDs
-    private long userId;
-    private long projectId;
+    private int paymentId;
+    private int projectId;
+    private String backerEmail;
+    private double amountFunded;
+    private Date paymentDate;
+
 }

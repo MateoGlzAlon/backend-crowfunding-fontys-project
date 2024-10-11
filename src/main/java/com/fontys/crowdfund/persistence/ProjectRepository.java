@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.model.Project;
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
 
 import java.util.List;
 
@@ -11,22 +11,22 @@ public interface ProjectRepository {
     boolean existsById(int id);
 
     // Find all projects by user email
-    List<GetDTOProject> findAllProjectsByUserEmail(String userEmail);
+    List<OutputDTOProject> findAllProjectsByUserEmail(String userEmail);
 
     // Find a project by its ID
-    GetDTOProject findById(int projectId);
+    OutputDTOProject findById(int projectId);
 
     // Delete a project by its ID
-    GetDTOProject deleteById(int projectId);
+    OutputDTOProject deleteById(int projectId);
 
     // Save a project (create or update)
-    GetDTOProject save(Project project);
+    OutputDTOProject save(Project project);
 
-    List<GetDTOProject> findAll();
+    List<OutputDTOProject> findAll();
 
-    List<GetDTOProject> getCloseToFundingProjects();
+    List<OutputDTOProject> getCloseToFundingProjects();
 
     boolean projectExists(String name, String userEmail);
 
-    List<GetDTOProject> getNewProjects();
+    List<OutputDTOProject> getNewProjects();
 }

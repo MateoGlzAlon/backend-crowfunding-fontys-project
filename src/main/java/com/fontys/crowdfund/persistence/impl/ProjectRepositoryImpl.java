@@ -2,12 +2,10 @@ package com.fontys.crowdfund.persistence.impl;
 
 import com.fontys.crowdfund.model.Project;
 import com.fontys.crowdfund.persistence.ProjectRepository;
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.ProjectDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<GetDTOProject> findAllProjectsByUserEmail(String userEmail) {
+    public List<OutputDTOProject> findAllProjectsByUserEmail(String userEmail) {
         return this.savedProjects.stream()
                 .filter(project -> project.getOwner().getEmail().equals(userEmail))
                 .map(this::convertToDTO) // Use the utility method for conversion
@@ -37,7 +35,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public GetDTOProject save(Project project) {
+    public OutputDTOProject save(Project project) {
         project.setId(NEXT_ID);
         NEXT_ID++;
         this.savedProjects.add(project);
@@ -45,7 +43,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public GetDTOProject deleteById(int projectId) {
+    public OutputDTOProject deleteById(int projectId) {
         for (Project project : this.savedProjects) {
             if (project.getId() == projectId) {
                 this.savedProjects.remove(project);
@@ -56,14 +54,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<GetDTOProject> findAll() {
+    public List<OutputDTOProject> findAll() {
         return this.savedProjects.stream()
                 .map(this::convertToDTO) // Use the utility method for conversion
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<GetDTOProject> getCloseToFundingProjects() {
+    public List<OutputDTOProject> getCloseToFundingProjects() {
         return this.savedProjects.stream()
                 .filter(project -> project.getMoneyRaised() < project.getFundingGoal()) // Filter projects
                 .sorted(Comparator.comparingDouble(project -> project.getFundingGoal() - project.getMoneyRaised())) // Sort by closeness to goal
@@ -79,7 +77,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<GetDTOProject> getNewProjects() {
+    public List<OutputDTOProject> getNewProjects() {
         return this.savedProjects.stream()
                 .sorted((project1, project2) -> project2.getDateCreated().compareTo(project1.getDateCreated())) // Sort by date in descending order
                 .limit(5) // Limit to the 5 most recent projects
@@ -88,7 +86,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public GetDTOProject findById(int projectId) {
+    public OutputDTOProject findById(int projectId) {
         Project project = this.savedProjects.stream()
                 .filter(projectDTO -> projectDTO.getId() == projectId)
                 .findFirst()
@@ -97,9 +95,9 @@ public class ProjectRepositoryImpl implements ProjectRepository {
         return convertToDTO(project); // Use the utility method for conversion
     }
 
-    // Utility method to convert Project to GetDTOProject
-    private GetDTOProject convertToDTO(Project project) {
-        return GetDTOProject.builder()
+    // Utility method to convert Project to OutputDTOProject
+    private OutputDTOProject convertToDTO(Project project) {
+        return OutputDTOProject.builder()
                 .id(project.getId())
                 .name(project.getName())
                 .type(project.getType())

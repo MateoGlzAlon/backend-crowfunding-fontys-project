@@ -1,25 +1,24 @@
 package com.fontys.crowdfund.business;
 
-import com.fontys.crowdfund.persistence.dto.GetDTOProject;
-import com.fontys.crowdfund.persistence.dto.PostDTOProject;
-import com.fontys.crowdfund.persistence.dto.ProjectDTO;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.InputDTOProject;
 
 import java.util.List;
 
 public interface ProjectService {
 
     // Get all projects and convert them to DTOs
-    List<GetDTOProject> getAllProjects();
+    List<OutputDTOProject> getAllProjects();
 
     // Get project by ID
-    GetDTOProject getProjectById(int id);
+    OutputDTOProject getProjectById(int id);
 
     // Create a new project and link it to a user by userId
-    GetDTOProject createProject(PostDTOProject projectDTO);
+    OutputDTOProject createProject(InputDTOProject projectDTO);
 
-    GetDTOProject deleteProject(int id);
+    OutputDTOProject deleteProject(int id);
 
-    List<GetDTOProject> getCloseToFundingAllProjects();
+    List<OutputDTOProject> getCloseToFundingAllProjects();
 
-    List<GetDTOProject> getNewProjects();
+    List<OutputDTOProject> getNewProjects();
 }
