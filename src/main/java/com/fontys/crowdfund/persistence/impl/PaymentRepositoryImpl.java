@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,6 +68,15 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         }
         return null; // or throw new PaymentNotFoundException("Payment not found with ID: " + id);
     }
+
+    @Override
+    public List<OutputDTOPayment> getPaymentsByProjectId(int id) {
+        return this.savedPayments.stream()
+                .filter(project -> project.getProjectId() == id) // Filter projects
+                .sorted((payment1, payment2) -> payment1.getPaymentDate().compareTo(payment2.getPaymentDate())) // Sort by date in descending order
+                .map(this::convertToDTO) // Use the utility method for conversion
+                .collect(Collectors.toList()); // Collect and return as a List
+         }
 
     // Utility method to convert Payment to OutputDTOPayment
     private OutputDTOPayment convertToDTO(Payment payment) {

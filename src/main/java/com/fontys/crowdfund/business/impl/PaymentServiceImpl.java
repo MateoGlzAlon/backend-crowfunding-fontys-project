@@ -51,6 +51,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     }
 
+    @Override
+    public List<OutputDTOPayment> getPaymentsByProjectId(int id) {
+        return paymentRepository.getPaymentsByProjectId(id);
+    }
 
 
 }

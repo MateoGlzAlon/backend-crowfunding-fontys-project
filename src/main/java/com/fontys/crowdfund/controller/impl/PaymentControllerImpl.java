@@ -25,9 +25,16 @@ public class PaymentControllerImpl implements PaymentController {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<OutputDTOPayment> getPaymentById(@PathVariable Long id) {
+    public ResponseEntity<OutputDTOPayment> getPaymentById(@PathVariable int id) {
         return ResponseEntity.ok(paymentService.getPaymentById(id));
     }
+
+    @Override
+    @GetMapping("/projects/{id}")
+    public ResponseEntity<List<OutputDTOPayment>> getPaymentsToProjectById(@PathVariable int id) {
+        return ResponseEntity.ok(paymentService.getPaymentsByProjectId(id));
+    }
+
 
     @Override
     @PostMapping
@@ -37,7 +44,7 @@ public class PaymentControllerImpl implements PaymentController {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<OutputDTOPayment> deleteProject(@PathVariable int id) {
+    public ResponseEntity<OutputDTOPayment> deletePayment(@PathVariable int id) {
         return ResponseEntity.ok(paymentService.deletePayment(id));
     }
 }

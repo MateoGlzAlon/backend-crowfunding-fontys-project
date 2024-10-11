@@ -44,7 +44,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         User owner = userRepository.findUserByEmail(postDTOProject.getUserEmail());
 
-        System.out.println("dateCraetd " + postDTOProject.getDateCreated());
 
         Project project = Project.builder()
                 .name(postDTOProject.getName())

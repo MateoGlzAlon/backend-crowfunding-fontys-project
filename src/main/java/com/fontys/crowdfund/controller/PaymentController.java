@@ -14,11 +14,16 @@ public interface PaymentController {
     List<OutputDTOPayment> getAllPayments();
 
     @GetMapping("/{id}")
-    ResponseEntity<OutputDTOPayment> getPaymentById(@PathVariable Long id);
+    ResponseEntity<OutputDTOPayment> getPaymentById(@PathVariable int id);
+
+    @GetMapping("/projects/{id}")
+    ResponseEntity<List<OutputDTOPayment>> getPaymentsToProjectById(@PathVariable int id);
 
     @PostMapping
     ResponseEntity<OutputDTOPayment> createPayment(@RequestBody InputDTOPayment paymentDTO);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<OutputDTOPayment> deleteProject(@PathVariable int id);
+    ResponseEntity<OutputDTOPayment> deletePayment(@PathVariable int id);
+
+
 }

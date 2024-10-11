@@ -23,4 +23,6 @@ public interface PaymentRepository {
     int count();
 
     OutputDTOPayment deleteById(int id);
+
+    List<OutputDTOPayment> getPaymentsByProjectId(int id);
 }

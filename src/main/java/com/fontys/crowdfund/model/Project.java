@@ -21,7 +21,7 @@ public class Project {
     //TO-DO
     private float fundingGoal;
     private float moneyRaised;
-    private List<String> fundings;
+    private List<Payment> fundings;
     private List<String> images;
 
 }

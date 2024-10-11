@@ -13,7 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class InputDTOPayment {
 
-    private int paymentId;
     private int projectId;
     private String backerEmail;
     private double amountFunded;
