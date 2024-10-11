@@ -30,7 +30,7 @@ class CrowdfundingApplicationTests {
 
 		project1 = Project.builder()
 				.id(1)
-				.created(new Date())
+				.dateCreated(new Date())
 				.owner(user1)
 				.name("Fund my school")
 				.description("Need fundings to keep the school in my village open")
