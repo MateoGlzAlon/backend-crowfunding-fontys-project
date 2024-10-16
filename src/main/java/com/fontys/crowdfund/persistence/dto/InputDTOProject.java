@@ -23,5 +23,4 @@ public class InputDTOProject {
     private String userEmail;
     private List<String> images;
 
-
 }

@@ -4,6 +4,7 @@ import com.fontys.crowdfund.business.PaymentService;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
 import com.fontys.crowdfund.model.Payment;
 import com.fontys.crowdfund.persistence.PaymentRepository;
+import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final ProjectRepository projectRepository;
 
     // Get all payments and convert them to DTOs
     @Override
