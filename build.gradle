@@ -15,20 +15,20 @@ sonar {
     properties {
         property "sonar.projectKey", "Individual-Crowfund"
         property "sonar.projectName", "Individual Crowfund"
-        // You can add more SonarQube properties here if needed
+        // Additional SonarQube properties can be added here
     }
 }
 
 jacoco {
-    toolVersion = "0.8.8" // Specify JaCoCo version, adjust if necessary
+    toolVersion = "0.8.8" // Specify JaCoCo version
 }
 
 jacocoTestReport {
-    dependsOn test // JaCoCo will depend on the 'test' task to run
+    dependsOn test // JaCoCo will run after tests
 
     reports {
-        xml.required = true // Ensure XML report is generated for SonarQube integration
-        html.required = true // HTML report for local viewing
+        xml.required = true // Correct usage for newer Gradle versions
+        html.required = true // Enable HTML report for local viewing
     }
 }
 
@@ -61,9 +61,9 @@ test {
 }
 
 jacocoTestReport {
-    dependsOn test
+    dependsOn test // Make sure JaCoCo runs after tests
     reports {
-        xml.enabled true // Enable XML report for SonarQube coverage integration
-        html.enabled true // Enable HTML report for local inspection
+        xml.required = true // Enable XML report for SonarQube
+        html.required = true // Enable HTML report for local inspection
     }
 }
