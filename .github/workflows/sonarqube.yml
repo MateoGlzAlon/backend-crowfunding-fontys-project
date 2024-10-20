@@ -20,17 +20,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          check-latest: true
 
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set Java Home
+        # Ensures that JAVA_HOME is set correctly for the SonarQube scanner
+        run: echo "JAVA_HOME_17_X64=$JAVA_HOME" >> $GITHUB_ENV
+
       - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
+        uses: SonarSource/sonarqube-scan-action@v1.1.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # SonarQube token stored in repo secrets
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # SonarQube host URL stored in repo secrets
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}     # Ensuring SonarQube uses Java 17
         with:
           args: |
-            -Dsonar.projectKey=
-
+            -Dsonar.sources=.                       
