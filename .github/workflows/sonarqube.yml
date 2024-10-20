@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-
 jobs:
   build:
     name: Build and analyze
@@ -15,23 +14,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available.
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+
+      - name: Grant execution permissions for Gradlew
+        run: chmod +x ./gradlew  # This adds the execution permission for the gradlew script
+
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
