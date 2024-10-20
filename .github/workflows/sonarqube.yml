@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  pull-requests: read # allows SonarQube to decorate PRs with analysis results
+  pull-requests: read  # Allows SonarQube to decorate PRs with analysis results
 
 jobs:
   Analysis:
@@ -25,17 +25,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set Java Home
-        # Ensures that JAVA_HOME is set correctly for the SonarQube scanner
-        run: echo "JAVA_HOME_17_X64=$JAVA_HOME" >> $GITHUB_ENV
+      - name: Install SonarScanner
+        run: |
+          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner-cli.zip
+          mv sonar-scanner-4.8.0.2856-linux sonar-scanner
+          echo "SONAR_SCANNER_HOME=$PWD/sonar-scanner" >> $GITHUB_ENV
+          echo "$PWD/sonar-scanner/bin" >> $GITHUB_PATH
 
-      - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@v1.1.0
+      - name: Run SonarQube analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=<your-project-key> \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # SonarQube token stored in repo secrets
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # SonarQube host URL stored in repo secrets
-          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}     # Ensuring SonarQube uses Java 17
-        with:
-          args: |
-            -Dsonar.sources=.                       
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
