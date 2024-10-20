@@ -24,7 +24,7 @@ sonar {
 jacocoTestReport {
     reports {
         xml.required = true
-        html.enabled = true
+        html.required = true
     }
 }
 
