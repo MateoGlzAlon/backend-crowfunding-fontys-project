@@ -4,13 +4,20 @@ plugins {
     id 'java'
     id "org.sonarqube" version "5.1.0.4882"
     id 'jacoco'
+
+}
+
+
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 sonar {
     properties {
         property "sonar.projectKey", "Individual-Crowfund"
         property "sonar.projectName", "Individual Crowfund"
-        property "sonar.host.url", "https://sonarcloud.io"  # Adjust this to your SonarQube server
     }
 }
 
@@ -19,11 +26,6 @@ jacocoTestReport {
         xml.required = true
         html.enabled = true
     }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
 
 group = 'fontys.sem3'
@@ -48,6 +50,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
 
 test {
     useJUnitPlatform()
