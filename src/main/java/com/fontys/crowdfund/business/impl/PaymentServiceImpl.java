@@ -1,12 +1,12 @@
 package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.PaymentService;
-import com.fontys.crowdfund.exception.EmailAlreadyExists;
 import com.fontys.crowdfund.model.Payment;
 import com.fontys.crowdfund.persistence.PaymentRepository;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
+import com.fontys.crowdfund.persistence.entity.PaymentEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +58,12 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.getPaymentsByProjectId(id);
     }
 
+
+    public OutputDTOPayment transformDTORepo(PaymentEntity payment) {
+
+        OutputDTOPayment outputDTOPayment = OutputDTOPayment.builder().build();
+
+        return null;
+    }
 
 }
