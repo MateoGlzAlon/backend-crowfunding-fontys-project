@@ -1,11 +1,15 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // Check if a user exists by email
     boolean existsByEmail(String email);
@@ -14,22 +18,17 @@ public interface UserRepository {
     boolean existsById(int userId);
 
     // Find a user by ID
-    OutputDTOUser findById(int userId);
+    UserEntity findById(int userId);
 
-    // Find a OutputDTOUser by ID
-    OutputDTOUser findByEmail(String userEmail);
+    // Find a user by email
+    @Query("select u from UserEntity u where u.email = :userEmail")
+    UserEntity findByEmail(@Param("userEmail") String userEmail);
 
-    // Find a User by ID
-    User findUserByEmail(String userEmail);
+    // Custom JPQL query to delete a user by ID
+    @Modifying
+    @Query("DELETE " +
+            "FROM UserEntity u " +
+            "WHERE u.id = :userId")
+    void deleteById(@Param("userId") int userId);
 
-    // Save a user (create or update)
-    OutputDTOUser save(User user);
-
-    // Find all users
-    List<OutputDTOUser> findAll();
-
-    // Get the count of users
-    int count();
-
-    OutputDTOUser deleteById(int id);
 }

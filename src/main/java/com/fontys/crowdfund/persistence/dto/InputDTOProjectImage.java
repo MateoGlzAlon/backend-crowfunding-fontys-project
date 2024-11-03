@@ -11,11 +11,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputDTOPayment {
+public class InputDTOProjectImage {
 
     private int projectId;
-    private String backerEmail;
-    private float amountFunded;
-    private Date paymentDate;
+    private String imageURL;
 
 }

@@ -54,4 +54,7 @@ public class ProjectEntity {
     @NotNull
     @Column(name = "moneyRaised", nullable = false)
     private Float moneyRaised;
+
+
+
 }

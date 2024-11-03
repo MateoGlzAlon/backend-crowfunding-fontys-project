@@ -5,17 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputDTOPayment {
+public class OutputDTOProjectImage {
 
+    private int id;
     private int projectId;
-    private String backerEmail;
-    private float amountFunded;
-    private Date paymentDate;
+    private String imageURL;
 
 }

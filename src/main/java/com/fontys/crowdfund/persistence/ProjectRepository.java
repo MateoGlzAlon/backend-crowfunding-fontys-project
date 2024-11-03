@@ -1,32 +1,48 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.model.Project;
 import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProjectRepository {
+public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer> {
 
     // Check if a project exists by its ID
-    boolean existsById(int id);
+    @Query("SELECT COUNT(p) > 0 " +
+            "FROM ProjectEntity p " +
+            "WHERE p.id = :id")
+    boolean existsById(@Param("id") int id);
 
     // Find all projects by user email
-    List<OutputDTOProject> findAllProjectsByUserEmail(String userEmail);
-
-    // Find a project by its ID
-    OutputDTOProject findById(int projectId);
+    @Query("SELECT new com.fontys.crowdfund.persistence.entity.ProjectEntity(p.id, p.name, p.description, p.location, p.type, p.dateCreated, p.fundingGoal, p.moneyRaised) " +
+            "FROM ProjectEntity p " +
+            "JOIN p.user u " +
+            "WHERE u.email = :userEmail")
+    List<ProjectEntity> findAllProjectsByUserEmail(@Param("userEmail") String userEmail);
 
     // Delete a project by its ID
-    OutputDTOProject deleteById(int projectId);
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ProjectEntity p " +
+            "WHERE p.id = :projectId")
+    void deleteById(@Param("projectId") int projectId);
 
-    // Save a project (create or update)
-    OutputDTOProject save(Project project);
+    // Get projects close to reaching funding goals (e.g., 90% of the goal)
+    @Query("SELECT p " +
+            "FROM ProjectEntity p " +
+            "ORDER BY p.fundingGoal - p.moneyRaised DESC " +
+            "LIMIT 5")
+    List<ProjectEntity> getCloseToFundingProjects();
 
-    List<OutputDTOProject> findAll();
-
-    List<OutputDTOProject> getCloseToFundingProjects();
-
-    boolean projectExists(String name, String userEmail);
-
-    List<OutputDTOProject> getNewProjects();
+    // Get new projects, ordered by creation date (assuming 'new' means most recently created)
+    @Query("SELECT p " +
+            "FROM ProjectEntity p " +
+            "ORDER BY p.dateCreated DESC " +
+            "LIMIT 5")
+    List<ProjectEntity> getNewProjects();
 }

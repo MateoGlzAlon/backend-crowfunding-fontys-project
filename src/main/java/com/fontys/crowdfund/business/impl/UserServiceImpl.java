@@ -2,14 +2,15 @@ package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserService;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
-import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.InputDTOUser;
 import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.persistence.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -21,13 +22,19 @@ public class UserServiceImpl implements UserService {
     // Get all users and convert them to DTOs
     @Override
     public List<OutputDTOUser> getAllUsers() {
-        return new ArrayList<>(userRepository.findAll());
+        List<OutputDTOUser> outputDTOUsers = new ArrayList<>();
+
+        for (UserEntity userEntity : userRepository.findAll()) {
+            outputDTOUsers.add(createOutputDTOUser(userEntity));
+        }
+
+        return outputDTOUsers;
     }
 
     // Get user by ID
     @Override
     public OutputDTOUser getUserById(int id) {
-        return userRepository.findById(id);
+        return createOutputDTOUser(userRepository.findById(id));
     }
 
     // Create a new user
@@ -38,20 +45,31 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExists();
         }
 
-        User user = User.builder()
+        UserEntity user = UserEntity.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
-                .ownedProjects(new ArrayList<>())
+                .projects(new HashSet<>())
                 .build();
 
-        return userRepository.save(user);
+        return createOutputDTOUser(userRepository.save(user));
     }
 
     @Override
-    public OutputDTOUser deleteUser(int id) {
+    public void deleteUser(int id) {
 
-        return userRepository.deleteById(id);
+        userRepository.deleteById(id);
+
+    }
+
+
+    public OutputDTOUser createOutputDTOUser(UserEntity userEntity) {
+
+        return OutputDTOUser.builder()
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .name(userEntity.getName())
+                .build();
 
     }
 

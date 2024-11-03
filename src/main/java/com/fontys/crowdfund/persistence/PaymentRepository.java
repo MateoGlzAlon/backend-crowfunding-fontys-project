@@ -1,28 +1,23 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.model.Payment;
-import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
+import com.fontys.crowdfund.persistence.entity.PaymentEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PaymentRepository {
+public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     // Check if a payment exists by ID
-    boolean existsById(long paymentId);
+    @Query("SELECT COUNT(p) > 0 FROM PaymentEntity p WHERE p.id = :paymentId")
+    boolean existsById(@Param("paymentId") long paymentId);
 
-    // Find a payment by ID
-    OutputDTOPayment findById(long paymentId);
+    // Find a payment by ID (JpaRepository already provides findById, but this is an example if custom logic is needed)
+    @Query("SELECT p FROM PaymentEntity p WHERE p.id = :paymentId")
+    PaymentEntity findPaymentById(@Param("paymentId") long paymentId);
 
-    // Save a payment (create or update)
-    OutputDTOPayment save(Payment payment);
-
-    // Find all payments
-    List<OutputDTOPayment> findAll();
-
-    // Get the count of payments
-    int count();
-
-    OutputDTOPayment deleteById(int id);
-
-    List<OutputDTOPayment> getPaymentsByProjectId(int id);
+    // Get payments by project ID, returning PaymentEntity directly
+    @Query("SELECT p FROM PaymentEntity p WHERE p.project.id = :projectId ORDER BY p.paymentDate DESC")
+    List<PaymentEntity> getPaymentsByProjectId(@Param("projectId") int projectId);
 }

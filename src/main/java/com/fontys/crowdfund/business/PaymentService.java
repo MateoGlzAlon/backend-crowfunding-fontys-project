@@ -16,7 +16,7 @@ public interface PaymentService {
     // Create a new payment
     OutputDTOPayment createPayment(InputDTOPayment paymentDTO);
 
-    OutputDTOPayment deletePayment(int id);
+    void deletePaymentById(int id);
 
     List<OutputDTOPayment> getPaymentsByProjectId(int id);
 }

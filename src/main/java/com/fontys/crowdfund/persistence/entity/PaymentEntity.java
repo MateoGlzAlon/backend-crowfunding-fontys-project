@@ -1,7 +1,6 @@
 package com.fontys.crowdfund.persistence.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "Payments")
+@Table(name = "payments")
 @Builder
 @Data
 @AllArgsConstructor
@@ -33,12 +32,12 @@ public class PaymentEntity {
     @JoinColumn(name = "project_id", nullable = false)
     private ProjectEntity project;
 
-    @NotBlank
+    @NotNull
     @Column(name = "amount")
     private float amount;
 
-    @NotBlank
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "payment_date")
     private Date paymentDate;
-
 }

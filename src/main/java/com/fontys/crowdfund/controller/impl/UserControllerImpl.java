@@ -38,6 +38,6 @@ public class UserControllerImpl implements UserController {
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<OutputDTOUser> deleteProject(@PathVariable int id) {
-        return ResponseEntity.ok(userService.deleteUser(id));
+        return ResponseEntity.ok().build();
     }
 }

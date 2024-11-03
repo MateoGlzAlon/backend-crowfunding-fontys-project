@@ -1,8 +1,10 @@
 // ProjectController.java
 package com.fontys.crowdfund.controller;
 
+import com.fontys.crowdfund.persistence.dto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.InputDTOProject;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProjectImage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,4 +29,21 @@ public interface ProjectController {
 
     @GetMapping("/new")
     ResponseEntity<List<OutputDTOProject>> getNewProjects();
+
+
+
+
+
+    @GetMapping("/images")
+    ResponseEntity<List<OutputDTOProjectImage>> getAllProjectImages();
+
+    @PostMapping("/images")
+    ResponseEntity<OutputDTOProjectImage> createProjectImage(@RequestBody InputDTOProjectImage projectDTOImage);
+
+    @GetMapping("/images/{id}")
+    ResponseEntity<OutputDTOProjectImage> getProjectImageById(@PathVariable int id);
+
+    @DeleteMapping("/images/{id}")
+    ResponseEntity<OutputDTOProjectImage> deleteProjectImage(@PathVariable int id);
+
 }

@@ -16,5 +16,5 @@ public interface UserService {
     // Create a new user
     OutputDTOUser createUser(InputDTOUser userDTO);
 
-    OutputDTOUser deleteUser(int id);
+    void deleteUser(int id);
 }

@@ -1,21 +1,22 @@
 package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.ProjectService;
-import com.fontys.crowdfund.exception.ProjectAlreadyExists;
+import com.fontys.crowdfund.persistence.ProjectImagesRepository;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.persistence.dto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import com.fontys.crowdfund.model.User;
-
-import com.fontys.crowdfund.model.Project;
 
 import com.fontys.crowdfund.persistence.dto.InputDTOProject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -23,56 +24,136 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ProjectImagesRepository projectImagesRepository;
 
 
     // Get all projects and convert them to DTOs
     public List<OutputDTOProject> getAllProjects() {
-        return new ArrayList<>(projectRepository.findAll());
+
+        List<OutputDTOProject> outputDTOProjects = new ArrayList<>();
+
+        for (ProjectEntity projectEntity : projectRepository.findAll()) {
+            outputDTOProjects.add(createOutputDTOProject(projectEntity));
+        }
+
+        return outputDTOProjects;
+
     }
 
     // Get project by ID
     public OutputDTOProject getProjectById(int id) {
-        return projectRepository.findById(id);
+        return createOutputDTOProject(Objects.requireNonNull(projectRepository.findById(id).orElse(null)));
     }
 
     // Create a new project and link it to a user by userId
     public OutputDTOProject createProject(InputDTOProject postDTOProject) {
 
-        if(projectRepository.projectExists(postDTOProject.getName(), postDTOProject.getUserEmail())){
-            throw new ProjectAlreadyExists();
-        }
-
-        User owner = userRepository.findUserByEmail(postDTOProject.getUserEmail());
-
-
-        Project project = Project.builder()
+        ProjectEntity project = ProjectEntity.builder()
                 .name(postDTOProject.getName())
                 .description(postDTOProject.getDescription())
                 .location(postDTOProject.getLocation())
                 .type(postDTOProject.getType())
                 .dateCreated(postDTOProject.getDateCreated())
-                .moneyRaised(0)
+                .moneyRaised(0f)
                 .fundingGoal(postDTOProject.getFundingGoal())
-                .owner(owner)  // Linking project to the user
-                .fundings(new ArrayList<>())
-                .images(postDTOProject.getImages())
+                .user(userRepository.findByEmail(postDTOProject.getUserEmail()))  // Linking project to the user
                 .build();
 
-        return projectRepository.save(project);
+        return createOutputDTOProject(projectRepository.save(project));
     }
 
     @Override
-    public OutputDTOProject deleteProject(int id) {
-        return projectRepository.deleteById(id);
+    public void deleteProject(int id) {
+        projectRepository.deleteById(id);
     }
 
     @Override
     public List<OutputDTOProject> getCloseToFundingAllProjects() {
-        return projectRepository.getCloseToFundingProjects();
+
+        List<OutputDTOProject> outputDTOProjects = new ArrayList<>();
+
+        for (ProjectEntity projectEntity : projectRepository.getCloseToFundingProjects()) {
+            outputDTOProjects.add(createOutputDTOProject(projectEntity));
+        }
+
+        return outputDTOProjects;
+
     }
 
     @Override
     public List<OutputDTOProject> getNewProjects() {
-        return projectRepository.getNewProjects();
+
+        List<OutputDTOProject> outputDTOProjects = new ArrayList<>();
+
+        for (ProjectEntity projectEntity : projectRepository.getNewProjects()) {
+            outputDTOProjects.add(createOutputDTOProject(projectEntity));
+        }
+
+        return outputDTOProjects;
     }
+
+    @Override
+    public List<OutputDTOProjectImage> getAllProjectImages() {
+
+        List<OutputDTOProjectImage> outputDTOProjectImages = new ArrayList<>();
+
+        for (ProjectImageEntity projectImageEntity : projectImagesRepository.findAll()) {
+            outputDTOProjectImages.add(createOutputDTOProjectImage(projectImageEntity));
+        }
+
+        return outputDTOProjectImages;    }
+
+    @Override
+    public OutputDTOProjectImage createProjectImage(InputDTOProjectImage projectDTOImage) {
+
+        ProjectImageEntity projectImage = ProjectImageEntity.builder()
+                .project(projectRepository.findById(projectDTOImage.getProjectId()).orElse(null))
+                .imageUrl(projectDTOImage.getImageURL())
+                .build();
+
+        return createOutputDTOProjectImage(projectImagesRepository.save(projectImage));
+    }
+
+    @Override
+    public OutputDTOProjectImage getProjectImageById(int id) {
+        return createOutputDTOProjectImage(Objects.requireNonNull(projectImagesRepository.findById(id).orElse(null)));
+    }
+
+    @Override
+    public void deleteProjectImage(int id) {
+        projectImagesRepository.deleteById(id);
+    }
+
+
+    public OutputDTOProject createOutputDTOProject(ProjectEntity projectEntity) {
+
+        return OutputDTOProject.builder()
+
+                .id(projectEntity.getId())
+                .name(projectEntity.getName())
+                .userEmail(projectEntity.getUser().getEmail())
+                .fundingGoal(projectEntity.getFundingGoal())
+                .moneyRaised(projectEntity.getMoneyRaised())
+                .images(projectImagesRepository.getImagesFromProjectId(projectEntity.getId()))
+                .description(projectEntity.getDescription())
+                .location(projectEntity.getLocation())
+                .type(projectEntity.getType())
+                .dateCreated(projectEntity.getDateCreated())
+                .build();
+
+
+    }
+
+    public OutputDTOProjectImage createOutputDTOProjectImage(ProjectImageEntity projectImageEntity) {
+
+        return OutputDTOProjectImage.builder()
+
+                .id(projectImageEntity.getId())
+                .projectId(projectImageEntity.getProject().getId())
+                .imageURL(projectImageEntity.getImageUrl())
+                .build();
+    }
+
+
+
 }

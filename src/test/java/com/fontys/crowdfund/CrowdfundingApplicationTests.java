@@ -1,7 +1,5 @@
 package com.fontys.crowdfund;
 
-import com.fontys.crowdfund.model.Project;
-import com.fontys.crowdfund.model.User;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
