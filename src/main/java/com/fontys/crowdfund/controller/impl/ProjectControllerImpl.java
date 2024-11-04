@@ -61,22 +61,26 @@ public class ProjectControllerImpl implements ProjectController {
 
 
     @Override
+    @GetMapping("/images")
     public ResponseEntity<List<OutputDTOProjectImage>> getAllProjectImages() {
         return ResponseEntity.ok(projectService.getAllProjectImages());
     }
 
     @Override
-    public ResponseEntity<OutputDTOProjectImage> createProjectImage(InputDTOProjectImage projectDTOImage) {
+    @PostMapping("/images")
+    public ResponseEntity<OutputDTOProjectImage> createProjectImage(@RequestBody InputDTOProjectImage projectDTOImage) {
         return ResponseEntity.ok(projectService.createProjectImage(projectDTOImage));
     }
 
     @Override
-    public ResponseEntity<OutputDTOProjectImage> getProjectImageById(int id) {
+    @GetMapping("/images/{id}")
+    public ResponseEntity<OutputDTOProjectImage> getProjectImageById(@PathVariable int id) {
         return ResponseEntity.ok(projectService.getProjectImageById(id));
     }
 
     @Override
-    public ResponseEntity<OutputDTOProjectImage> deleteProjectImage(int id) {
+    @DeleteMapping("/images/{id}")
+    public ResponseEntity<OutputDTOProjectImage> deleteProjectImage(@PathVariable int id) {
         projectService.deleteProjectImage(id);
         return ResponseEntity.ok().build();
     }

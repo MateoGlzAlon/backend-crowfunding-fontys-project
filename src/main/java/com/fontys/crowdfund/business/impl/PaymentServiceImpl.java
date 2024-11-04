@@ -9,6 +9,7 @@ import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -89,6 +90,23 @@ public class PaymentServiceImpl implements PaymentService {
 
         return outputDTOPayments;
     }
+
+    @Override
+    public List<OutputDonationNotification> getPaymentNotificationsByProjectId(int id) {
+        List<OutputDonationNotification> outputDTOPaymentNotification = new ArrayList<>();
+
+        for (PaymentEntity paymentEntity : paymentRepository.getPaymentsByProjectId(id)) {
+
+            OutputDonationNotification outputDonationNotification = OutputDonationNotification.builder()
+                    .backerName(paymentEntity.getUser().getName())
+                    .paymentDate(paymentEntity.getPaymentDate())
+                    .amount(paymentEntity.getAmount())
+                    .build();
+
+            outputDTOPaymentNotification.add(outputDonationNotification);
+        }
+
+        return outputDTOPaymentNotification;    }
 
 
     private OutputDTOPayment createOutputDTOPayment(PaymentEntity paymentEntity) {
