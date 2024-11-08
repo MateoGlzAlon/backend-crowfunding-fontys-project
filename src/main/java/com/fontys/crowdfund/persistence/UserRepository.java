@@ -11,26 +11,26 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    // Check if a user exists by email
-    boolean existsByEmail(String email);
+        // Check if a user exists by email
+        boolean existsByEmail(String email);
 
-    // Check if a user exists by ID
-    boolean existsById(int userId);
+        // Check if a user exists by ID
+        boolean existsById(int userId);
 
-    // Find a user by ID
-    UserEntity findById(int userId);
+        // Find a user by ID
+        UserEntity findById(int userId);
 
-    // Find a user by email
-    @Query("SELECT u " +
-            "FROM UserEntity u " +
-            "WHERE u.email = :userEmail")
-    UserEntity findByEmail(@Param("userEmail") String userEmail);
+        // Find a user by email
+        @Query("SELECT u " +
+                        "FROM UserEntity u " +
+                        "WHERE u.email = :userEmail")
+        UserEntity findByEmail(@Param("userEmail") String userEmail);
 
-    // Custom JPQL query to delete a user by ID
-    @Modifying
-    @Query("DELETE " +
-            "FROM UserEntity u " +
-            "WHERE u.id = :userId")
-    void deleteById(@Param("userId") int userId);
+        // Delete a user by ID
+        @Modifying
+        @Query("DELETE " +
+                        "FROM UserEntity u " +
+                        "WHERE u.id = :userId")
+        void deleteById(@Param("userId") int userId);
 
 }
