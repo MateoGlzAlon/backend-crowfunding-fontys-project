@@ -14,5 +14,6 @@ public class OutputDTOProjectImage {
     private int id;
     private int projectId;
     private String imageURL;
+    private int imageOrder;
 
 }

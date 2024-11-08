@@ -15,5 +15,6 @@ public class InputDTOProjectImage {
 
     private int projectId;
     private String imageURL;
+    private int imageOrder;
 
 }

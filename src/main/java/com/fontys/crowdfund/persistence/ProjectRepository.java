@@ -36,7 +36,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
     @Query("SELECT p " +
             "FROM ProjectEntity p " +
             "ORDER BY p.fundingGoal - p.moneyRaised DESC " +
-            "LIMIT 5")
+            "LIMIT 5 ")
     List<ProjectEntity> getCloseToFundingProjects();
 
     // Get new projects, ordered by creation date (assuming 'new' means most recently created)

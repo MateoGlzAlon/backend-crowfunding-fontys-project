@@ -21,7 +21,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findById(int userId);
 
     // Find a user by email
-    @Query("select u from UserEntity u where u.email = :userEmail")
+    @Query("SELECT u " +
+            "FROM UserEntity u " +
+            "WHERE u.email = :userEmail")
     UserEntity findByEmail(@Param("userEmail") String userEmail);
 
     // Custom JPQL query to delete a user by ID

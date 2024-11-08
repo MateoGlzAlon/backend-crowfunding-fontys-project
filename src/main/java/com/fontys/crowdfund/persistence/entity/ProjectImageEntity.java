@@ -33,4 +33,8 @@ public class ProjectImageEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @NotNull
+    @Column(name = "image_order")
+    private Integer imageOrder;
+
 }

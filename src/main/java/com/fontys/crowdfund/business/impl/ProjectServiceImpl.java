@@ -109,6 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectImageEntity projectImage = ProjectImageEntity.builder()
                 .project(projectRepository.findById(projectDTOImage.getProjectId()).orElse(null))
                 .imageUrl(projectDTOImage.getImageURL())
+                .imageOrder(projectDTOImage.getImageOrder())
                 .build();
 
         return createOutputDTOProjectImage(projectImagesRepository.save(projectImage));
@@ -151,6 +152,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .id(projectImageEntity.getId())
                 .projectId(projectImageEntity.getProject().getId())
                 .imageURL(projectImageEntity.getImageUrl())
+                .imageOrder(projectImageEntity.getImageOrder())
                 .build();
     }
 

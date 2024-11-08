@@ -13,6 +13,6 @@ public interface ProjectImagesRepository extends JpaRepository<ProjectImageEntit
     @Query("SELECT pi.imageUrl " +
             "FROM ProjectImageEntity pi " +
             "WHERE pi.project.id = :projectId " +
-            "ORDER BY pi.id DESC")
+            "ORDER BY pi.id ASC")
     List<String> getImagesFromProjectId(@Param("projectId") Integer projectId);
 }
