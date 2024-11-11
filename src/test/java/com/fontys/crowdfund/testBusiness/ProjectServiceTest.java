@@ -157,6 +157,8 @@ class ProjectServiceTest {
         verify(projectRepository, times(1)).deleteById(1);
     }
 
+
+
     //TO-DO
     @Disabled
     @Test
@@ -185,5 +187,62 @@ class ProjectServiceTest {
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> projectService.getProjectById(99));
         assertEquals("Project not found", thrown.getMessage());
         verify(projectRepository, times(1)).findById(99);
+    }
+
+    @Test
+    @DisplayName("Should get all projects close to funding goal")
+    void get_close_to_funding_all_projects() {
+        // Arrange
+        ProjectEntity project3 = ProjectEntity.builder()
+                .id(3)
+                .name("Project Three")
+                .description("Description of project three")
+                .location("Location Three")
+                .type("Type Three")
+                .dateCreated(new Date())
+                .user(user)
+                .fundingGoal(1000f)
+                .moneyRaised(950f) // Close to funding goal
+                .build();
+
+        when(projectRepository.getCloseToFundingProjects()).thenReturn(List.of(project3));
+
+        // Act
+        List<OutputDTOProject> projects = projectService.getCloseToFundingAllProjects();
+
+        // Assert
+        assertEquals(1, projects.size());
+        assertEquals("Project Three", projects.get(0).getName());
+        assertEquals(3, projects.get(0).getId());
+        verify(projectRepository, times(1)).getCloseToFundingProjects();
+    }
+
+
+    @Test
+    @DisplayName("Should get all projects close to funding goal")
+    void get_new_all_projects() {
+        // Arrange
+        ProjectEntity project3 = ProjectEntity.builder()
+                .id(3)
+                .name("Project Three")
+                .description("Description of project three")
+                .location("Location Three")
+                .type("Type Three")
+                .dateCreated(new Date())
+                .user(user)
+                .fundingGoal(1000f)
+                .moneyRaised(950f) // Close to funding goal
+                .build();
+
+        when(projectRepository.getNewProjects()).thenReturn(List.of(project3));
+
+        // Act
+        List<OutputDTOProject> projects = projectService.getNewProjects();
+
+        // Assert
+        assertEquals(1, projects.size());
+        assertEquals("Project Three", projects.get(0).getName());
+        assertEquals(3, projects.get(0).getId());
+        verify(projectRepository, times(1)).getNewProjects();
     }
 }

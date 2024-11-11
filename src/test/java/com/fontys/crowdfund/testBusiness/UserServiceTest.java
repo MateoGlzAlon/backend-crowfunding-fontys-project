@@ -1,6 +1,7 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.UserServiceImpl;
+import com.fontys.crowdfund.exception.EmailAlreadyExists;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.dto.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
@@ -150,6 +151,25 @@ class UserServiceTest {
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> userService.getUserById(99));
         assertEquals("User not found", thrown.getMessage());
         verify(userRepository, times(1)).findById(99);
+    }
+
+    @Test
+    @DisplayName("Should throw exception if user email already exists")
+    void user_already_exists() {
+
+        InputDTOUser inputUser = InputDTOUser.builder()
+                .email("user1@example.com")
+                .name("User One")
+                .password("password1")
+                .build();
+
+
+        // Arrange
+        when(userRepository.existsByEmail(user1.getEmail())).thenReturn(true);
+
+        // Act & Assert
+        RuntimeException thrown = assertThrows(EmailAlreadyExists.class, () -> userService.createUser(inputUser));
+        assertEquals("EMAIL_IS_ALREADY_REGISTERED", thrown.getMessage());
     }
 
 }
