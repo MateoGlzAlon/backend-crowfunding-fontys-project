@@ -1,8 +1,8 @@
 // PaymentController.java
 package com.fontys.crowdfund.controller;
 
-import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
-import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
 import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

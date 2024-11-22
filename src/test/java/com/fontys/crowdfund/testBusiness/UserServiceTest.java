@@ -3,8 +3,8 @@ package com.fontys.crowdfund.testBusiness;
 import com.fontys.crowdfund.business.impl.UserServiceImpl;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
 import com.fontys.crowdfund.persistence.UserRepository;
-import com.fontys.crowdfund.persistence.dto.InputDTOUser;
-import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

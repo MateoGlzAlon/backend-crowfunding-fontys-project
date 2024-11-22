@@ -1,6 +1,5 @@
 package com.fontys.crowdfund.persistence;
 
-import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

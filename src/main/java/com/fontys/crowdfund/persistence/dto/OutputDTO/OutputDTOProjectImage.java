@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence.dto;
+package com.fontys.crowdfund.persistence.dto.OutputDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

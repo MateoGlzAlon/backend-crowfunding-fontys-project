@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence.dto;
+package com.fontys.crowdfund.persistence.dto.OutputDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputDTOProjectImage {
+public class OutputDTOPayment {
 
+    private int paymentId;
     private int projectId;
-    private String imageURL;
-    private int imageOrder;
+    private String backerEmail;
+    private double amountFunded;
+    private Date paymentDate;
 
 }

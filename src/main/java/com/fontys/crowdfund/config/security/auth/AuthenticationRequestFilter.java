@@ -1,9 +1,9 @@
 package com.fontys.crowdfund.config.security.auth;
 
-import fontys.sem3.school.configuration.security.token.AccessToken;
-import fontys.sem3.school.configuration.security.token.AccessTokenDecoder;
+import com.fontys.crowdfund.config.security.token.AccessToken;
+import com.fontys.crowdfund.config.security.token.AccessTokenDecoder;
 
-import fontys.sem3.school.configuration.security.token.exception.InvalidAccessTokenException;
+import com.fontys.crowdfund.config.security.token.exception.InvalidAccessTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

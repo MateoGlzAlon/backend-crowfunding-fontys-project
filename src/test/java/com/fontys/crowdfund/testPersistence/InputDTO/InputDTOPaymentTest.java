@@ -1,6 +1,6 @@
 package com.fontys.crowdfund.testPersistence.InputDTO;
 
-import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

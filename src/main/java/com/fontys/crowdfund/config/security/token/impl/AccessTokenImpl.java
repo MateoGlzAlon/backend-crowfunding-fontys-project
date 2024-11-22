@@ -1,6 +1,6 @@
 package com.fontys.crowdfund.config.security.token.impl;
 
-import fontys.sem3.school.configuration.security.token.AccessToken;
+import com.fontys.crowdfund.config.security.token.AccessToken;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

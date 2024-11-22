@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence.dto;
+package com.fontys.crowdfund.persistence.dto.InputDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OutputDTOUser {
+public class InputDTOUser {
 
-    private long id;
     private String name;
     private String email;
+    private String password;
+    private String role;
+
 }

@@ -4,15 +4,15 @@ import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.persistence.ProjectImagesRepository;
 import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
-import com.fontys.crowdfund.persistence.dto.InputDTOProjectImage;
-import com.fontys.crowdfund.persistence.dto.OutputDTOProject;
-import com.fontys.crowdfund.persistence.dto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.fontys.crowdfund.persistence.dto.InputDTOProject;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProject;
 
 import java.util.ArrayList;
 import java.util.List;

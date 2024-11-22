@@ -2,11 +2,12 @@ package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserService;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
-import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     // Get all users and convert them to DTOs
     @Override
@@ -44,12 +47,14 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsByEmail(userDTO.getEmail())){
             throw new EmailAlreadyExists();
         }
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
 
         UserEntity user = UserEntity.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
+                .password(encodedPassword)
                 .projects(new HashSet<>())
+                .role(userDTO.getRole())
                 .build();
 
         return createOutputDTOUser(userRepository.save(user));
@@ -69,6 +74,7 @@ public class UserServiceImpl implements UserService {
                 .id(userEntity.getId())
                 .email(userEntity.getEmail())
                 .name(userEntity.getName())
+                .role(userEntity.getRole())
                 .build();
 
     }

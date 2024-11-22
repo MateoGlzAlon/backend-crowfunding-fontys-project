@@ -1,8 +1,8 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.PaymentController;
-import com.fontys.crowdfund.persistence.dto.OutputDTOPayment;
-import com.fontys.crowdfund.persistence.dto.InputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
 import com.fontys.crowdfund.business.PaymentService;
 import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
 import lombok.AllArgsConstructor;

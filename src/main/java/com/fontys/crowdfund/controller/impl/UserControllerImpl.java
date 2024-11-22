@@ -1,8 +1,8 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.UserController;
-import com.fontys.crowdfund.persistence.dto.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
 import com.fontys.crowdfund.business.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
