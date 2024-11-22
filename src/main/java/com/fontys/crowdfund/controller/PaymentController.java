@@ -29,5 +29,4 @@ public interface PaymentController {
     @DeleteMapping("/{id}")
     ResponseEntity<OutputDTOPayment> deletePayment(@PathVariable int id);
 
-
 }

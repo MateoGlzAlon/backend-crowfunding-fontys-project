@@ -33,4 +33,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                         "WHERE u.id = :userId")
         void deleteById(@Param("userId") int userId);
 
+
+
 }
