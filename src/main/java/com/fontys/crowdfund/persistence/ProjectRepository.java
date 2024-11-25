@@ -34,7 +34,8 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
     // Get projects close to reaching funding goals (e.g., 90% of the goal)
     @Query("SELECT p " +
             "FROM ProjectEntity p " +
-            "ORDER BY p.fundingGoal - p.moneyRaised ASC " +
+            "WHERE p.moneyRaised < p.fundingGoal " +
+            "ORDER BY p.moneyRaised/p.fundingGoal DESC " +
             "LIMIT 5 ")
     List<ProjectEntity> getCloseToFundingProjects();
 
