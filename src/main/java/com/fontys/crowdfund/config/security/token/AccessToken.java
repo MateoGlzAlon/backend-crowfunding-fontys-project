@@ -1,13 +1,13 @@
 package com.fontys.crowdfund.config.security.token;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface AccessToken {
-    String getSubject();
 
-    Long getStudentId();
+    Long getUserId();
 
-    Set<String> getRoles();
+    Collection<String> getRole();
 
     boolean hasRole(String roleName);
 }

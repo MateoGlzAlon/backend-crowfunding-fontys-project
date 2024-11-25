@@ -34,16 +34,15 @@ public class AccessTokenEncoderDecoderImpl implements AccessTokenEncoder, Access
     @Override
     public String encode(AccessToken accessToken) {
         Map<String, Object> claimsMap = new HashMap<>();
-        if (!CollectionUtils.isEmpty(accessToken.getRoles())) {
-            claimsMap.put("roles", accessToken.getRoles());
+        if (!CollectionUtils.isEmpty(accessToken.getRole())) {
+            claimsMap.put("roles", accessToken.getRole());
         }
-        if (accessToken.getStudentId() != null) {
-            claimsMap.put("studentId", accessToken.getStudentId());
+        if (accessToken.getUserId() != null) {
+            claimsMap.put("userId", accessToken.getUserId());
         }
 
         Instant now = Instant.now();
         return Jwts.builder()
-                .setSubject(accessToken.getSubject())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(30, ChronoUnit.MINUTES)))
                 .addClaims(claimsMap)
@@ -59,9 +58,11 @@ public class AccessTokenEncoderDecoderImpl implements AccessTokenEncoder, Access
             Claims claims = jwt.getBody();
 
             List<String> roles = claims.get("roles", List.class);
-            Long studentId = claims.get("studentId", Long.class);
+            Long userId = claims.get("userId", Long.class);
 
-            return new AccessTokenImpl(claims.getSubject(), studentId, roles);
+            System.out.println(new AccessTokenImpl(userId, roles));
+
+            return new AccessTokenImpl(userId, roles);
         } catch (JwtException e) {
             throw new InvalidAccessTokenException(e.getMessage());
         }

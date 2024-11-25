@@ -59,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
         List<String> role = new ArrayList<>();
         role.add(user.getRole());
 
-        return accessTokenEncoder.encode(new AccessTokenImpl(user.getEmail(), studentId, role));
+        return accessTokenEncoder.encode(new AccessTokenImpl(studentId, role));
     }
 
 }
