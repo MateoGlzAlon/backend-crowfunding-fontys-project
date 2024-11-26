@@ -15,4 +15,5 @@ public class OutputDTOUser {
     private String name;
     private String email;
     private String role;
+    private String profilePicture;
 }

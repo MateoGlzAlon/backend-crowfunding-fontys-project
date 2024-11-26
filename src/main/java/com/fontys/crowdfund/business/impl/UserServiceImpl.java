@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 .password(encodedPassword)
                 .projects(new HashSet<>())
                 .role(userDTO.getRole())
+                .profilePicture(userDTO.getProfilePicture())
                 .build();
 
         return createOutputDTOUser(userRepository.save(user));
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
                 .email(userEntity.getEmail())
                 .name(userEntity.getName())
                 .role(userEntity.getRole())
+                .profilePicture(userEntity.getProfilePicture())
                 .build();
 
     }

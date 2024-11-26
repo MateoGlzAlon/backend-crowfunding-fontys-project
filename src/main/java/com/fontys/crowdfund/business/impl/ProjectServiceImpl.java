@@ -101,7 +101,8 @@ public class ProjectServiceImpl implements ProjectService {
             outputDTOProjectImages.add(createOutputDTOProjectImage(projectImageEntity));
         }
 
-        return outputDTOProjectImages;    }
+        return outputDTOProjectImages;
+    }
 
     @Override
     public OutputDTOProjectImage createProjectImage(InputDTOProjectImage projectDTOImage) {
@@ -123,6 +124,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProjectImage(int id) {
         projectImagesRepository.deleteById(id);
+    }
+
+    @Override
+    public List<OutputDTOProject> getProjectsFromUserId(int id) {
+        List<OutputDTOProject> outputDTOProject = new ArrayList<>();
+
+        for (ProjectEntity projectEntity : projectRepository.findProjectsByUserId(id)) {
+            outputDTOProject.add(createOutputDTOProject(projectEntity));
+        }
+
+        return outputDTOProject;
     }
 
 

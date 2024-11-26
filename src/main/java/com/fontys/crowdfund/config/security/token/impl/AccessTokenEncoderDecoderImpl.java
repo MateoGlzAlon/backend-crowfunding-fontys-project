@@ -44,7 +44,8 @@ public class AccessTokenEncoderDecoderImpl implements AccessTokenEncoder, Access
         Instant now = Instant.now();
         return Jwts.builder()
                 .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(30, ChronoUnit.MINUTES)))
+                //TO-DO
+                .setExpiration(Date.from(now.plus(10, ChronoUnit.HOURS)))
                 .addClaims(claimsMap)
                 .signWith(key)
                 .compact();

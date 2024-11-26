@@ -30,9 +30,11 @@ public interface ProjectController {
     @GetMapping("/new")
     ResponseEntity<List<OutputDTOProject>> getNewProjects();
 
+    @GetMapping("/new")
+    ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(int userId);
 
 
-
+    //=================================00
 
     @GetMapping("/images")
     ResponseEntity<List<OutputDTOProjectImage>> getAllProjectImages();

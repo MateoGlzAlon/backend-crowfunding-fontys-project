@@ -45,4 +45,11 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
             "ORDER BY p.dateCreated DESC " +
             "LIMIT 5")
     List<ProjectEntity> getNewProjects();
+
+
+    @Query("SELECT p " +
+            "FROM ProjectEntity p " +
+            "WHERE p.user.id =:userId " +
+            "ORDER BY p.dateCreated ")
+    List<ProjectEntity> findProjectsByUserId(@Param("userId")int userId);
 }

@@ -31,4 +31,6 @@ public interface ProjectService {
     OutputDTOProjectImage getProjectImageById(int id);
 
     void deleteProjectImage(int id);
+
+    List<OutputDTOProject> getProjectsFromUserId(int id);
 }

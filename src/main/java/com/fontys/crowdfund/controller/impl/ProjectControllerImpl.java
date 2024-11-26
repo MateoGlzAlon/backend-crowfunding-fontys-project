@@ -56,8 +56,14 @@ public class ProjectControllerImpl implements ProjectController {
         return ResponseEntity.ok(projectService.getNewProjects());
     }
 
+    @Override
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(@PathVariable int id) {
+        return ResponseEntity.ok(projectService.getProjectsFromUserId(id));
+    }
 
 
+//==========================================================================================00
 
 
     @Override

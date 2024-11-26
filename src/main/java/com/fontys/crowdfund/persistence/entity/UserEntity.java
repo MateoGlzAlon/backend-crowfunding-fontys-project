@@ -42,5 +42,8 @@ public class UserEntity {
     @Column(name = "role")
     private String role;
 
+    @NotNull
+    @Column(name = "profilePicture")
+    private String profilePicture;
 
 }
