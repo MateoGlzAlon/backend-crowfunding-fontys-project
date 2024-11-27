@@ -25,32 +25,21 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public OutputDTOLogin login(InputDTOLogin loginRequest) {
         UserEntity user = userRepository.findByEmail(loginRequest.getUsername());
-        System.out.println(1);
 
         if (user == null) {
             throw new InvalidCredentialsException();
         }
-        System.out.println(2);
 
         if (!matchesPassword(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
-        System.out.println(3);
-
 
         String accessToken = generateAccessToken(user);
-        System.out.println(4);
 
         return OutputDTOLogin.builder().accessToken(accessToken).build();
     }
 
     private boolean matchesPassword(String rawPassword, String encodedPassword) {
-
-        System.out.println("m1");
-        System.out.println("rawPassword: " + rawPassword);
-        System.out.println("encodedPassword: " + encodedPassword);
-
-
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 

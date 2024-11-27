@@ -3,6 +3,7 @@ package com.fontys.crowdfund.business;
 import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
+import com.fontys.crowdfund.persistence.specialDTO.ProfilePaymentDTO;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface PaymentService {
     List<OutputDTOPayment> getPaymentsByProjectId(int id);
 
     List<OutputDonationNotification> getPaymentNotificationsByProjectId(int id);
+
+    List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id);
+
 }
