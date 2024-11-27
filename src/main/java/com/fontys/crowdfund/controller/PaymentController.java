@@ -4,6 +4,7 @@ package com.fontys.crowdfund.controller;
 import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
 import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
+import com.fontys.crowdfund.persistence.specialDTO.ProfilePaymentDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,9 @@ public interface PaymentController {
 
     @GetMapping("/projects/{id}")
     ResponseEntity<List<OutputDonationNotification>> getPaymentNotificationsToProjectById(@PathVariable int id);
+
+    @GetMapping("/projects/profile/{id}")
+    ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id);
 
     @PostMapping
     ResponseEntity<OutputDTOPayment> createPayment(@RequestBody InputDTOPayment paymentDTO);

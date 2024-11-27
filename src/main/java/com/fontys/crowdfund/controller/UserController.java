@@ -3,6 +3,7 @@ package com.fontys.crowdfund.controller;
 
 import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

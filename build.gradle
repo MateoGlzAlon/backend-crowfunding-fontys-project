@@ -16,27 +16,40 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "Individual-Crowfund"
-        property "sonar.projectName", "Individual Crowfund"
-        // Additional SonarQube properties can be added here
-    }
-}
+
 
 jacoco {
     toolVersion = "0.8.8" // Specify JaCoCo version
 }
 
 jacocoTestReport {
-    dependsOn test // JaCoCo will run after tests
+    dependsOn test // Ensure JaCoCo runs after tests
 
     reports {
-        xml.required = true // Correct usage for newer Gradle versions
-        html.required = true // Enable HTML report for local viewing
+        xml.required.set(true)  // Enable XML report for SonarQube or CI
+        html.required.set(true) // Enable HTML report for local inspection
     }
+
+    // Exclude the package 'com.fontys.crowdfund.persistence' from the coverage report
+    classDirectories.setFrom(files(classDirectories.files.collect{
+        fileTree(dir: it, exclude: [
+                "**/persistence/dto/**",
+                "**/persistence/entity/**",
+                "**/persistence/specialDTO/**",
+        ])
+    }
+    ))
 }
 
+sonar {
+    properties {
+        property "sonar.projectKey", "Individual-Crowfund"
+        property "sonar.projectName", "Individual Crowfund"
+        // Additional SonarQube properties can be added here
+        property "sonar.exclusion",
+                "**/persistence/**"
+    }
+}
 
 configurations {
     compileOnly {
@@ -67,17 +80,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'com.h2database:h2'
 }
 
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-    dependsOn test // Make sure JaCoCo runs after tests
-    reports {
-        xml.required = true // Enable XML report for SonarQube
-        html.required = true // Enable HTML report for local inspection
-    }
 }

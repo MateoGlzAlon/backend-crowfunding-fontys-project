@@ -10,6 +10,7 @@ import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
+import com.fontys.crowdfund.persistence.specialDTO.ProfilePaymentDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,24 +51,12 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public OutputDTOPayment createPayment(InputDTOPayment paymentDTO) {
 
-        System.out.println("PaymentDTO es : " + paymentDTO);
-        System.out.println("1A");
-        System.out.println("back ema: " + paymentDTO.getBackerEmail());
-        UserEntity u1 = userRepository.findByEmail(paymentDTO.getBackerEmail());
-
-        System.out.println("UserEnt1 es " + u1.getName());
-        System.out.println("2A");
-        System.out.println("ProjectEnt es " + projectRepository.findById(paymentDTO.getProjectId()));
-        System.out.println("3A");
-
         PaymentEntity payment = PaymentEntity.builder()
                 .user(userRepository.findByEmail(paymentDTO.getBackerEmail()))
                 .project(projectRepository.findById(paymentDTO.getProjectId()).orElse(null))
                 .amount(paymentDTO.getAmountFunded())
                 .paymentDate(paymentDTO.getPaymentDate())
                 .build();
-        System.out.println("4A");
-        System.out.println("Payment es : " + payment);
 
         return createOutputDTOPayment(paymentRepository.save(payment));
     }
@@ -106,7 +95,30 @@ public class PaymentServiceImpl implements PaymentService {
             outputDTOPaymentNotification.add(outputDonationNotification);
         }
 
-        return outputDTOPaymentNotification;    }
+        return outputDTOPaymentNotification;
+    }
+
+    @Override
+    public List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id) {
+        List<ProfilePaymentDTO> profilePaymentDTOs = new ArrayList<>();
+
+        for (PaymentEntity paymentEntity : paymentRepository.getPaymentsByUserIdForProfile(id)) {
+
+            ProfilePaymentDTO profilePaymentDTO = ProfilePaymentDTO.builder()
+                    .id(paymentEntity.getId())
+                    .projectName(paymentEntity.getProject().getName())
+                    .projectOwnerName(paymentEntity.getUser().getName())
+                    .paymentDate(paymentEntity.getPaymentDate())
+                    .amountFunded(paymentEntity.getAmount())
+                    .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
+                    .build();
+
+
+            profilePaymentDTOs.add(profilePaymentDTO);
+        }
+
+        return profilePaymentDTOs;
+    }
 
 
     private OutputDTOPayment createOutputDTOPayment(PaymentEntity paymentEntity) {
