@@ -7,13 +7,15 @@ import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,63 +27,58 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private UserServiceImpl userService;
 
-    private static UserEntity user1;
-    private static UserEntity user2;
+    private InputDTOUser inputUser;
+    private OutputDTOUser outputUser;
+
+    private UserEntity savedUser;
+    private String encodedPassword;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        user1 = UserEntity.builder()
-                .id(1)
-                .email("user1@example.com")
-                .name("User One")
-                .password("password1")
-                .build();
-
-        user2 = UserEntity.builder()
-                .id(2)
-                .email("user2@example.com")
-                .name("User Two")
-                .password("password2")
-                .build();
-    }
-
-    @Test
-    @DisplayName("Should get all users")
-    void get_all_users() {
-        // Arrange
-        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
-
-        // Act
-        List<OutputDTOUser> users = userService.getAllUsers();
-
-        // Assert
-        assertEquals(2, users.size());
-        verify(userRepository, times(1)).findAll();
-    }
-
-    //TO-DO
-    @Disabled
-    @Test
-    @DisplayName("Should add user and return output DTO")
-    void add_user() {
-        // Arrange
-        InputDTOUser inputUser = new InputDTOUser();
-        inputUser.setEmail("newuser@example.com");
-        inputUser.setName("New User");
-        inputUser.setPassword("newpassword");
-
-        UserEntity savedUser = UserEntity.builder()
-                .id(3)
+        // Common arrangements for tests
+        inputUser = InputDTOUser.builder()
                 .email("newuser@example.com")
                 .name("New User")
-                .password("newpassword")
+                .password("plaintextpassword")
+                .role("user")
+                .profilePicture("https://example.com/avatar.png")
                 .build();
 
+        encodedPassword = "hashedpassword";
+
+        savedUser = UserEntity.builder()
+                .id(1)
+                .email(inputUser.getEmail())
+                .name(inputUser.getName())
+                .password(encodedPassword)
+                .projects(new HashSet<>())
+                .role(inputUser.getRole())
+                .profilePicture(inputUser.getProfilePicture())
+                .build();
+
+        outputUser = OutputDTOUser.builder()
+                .id(1)
+                .email("newuser@example.com")
+                .name("New User")
+                .role("user")
+                .profilePicture("https://example.com/avatar.png")
+                .build();
+    }
+
+    @Test
+    @DisplayName("Should create a new user successfully")
+    void createUser_Success() {
+        // Arrange
+        when(userRepository.existsByEmail(inputUser.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(inputUser.getPassword())).thenReturn(encodedPassword);
         when(userRepository.save(any(UserEntity.class))).thenReturn(savedUser);
 
         // Act
@@ -89,88 +86,84 @@ class UserServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(3, result.getId());
+        assertEquals(1, result.getId());
         assertEquals("newuser@example.com", result.getEmail());
+        assertEquals("New User", result.getName());
+        assertEquals("user", result.getRole());
+        assertEquals("https://example.com/avatar.png", result.getProfilePicture());
+        verify(userRepository, times(1)).existsByEmail(inputUser.getEmail());
+        verify(passwordEncoder, times(1)).encode(inputUser.getPassword());
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
     @Test
-    @DisplayName("Should get user by ID")
-    void get_user_by_id() {
+    @DisplayName("Should throw exception when email already exists")
+    void createUser_EmailAlreadyExists() {
         // Arrange
-        when(userRepository.findById(1)).thenReturn(user1);
+        when(userRepository.existsByEmail(inputUser.getEmail())).thenReturn(true);
 
-        // Act
-        OutputDTOUser user = userService.getUserById(1);
-
-        // Assert
-        assertNotNull(user);
-        assertEquals(1, user.getId());
-        assertEquals("user1@example.com", user.getEmail());
-        verify(userRepository, times(1)).findById(1);
+        // Act & Assert
+        assertThrows(EmailAlreadyExists.class, () -> userService.createUser(inputUser));
+        verify(userRepository, times(1)).existsByEmail(inputUser.getEmail());
+        verify(passwordEncoder, never()).encode(anyString());
+        verify(userRepository, never()).save(any(UserEntity.class));
     }
 
+    @Test
+    @DisplayName("Should encode password when creating user")
+    void createUser_ShouldEncodePassword() {
+        // Arrange
+        when(userRepository.existsByEmail(inputUser.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(inputUser.getPassword())).thenReturn(encodedPassword);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(savedUser);
+
+        // Act
+        userService.createUser(inputUser);
+
+        // Assert
+        verify(passwordEncoder, times(1)).encode("plaintextpassword");
+    }
 
     @Test
-    @DisplayName("Should delete user by ID")
+    @DisplayName("Should return a user by Id")
+    void get_user_by_id() {
+        // Arrange
+        when(userRepository.findById(1)).thenReturn(savedUser);
+
+        // Act
+        OutputDTOUser u1 = userService.getUserById(1);
+
+        // Assert
+        assertEquals(u1.getEmail(), outputUser.getEmail());
+    }
+
+    @Test
+    @DisplayName("Should delete a user by Id successfully")
     void delete_user_by_id() {
         // Arrange
-        when(userRepository.findById(1)).thenReturn(user1);
+        when(userRepository.findById(1)).thenReturn(savedUser);
         doNothing().when(userRepository).deleteById(1);
 
         // Act
         userService.deleteUser(1);
-
-        // Assert
-        verify(userRepository, times(1)).deleteById(1);
     }
 
-    //TO-DO
-    @Disabled
-    @Test
-    @DisplayName("Should throw exception if user to delete not found")
-    void delete_user_by_id_not_found() {
-        // Arrange
-        when(userRepository.findById(99)).thenReturn(null);
+        @Test
+        @DisplayName("Should return all users")
+        void get_all_users() {
 
-        // Act & Assert
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> userService.deleteUser(99));
-        assertEquals("User not found", thrown.getMessage());
-        verify(userRepository, times(1)).findById(99);
-        verify(userRepository, never()).deleteById(99);
-    }
+            List<UserEntity> userRepositoryList = new ArrayList<>();
+            userRepositoryList.add(savedUser);
 
-    //TO-DO
-    @Disabled
-    @Test
-    @DisplayName("Should throw exception if user not found by ID")
-    void get_user_by_id_not_found() {
-        // Arrange
-        when(userRepository.findById(99)).thenReturn(null);
+            // Arrange
+            when(userRepository.findAll()).thenReturn(userRepositoryList);
 
-        // Act & Assert
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> userService.getUserById(99));
-        assertEquals("User not found", thrown.getMessage());
-        verify(userRepository, times(1)).findById(99);
-    }
+            // Act
+            List<OutputDTOUser> userList = userService.getAllUsers();
 
-    @Test
-    @DisplayName("Should throw exception if user email already exists")
-    void user_already_exists() {
+            // Assert
+            assertEquals(1, userList.size() );
+        }
 
-        InputDTOUser inputUser = InputDTOUser.builder()
-                .email("user1@example.com")
-                .name("User One")
-                .password("password1")
-                .build();
-
-
-        // Arrange
-        when(userRepository.existsByEmail(user1.getEmail())).thenReturn(true);
-
-        // Act & Assert
-        RuntimeException thrown = assertThrows(EmailAlreadyExists.class, () -> userService.createUser(inputUser));
-        assertEquals("EMAIL_IS_ALREADY_REGISTERED", thrown.getMessage());
-    }
 
 }

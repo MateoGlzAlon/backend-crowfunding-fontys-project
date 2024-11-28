@@ -10,6 +10,8 @@ import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
+import com.fontys.crowdfund.persistence.specialDTO.ProfilePaymentDTO;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,6 +44,7 @@ class PaymentServiceTest {
 
     private static UserEntity u1;
     private static ProjectEntity p1;
+    private static PaymentEntity payment;
 
     @BeforeAll
     static void setUp1() {
@@ -62,6 +65,15 @@ class PaymentServiceTest {
                 .location("project location")
                 .user(u1)
                 .build();
+
+        payment = PaymentEntity.builder()
+                .id(1)
+                .paymentDate(new Date())
+                .amount(50)
+                .project(p1)
+                .user(u1)
+                .build();
+
     }
 
     @BeforeEach
@@ -92,8 +104,6 @@ class PaymentServiceTest {
         verify(paymentRepository, times(1)).findAll();
     }
 
-    //TO-DO
-    @Disabled
     @Test
     @DisplayName("Should add payment and return output DTO")
     void add_payment() {
@@ -140,21 +150,75 @@ class PaymentServiceTest {
         verify(paymentRepository, times(1)).findAll();
     }
 
-    //TO-DO
-    @Disabled
     @Test
-    @DisplayName("Should throw exception if user not found for payment")
-    void add_payment_user_not_found() {
+    @DisplayName("Should delete payment by ID")
+    void delete_payment_by_id() {
         // Arrange
-        InputDTOPayment inputPayment = new InputDTOPayment();
-        inputPayment.setBackerEmail("nonexistent@example.com");
-        when(userRepository.findByEmail(inputPayment.getBackerEmail())).thenReturn(null);
+        when(paymentRepository.findById(1L)).thenReturn(Optional.ofNullable(payment));
+        doNothing().when(projectRepository).deleteById(1);
 
-        // Act & Assert
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> paymentService.createPayment(inputPayment));
-        assertEquals("User not found", thrown.getMessage());
-        verify(userRepository, times(1)).findByEmail(inputPayment.getBackerEmail());
-        verify(projectRepository, never()).findById(anyInt());
-        verify(paymentRepository, never()).save(any(PaymentEntity.class));
+        // Act
+        paymentService.deletePaymentById(1);
+
+        // Assert
+        verify(paymentRepository, times(1)).deleteById(1L);
     }
+
+    @Test
+    @DisplayName("Should get payments by project Id")
+    void get_payments_by_project_id() {
+        // Arrange
+        when(paymentRepository.getPaymentsByProjectId(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<OutputDTOPayment> payments = paymentService.getPaymentsByProjectId(1);
+
+        // Assert
+        assertEquals(1, payments.size());
+        assertEquals(payment.getId(), payments.get(0).getPaymentId());
+        verify(paymentRepository, times(1)).getPaymentsByProjectId(1);
+    }
+
+
+    @Test
+    @DisplayName("Should get payment notifications by project Id")
+    void get_payment_notifications_by_project_id() {
+        // Arrange
+        when(paymentRepository.getPaymentsByProjectId(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<OutputDonationNotification> payments = paymentService.getPaymentNotificationsByProjectId(1);
+
+        // Assert
+        assertEquals(1, payments.size());
+        verify(paymentRepository, times(1)).getPaymentsByProjectId(1);
+    }
+
+    @Test
+    @DisplayName("Should get payments by user to be used in profile")
+        void get_payments_for_profile() {
+        // Arrange
+        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1);
+
+        // Assert
+        assertEquals(1, payments.size());
+        verify(paymentRepository, times(1)).getPaymentsByUserIdForProfile(1);
+    }
+
+    @Test
+    @DisplayName("Should get payment notifications by project Id")
+    void get_payments_by_id() {
+        // Arrange
+        when(paymentRepository.findById(1L)).thenReturn(Optional.ofNullable(payment));
+
+        // Act
+        OutputDTOPayment payments = paymentService.getPaymentById(1L);
+
+        // Assert
+        assertEquals(1, payments.getPaymentId());
+    }
+
 }

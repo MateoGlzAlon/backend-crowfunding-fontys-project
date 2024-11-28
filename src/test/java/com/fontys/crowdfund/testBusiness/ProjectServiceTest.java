@@ -5,8 +5,12 @@ import com.fontys.crowdfund.persistence.ProjectRepository;
 import com.fontys.crowdfund.persistence.ProjectImagesRepository;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProject;
+import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -16,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +45,7 @@ class ProjectServiceTest {
 
     private static ProjectEntity project1;
     private static ProjectEntity project2;
+    private static ProjectImageEntity projectImage;
     private static UserEntity user;
 
     @BeforeEach
@@ -75,6 +81,13 @@ class ProjectServiceTest {
                 .user(user)
                 .fundingGoal(2000f)
                 .moneyRaised(500f)
+                .build();
+
+        projectImage = ProjectImageEntity.builder()
+                .id(1)
+                .project(project1)
+                .imageOrder(1)
+                .imageUrl("imageUrl")
                 .build();
     }
 
@@ -158,37 +171,6 @@ class ProjectServiceTest {
     }
 
 
-
-    //TO-DO
-    @Disabled
-    @Test
-    @DisplayName("Should throw exception if project to delete not found")
-    void delete_project_by_id_not_found() {
-        // Arrange
-        when(projectRepository.findById(99)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> projectService.deleteProject(99));
-        assertEquals("Project not found", thrown.getMessage());
-        verify(projectRepository, times(1)).findById(99);
-        verify(projectRepository, never()).deleteById(99);
-    }
-
-
-    //TO-DO
-    @Disabled
-    @Test
-    @DisplayName("Should throw exception if project not found by ID")
-    void get_project_by_id_not_found() {
-        // Arrange
-        when(projectRepository.findById(99)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> projectService.getProjectById(99));
-        assertEquals("Project not found", thrown.getMessage());
-        verify(projectRepository, times(1)).findById(99);
-    }
-
     @Test
     @DisplayName("Should get all projects close to funding goal")
     void get_close_to_funding_all_projects() {
@@ -245,4 +227,99 @@ class ProjectServiceTest {
         assertEquals(3, projects.get(0).getId());
         verify(projectRepository, times(1)).getNewProjects();
     }
+
+    @Test
+    @DisplayName("Should delete project by ID")
+    void delete_project_image_by_id() {
+        // Arrange
+        when(projectImageRepository.findById(1)).thenReturn(Optional.ofNullable(projectImage));
+        doNothing().when(projectImageRepository).deleteById(1);
+
+        // Act
+        projectService.deleteProjectImage(1);
+
+        // Assert
+        verify(projectImageRepository, times(1)).deleteById(1);
+    }
+
+
+
+    @Test
+    @DisplayName("Should get project image by ID")
+    void get_project_image_by_id() {
+        // Arrange
+        when(projectImageRepository.findById(1)).thenReturn(Optional.ofNullable(projectImage));
+
+        // Act
+        OutputDTOProjectImage projectImage = projectService.getProjectImageById(1);
+
+        // Assert
+        assertNotNull(projectImage);
+        assertEquals(1, projectImage.getId());
+        verify(projectImageRepository, times(1)).findById(1);
+    }
+
+    @Test
+    @DisplayName("Should return all projects owned by a user")
+    void get_projects_from_user_id() {
+
+        List<ProjectEntity> projectRepositoryList = new ArrayList<>();
+        projectRepositoryList.add(project1);
+
+        // Arrange
+        when(projectRepository.findProjectsByUserId(1)).thenReturn(projectRepositoryList);
+
+        // Act
+        List<OutputDTOProject> projectList = projectService.getProjectsFromUserId(1);
+
+        // Assert
+        assertEquals(1, projectList.size() );
+    }
+
+    @Test
+    @DisplayName("Should return all project images")
+    void get_all_users() {
+
+        List<ProjectImageEntity> projectImageRepositoryList = new ArrayList<>();
+        projectImageRepositoryList.add(projectImage);
+
+        // Arrange
+        when(projectImageRepository.findAll()).thenReturn(projectImageRepositoryList);
+
+        // Act
+        List<OutputDTOProjectImage> projectImagesList = projectService.getAllProjectImages();
+
+        // Assert
+        assertEquals(1, projectImagesList.size() );
+    }
+
+
+    @Test
+    @DisplayName("Should add projectImage and return output DTO")
+    void add_project_image() {
+        // Arrange
+        InputDTOProjectImage inputImage = InputDTOProjectImage.builder()
+                .imageURL("imageURL")
+                .imageOrder(1)
+                .projectId(1)
+                .build();
+
+        ProjectImageEntity savedProjectImage = ProjectImageEntity.builder()
+                .id(1)
+                .imageUrl("imageURL")
+                .imageOrder(1)
+                .project(project1)
+                .build();
+
+        when(projectImageRepository.save(any(ProjectImageEntity.class))).thenReturn(savedProjectImage);
+
+        // Act
+        OutputDTOProjectImage result = projectService.createProjectImage(inputImage);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getId());
+        verify(projectImageRepository, times(1)).save(any(ProjectImageEntity.class));
+    }
+
 }
