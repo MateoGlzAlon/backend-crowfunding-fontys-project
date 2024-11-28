@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.testPersistence;
+/*package com.fontys.crowdfund.testPersistence;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -29,7 +29,7 @@ class TestH2Database {
 
     private static UserEntity u1;
 
-/*
+
 
     @Disabled
     @Test
@@ -67,5 +67,6 @@ class TestH2Database {
     }
 
 
- */
+
 }
+        */
