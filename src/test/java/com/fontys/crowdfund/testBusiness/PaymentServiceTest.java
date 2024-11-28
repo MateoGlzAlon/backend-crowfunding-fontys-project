@@ -119,10 +119,10 @@ class PaymentServiceTest {
         when(userRepository.findByEmail(inputPayment.getBackerEmail())).thenReturn(userEntity);
         when(projectRepository.findById(inputPayment.getProjectId())).thenReturn(Optional.of(p1));
         when(paymentRepository.save(any(PaymentEntity.class))).thenAnswer(invocation -> {
-            PaymentEntity payment = invocation.getArgument(0);
-            payment.setId(1); // Mock ID generation
-            payment.setUser(userEntity);
-            return payment;
+            PaymentEntity payment2 = invocation.getArgument(0);
+            payment2.setId(1); // Mock ID generation
+            payment2.setUser(userEntity);
+            return payment2;
         });
 
         // Act

@@ -249,11 +249,11 @@ class ProjectServiceTest {
         when(projectImageRepository.findById(1)).thenReturn(Optional.ofNullable(projectImage));
 
         // Act
-        OutputDTOProjectImage projectImage = projectService.getProjectImageById(1);
+        OutputDTOProjectImage outProjectImage = projectService.getProjectImageById(1);
 
         // Assert
-        assertNotNull(projectImage);
-        assertEquals(1, projectImage.getId());
+        assertNotNull(outProjectImage);
+        assertEquals(1, outProjectImage.getId());
         verify(projectImageRepository, times(1)).findById(1);
     }
 
