@@ -120,7 +120,6 @@ class LoginServiceTest {
                 .password("password")
                 .build();
 
-        List<String> roles = List.of(user.getRole());
         when(userRepository.findByEmail(loginRequest.getUsername())).thenReturn(user);
         when(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())).thenReturn(true);
         when(accessTokenEncoder.encode(any(AccessTokenImpl.class))).thenReturn("mockedAccessToken");
