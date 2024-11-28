@@ -1,11 +1,11 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.ProjectController;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProjectImage;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProject;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProject;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.business.ProjectService;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

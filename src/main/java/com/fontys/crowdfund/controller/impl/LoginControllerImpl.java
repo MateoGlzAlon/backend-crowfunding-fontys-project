@@ -2,8 +2,8 @@ package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.business.LoginService;
 import com.fontys.crowdfund.controller.LoginController;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOLogin;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOLogin;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOLogin;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOLogin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

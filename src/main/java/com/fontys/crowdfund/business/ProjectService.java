@@ -1,9 +1,9 @@
 package com.fontys.crowdfund.business;
 
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProjectImage;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProject;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOProject;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 
 import java.util.List;
 

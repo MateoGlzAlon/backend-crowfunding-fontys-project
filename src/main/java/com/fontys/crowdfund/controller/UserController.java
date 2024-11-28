@@ -1,9 +1,8 @@
 // UserController.java
 package com.fontys.crowdfund.controller;
 
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
-import jakarta.annotation.security.RolesAllowed;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
