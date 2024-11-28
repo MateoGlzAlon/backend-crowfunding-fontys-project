@@ -1,9 +1,9 @@
 package com.fontys.crowdfund.business;
 
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOPayment;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOPayment;
-import com.fontys.crowdfund.persistence.specialDTO.OutputDonationNotification;
-import com.fontys.crowdfund.persistence.specialDTO.ProfilePaymentDTO;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
+import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
+import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
 
 import java.util.List;
 

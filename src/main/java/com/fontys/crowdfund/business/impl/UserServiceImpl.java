@@ -2,8 +2,8 @@ package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.UserService;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.business;
 
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 
 import java.util.List;
 
