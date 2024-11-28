@@ -1,8 +1,8 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.UserController;
-import com.fontys.crowdfund.persistence.dto.OutputDTO.OutputDTOUser;
-import com.fontys.crowdfund.persistence.dto.InputDTO.InputDTOUser;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.business.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;

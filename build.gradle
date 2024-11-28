@@ -35,7 +35,7 @@ jacocoTestReport {
         fileTree(dir: it, exclude: [
                 "**/persistence/dto/**",
                 "**/persistence/entity/**",
-                "**/persistence/specialDTO/**",
+                "**/persistence/specialdto/**",
         ])
     }
     ))

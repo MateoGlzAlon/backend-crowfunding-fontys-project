@@ -1,6 +1,5 @@
-package com.fontys.crowdfund.persistence.dto.InputDTO;
+package com.fontys.crowdfund.persistence.dto.inputdto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputDTOLogin {
-    @NotBlank
-    private String username;
-    @NotBlank
+public class InputDTOUser {
+
+    private String name;
+    private String email;
     private String password;
+    private String role;
+    private String profilePicture;
+
 }
