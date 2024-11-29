@@ -3,6 +3,7 @@ package com.fontys.crowdfund.controller;
 
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,9 @@ public interface UserController {
 
     @GetMapping("/{id}")
     ResponseEntity<OutputDTOUser> getUserById(@PathVariable int id);
+
+    @GetMapping("/project/{id}")
+    ResponseEntity<UserProjectDTO> getUserDataForProject(@PathVariable int id);
 
     @PostMapping
     ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO);

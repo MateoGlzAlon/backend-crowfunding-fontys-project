@@ -12,3 +12,6 @@ RUN gradle build --no-daemon
 
 # Set the entry point to run the application
 ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar build/libs/Crowdfund-0.0.1-SNAPSHOT.jar"]
+
+# I added this so that it uses the file application-docker.properties instead of the local setup
+ENV PROFILE=docker

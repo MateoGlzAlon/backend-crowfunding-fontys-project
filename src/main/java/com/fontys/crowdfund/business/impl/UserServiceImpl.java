@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,11 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(id);
 
+    }
+
+    @Override
+    public UserProjectDTO getUserDataForProject(int id) {
+        return userRepository.getUserDataForProject(id);
     }
 
 

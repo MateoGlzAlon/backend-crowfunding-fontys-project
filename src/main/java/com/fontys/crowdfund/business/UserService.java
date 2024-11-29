@@ -2,6 +2,7 @@ package com.fontys.crowdfund.business;
 
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface UserService {
     OutputDTOUser createUser(InputDTOUser userDTO);
 
     void deleteUser(int id);
+
+    UserProjectDTO getUserDataForProject(int id);
 }

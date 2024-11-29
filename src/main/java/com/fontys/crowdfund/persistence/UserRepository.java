@@ -1,6 +1,7 @@
 package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
         void deleteById(@Param("userId") int userId);
 
 
+        @Query("SELECT new com.fontys.crowdfund.persistence.specialdto.UserProjectDTO(p.user.name, p.user.profilePicture) " +
+                "FROM ProjectEntity p " +
+                "WHERE p.id = :projectId")
+        UserProjectDTO getUserDataForProject(@Param("projectId") int id);
 
 }

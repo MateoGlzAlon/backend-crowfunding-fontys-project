@@ -4,6 +4,7 @@ import com.fontys.crowdfund.controller.UserController;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.business.UserService;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class UserControllerImpl implements UserController {
     @GetMapping("/{id}")
     public ResponseEntity<OutputDTOUser> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @Override
+    @GetMapping("/project/{id}")
+    public ResponseEntity<UserProjectDTO> getUserDataForProject(@PathVariable int id) {
+        return ResponseEntity.ok(userService.getUserDataForProject(id));
     }
 
     @Override

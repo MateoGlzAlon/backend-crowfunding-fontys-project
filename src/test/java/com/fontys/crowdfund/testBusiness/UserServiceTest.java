@@ -146,6 +146,10 @@ class UserServiceTest {
 
         // Act
         userService.deleteUser(1);
+
+        //Verify
+        verify(userRepository, times(1)).deleteById(1);
+
     }
 
         @Test
