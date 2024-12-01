@@ -1,6 +1,9 @@
 package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,4 +55,20 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
             "WHERE p.user.id =:userId " +
             "ORDER BY p.dateCreated ")
     List<ProjectEntity> findProjectsByUserId(@Param("userId")int userId);
+
+
+
+    @Query("SELECT p FROM ProjectEntity p " +
+            "WHERE (:type IS NULL OR p.type = :type) " +
+            "AND (:minPercentageFunded IS NULL OR (CAST((p.moneyRaised / p.fundingGoal) * 100 AS double)) >= :minPercentageFunded) " +
+            "AND (:maxPercentageFunded IS NULL OR (CAST((p.moneyRaised / p.fundingGoal) * 100 AS double)) <= :maxPercentageFunded) " +
+            "ORDER BY " +
+            "CASE WHEN :sortBy = 'dateCreated' THEN p.dateCreated END DESC, " +
+            "CASE WHEN :sortBy = 'percentageFunded' THEN CAST((p.moneyRaised / p.fundingGoal) * 100 AS double) END DESC")
+    Page<ProjectEntity> getAllProjectsWithFiltersAndPagination(@Param("type") String type,
+                                                               @Param("minPercentageFunded") Double minPercentageFunded,
+                                                               @Param("maxPercentageFunded") Double maxPercentageFunded,
+                                                               @Param("sortBy") String sortBy,
+                                                               Pageable pageable);
+
 }

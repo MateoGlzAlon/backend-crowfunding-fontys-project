@@ -14,7 +14,7 @@ import java.util.Date;
 public class InputDTOPayment {
 
     private int projectId;
-    private String backerEmail;
+    private int backerId;
     private float amountFunded;
     private Date paymentDate;
 

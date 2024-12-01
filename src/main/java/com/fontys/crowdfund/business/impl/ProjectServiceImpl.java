@@ -9,7 +9,11 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
@@ -17,6 +21,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -68,28 +73,48 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<OutputDTOProject> getCloseToFundingAllProjects() {
+    public List<ProjectOnlyCoverLandingPage> getCloseToFundingAllProjects() {
 
-        List<OutputDTOProject> outputDTOProjects = new ArrayList<>();
+        List<ProjectOnlyCoverLandingPage> closeProjects = new ArrayList<>();
 
         for (ProjectEntity projectEntity : projectRepository.getCloseToFundingProjects()) {
-            outputDTOProjects.add(createOutputDTOProject(projectEntity));
+
+            ProjectOnlyCoverLandingPage projectClose = ProjectOnlyCoverLandingPage.builder()
+                    .id(projectEntity.getId())
+                    .imageCover(projectImagesRepository.getProjectImageCover(projectEntity.getId()))
+                    .name(projectEntity.getName())
+                    .moneyRaised(projectEntity.getMoneyRaised())
+                    .fundingGoal(projectEntity.getFundingGoal())
+                    .dateCreated(projectEntity.getDateCreated())
+                    .build();
+
+            closeProjects.add(projectClose);
         }
 
-        return outputDTOProjects;
+        return closeProjects;
 
     }
 
     @Override
-    public List<OutputDTOProject> getNewProjects() {
+    public List<ProjectOnlyCoverLandingPage> getNewProjects() {
 
-        List<OutputDTOProject> outputDTOProjects = new ArrayList<>();
+        List<ProjectOnlyCoverLandingPage> newProjects = new ArrayList<>();
 
         for (ProjectEntity projectEntity : projectRepository.getNewProjects()) {
-            outputDTOProjects.add(createOutputDTOProject(projectEntity));
+
+            ProjectOnlyCoverLandingPage projectNew = ProjectOnlyCoverLandingPage.builder()
+                    .id(projectEntity.getId())
+                    .imageCover(projectImagesRepository.getProjectImageCover(projectEntity.getId()))
+                    .name(projectEntity.getName())
+                    .moneyRaised(projectEntity.getMoneyRaised())
+                    .fundingGoal(projectEntity.getFundingGoal())
+                    .dateCreated(projectEntity.getDateCreated())
+                    .build();
+
+            newProjects.add(projectNew);
         }
 
-        return outputDTOProjects;
+        return newProjects;
     }
 
     @Override
@@ -136,6 +161,32 @@ public class ProjectServiceImpl implements ProjectService {
 
         return outputDTOProject;
     }
+
+    @Override
+    public List<ProjectOnlyCoverLandingPage> getAllProjectsForLandingPage(String type, Double minPercentageFunded,
+                                                                          Double maxPercentageFunded, String sortBy,
+                                                                          int page, int size) {
+        // Set up pageable for pagination
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Fetch paginated and filtered projects from the repository
+        Page<ProjectEntity> projectEntities = projectRepository.getAllProjectsWithFiltersAndPagination(
+                type, minPercentageFunded, maxPercentageFunded, sortBy, pageable);
+
+        // Map each ProjectEntity to ProjectOnlyCoverLandingPage DTO
+        return projectEntities.stream()
+                .map(projectEntity -> ProjectOnlyCoverLandingPage.builder()
+                        .id(projectEntity.getId())
+                        .imageCover(projectImagesRepository.getProjectImageCover(projectEntity.getId()))
+                        .name(projectEntity.getName())
+                        .moneyRaised(projectEntity.getMoneyRaised())
+                        .fundingGoal(projectEntity.getFundingGoal())
+                        .dateCreated(projectEntity.getDateCreated())
+                        .description(projectEntity.getDescription())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 
 
     public OutputDTOProject createOutputDTOProject(ProjectEntity projectEntity) {

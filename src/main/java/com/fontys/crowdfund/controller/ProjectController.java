@@ -5,6 +5,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,19 @@ public interface ProjectController {
     ResponseEntity<OutputDTOProject> deleteProject(@PathVariable int id);
 
     @GetMapping("/highlighted")
-    ResponseEntity<List<OutputDTOProject>> getCloseToFundingProjects();
+    ResponseEntity<List<ProjectOnlyCoverLandingPage>> getCloseToFundingProjects();
 
     @GetMapping("/new")
-    ResponseEntity<List<OutputDTOProject>> getNewProjects();
+    ResponseEntity<List<ProjectOnlyCoverLandingPage>> getNewProjects();
+
+    @GetMapping("/filters/pagination")
+    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getAllProjectsForLandingPage(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Double minPercentageFunded,
+            @RequestParam(required = false) Double maxPercentageFunded,
+            @RequestParam(defaultValue = "dateCreated") String sortBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size);
 
     @GetMapping("/new")
     ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(int userId);

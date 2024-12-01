@@ -11,14 +11,15 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfilePaymentDTO {
+public class ProjectOnlyCoverLandingPage {
 
     private int id;
-    private int projectId;
-    private String projectName;
-    private Date paymentDate;
-    private float amountFunded;
-    private String projectOwnerName;
-    private String projectCoverImage;
+    private String name;
+    private String imageCover;
+    private float moneyRaised;
+    private float fundingGoal;
+    private Date dateCreated;
+    private String description;
+
 
 }

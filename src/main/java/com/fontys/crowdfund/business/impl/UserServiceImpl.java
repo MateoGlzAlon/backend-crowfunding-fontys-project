@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserDataForProject(id);
     }
 
+    @Override
+    public Integer getUserIdFromEmail(String email) {
+        return userRepository.getUserIdFromEmail(email);
+    }
+
 
     public OutputDTOUser createOutputDTOUser(UserEntity userEntity) {
 

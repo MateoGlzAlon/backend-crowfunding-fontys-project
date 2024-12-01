@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,15 +47,29 @@ public class ProjectControllerImpl implements ProjectController {
 
     @Override
     @GetMapping("/highlighted")
-    public ResponseEntity<List<OutputDTOProject>> getCloseToFundingProjects() {
+    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getCloseToFundingProjects() {
         return ResponseEntity.ok(projectService.getCloseToFundingAllProjects());
     }
 
     @Override
     @GetMapping("/new")
-    public ResponseEntity<List<OutputDTOProject>> getNewProjects() {
+    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getNewProjects() {
         return ResponseEntity.ok(projectService.getNewProjects());
     }
+
+    @GetMapping("/filters/pagination")
+    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getAllProjectsForLandingPage(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Double minPercentageFunded,
+            @RequestParam(required = false) Double maxPercentageFunded,
+            @RequestParam(defaultValue = "dateCreated") String sortBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        List<ProjectOnlyCoverLandingPage> projects = projectService.getAllProjectsForLandingPage(
+                type, minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+        return ResponseEntity.ok(projects);
+    }
+
 
     @Override
     @GetMapping("/users/{id}")
@@ -71,6 +86,8 @@ public class ProjectControllerImpl implements ProjectController {
     public ResponseEntity<List<OutputDTOProjectImage>> getAllProjectImages() {
         return ResponseEntity.ok(projectService.getAllProjectImages());
     }
+
+
 
     @Override
     @PostMapping("/images")

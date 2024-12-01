@@ -8,6 +8,7 @@ import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
+import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
 import lombok.AllArgsConstructor;
@@ -51,11 +52,17 @@ public class PaymentServiceImpl implements PaymentService {
     public OutputDTOPayment createPayment(InputDTOPayment paymentDTO) {
 
         PaymentEntity payment = PaymentEntity.builder()
-                .user(userRepository.findByEmail(paymentDTO.getBackerEmail()))
+                .user(userRepository.findById(paymentDTO.getBackerId()))
                 .project(projectRepository.findById(paymentDTO.getProjectId()).orElse(null))
                 .amount(paymentDTO.getAmountFunded())
                 .paymentDate(paymentDTO.getPaymentDate())
                 .build();
+
+
+        ProjectEntity project = projectRepository.findById(paymentDTO.getProjectId()).orElse(null);
+        assert project != null;
+        project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
+        projectRepository.save(project);
 
         return createOutputDTOPayment(paymentRepository.save(payment));
     }
@@ -105,6 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             ProfilePaymentDTO profilePaymentDTO = ProfilePaymentDTO.builder()
                     .id(paymentEntity.getId())
+                    .projectId(paymentEntity.getProject().getId())
                     .projectName(paymentEntity.getProject().getName())
                     .projectOwnerName(paymentEntity.getUser().getName())
                     .paymentDate(paymentEntity.getPaymentDate())

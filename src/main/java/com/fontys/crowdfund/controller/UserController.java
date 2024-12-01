@@ -20,6 +20,9 @@ public interface UserController {
     @GetMapping("/project/{id}")
     ResponseEntity<UserProjectDTO> getUserDataForProject(@PathVariable int id);
 
+    @GetMapping("/email/{email}")
+    ResponseEntity<Integer> getUserIdFromEmail(@PathVariable String email);
+
     @PostMapping
     ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO);
 

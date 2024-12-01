@@ -38,6 +38,13 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userService.getUserDataForProject(id));
     }
 
+
+    @GetMapping("/email/{email}")
+    @Override
+    public ResponseEntity<Integer> getUserIdFromEmail(@PathVariable String email) {
+        return ResponseEntity.ok(userService.getUserIdFromEmail(email));
+    }
+
     @Override
     @PostMapping
     public ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO) {

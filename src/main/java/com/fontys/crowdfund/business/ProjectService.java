@@ -4,6 +4,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ public interface ProjectService {
 
     void deleteProject(int id);
 
-    List<OutputDTOProject> getCloseToFundingAllProjects();
+    List<ProjectOnlyCoverLandingPage> getCloseToFundingAllProjects();
 
-    List<OutputDTOProject> getNewProjects();
+    List<ProjectOnlyCoverLandingPage> getNewProjects();
 
     List<OutputDTOProjectImage> getAllProjectImages();
 
@@ -33,4 +34,8 @@ public interface ProjectService {
     void deleteProjectImage(int id);
 
     List<OutputDTOProject> getProjectsFromUserId(int id);
+
+    public List<ProjectOnlyCoverLandingPage> getAllProjectsForLandingPage(String type, Double minPercentageFunded,
+                                                                          Double maxPercentageFunded, String sortBy,
+                                                                          int page, int size);
 }

@@ -37,4 +37,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                 "WHERE p.id = :projectId")
         UserProjectDTO getUserDataForProject(@Param("projectId") int id);
 
+
+        @Query("SELECT u.id " +
+                "FROM UserEntity u " +
+                "WHERE u.email = :userEmail")
+        Integer getUserIdFromEmail(@Param("userEmail")String email);
 }

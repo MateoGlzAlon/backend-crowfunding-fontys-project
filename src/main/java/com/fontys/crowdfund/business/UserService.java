@@ -20,4 +20,6 @@ public interface UserService {
     void deleteUser(int id);
 
     UserProjectDTO getUserDataForProject(int id);
+
+    Integer getUserIdFromEmail(String email);
 }
