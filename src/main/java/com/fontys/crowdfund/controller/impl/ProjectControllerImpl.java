@@ -10,8 +10,12 @@ import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/projects")
@@ -57,18 +61,29 @@ public class ProjectControllerImpl implements ProjectController {
         return ResponseEntity.ok(projectService.getNewProjects());
     }
 
+    @Override
     @GetMapping("/filters/pagination")
-    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getAllProjectsForLandingPage(
+    public ResponseEntity<Map<String, Object>> getAllProjectsForLandingPage(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Double minPercentageFunded,
             @RequestParam(required = false) Double maxPercentageFunded,
             @RequestParam(defaultValue = "dateCreated") String sortBy,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
-        List<ProjectOnlyCoverLandingPage> projects = projectService.getAllProjectsForLandingPage(
+
+        Page<ProjectOnlyCoverLandingPage> projectsPage = projectService.getAllProjectsForLandingPage(
                 type, minPercentageFunded, maxPercentageFunded, sortBy, page, size);
-        return ResponseEntity.ok(projects);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", projectsPage.getContent());
+        response.put("totalPages", projectsPage.getTotalPages());
+        response.put("totalElements", projectsPage.getTotalElements());
+        response.put("size", projectsPage.getSize());
+        response.put("number", projectsPage.getNumber());
+
+        return ResponseEntity.ok(response);
     }
+
 
 
     @Override

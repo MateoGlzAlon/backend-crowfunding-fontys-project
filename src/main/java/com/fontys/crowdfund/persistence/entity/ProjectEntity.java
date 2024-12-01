@@ -55,6 +55,9 @@ public class ProjectEntity {
     @Column(name = "moneyRaised", nullable = false)
     private Float moneyRaised;
 
+    @Column(name = "percentage_funded", insertable = false, updatable = false)
+    private Double percentageFunded;
+
 
 
 }

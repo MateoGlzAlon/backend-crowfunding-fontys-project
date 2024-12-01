@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectController {
 
@@ -32,7 +33,7 @@ public interface ProjectController {
     ResponseEntity<List<ProjectOnlyCoverLandingPage>> getNewProjects();
 
     @GetMapping("/filters/pagination")
-    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getAllProjectsForLandingPage(
+    ResponseEntity<Map<String, Object>> getAllProjectsForLandingPage(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Double minPercentageFunded,
             @RequestParam(required = false) Double maxPercentageFunded,

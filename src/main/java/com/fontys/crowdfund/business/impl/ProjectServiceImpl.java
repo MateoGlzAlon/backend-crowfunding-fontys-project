@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
@@ -163,29 +164,35 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectOnlyCoverLandingPage> getAllProjectsForLandingPage(String type, Double minPercentageFunded,
-                                                                          Double maxPercentageFunded, String sortBy,
-                                                                          int page, int size) {
-        // Set up pageable for pagination
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<ProjectOnlyCoverLandingPage> getAllProjectsForLandingPage(
+            String type,
+            Double minPercentageFunded,
+            Double maxPercentageFunded,
+            String sortBy,
+            int page,
+            int size) {
 
-        // Fetch paginated and filtered projects from the repository
-        Page<ProjectEntity> projectEntities = projectRepository.getAllProjectsWithFiltersAndPagination(
-                type, minPercentageFunded, maxPercentageFunded, sortBy, pageable);
+        // Create Pageable object with sorting
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
 
-        // Map each ProjectEntity to ProjectOnlyCoverLandingPage DTO
-        return projectEntities.stream()
-                .map(projectEntity -> ProjectOnlyCoverLandingPage.builder()
-                        .id(projectEntity.getId())
-                        .imageCover(projectImagesRepository.getProjectImageCover(projectEntity.getId()))
-                        .name(projectEntity.getName())
-                        .moneyRaised(projectEntity.getMoneyRaised())
-                        .fundingGoal(projectEntity.getFundingGoal())
-                        .dateCreated(projectEntity.getDateCreated())
-                        .description(projectEntity.getDescription())
-                        .build())
-                .collect(Collectors.toList());
+        // Fetch paginated data from the repository
+        Page<ProjectEntity> projectEntitiesPage = projectRepository.getAllProjectsWithFiltersAndPagination(
+                type, minPercentageFunded, maxPercentageFunded, pageable);
+
+        // Transform each ProjectEntity into ProjectOnlyCoverLandingPage using Page.map()
+        return projectEntitiesPage.map(projectEntity ->
+                new ProjectOnlyCoverLandingPage(
+                        projectEntity.getId(),
+                        projectEntity.getName(),
+                        projectImagesRepository.getImagesFromProjectId(projectEntity.getId()).get(0),
+                        projectEntity.getMoneyRaised(),
+                        projectEntity.getFundingGoal(),
+                        projectEntity.getDateCreated(),
+                        projectEntity.getDescription()
+                )
+        );
     }
+
 
 
 

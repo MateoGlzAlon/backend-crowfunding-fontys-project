@@ -20,13 +20,6 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
             "WHERE p.id = :id")
     boolean existsById(@Param("id") int id);
 
-    // Find all projects by user email
-    @Query("SELECT new com.fontys.crowdfund.persistence.entity.ProjectEntity(p.id, p.name, p.description, p.location, p.type, p.dateCreated, p.fundingGoal, p.moneyRaised) " +
-            "FROM ProjectEntity p " +
-            "JOIN p.user u " +
-            "WHERE u.email = :userEmail")
-    List<ProjectEntity> findAllProjectsByUserEmail(@Param("userEmail") String userEmail);
-
     // Delete a project by its ID
     @Modifying
     @Transactional
@@ -58,17 +51,19 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
 
 
 
-    @Query("SELECT p FROM ProjectEntity p " +
+    @Query("SELECT p " +
+            "FROM ProjectEntity p " +
             "WHERE (:type IS NULL OR p.type = :type) " +
-            "AND (:minPercentageFunded IS NULL OR (CAST((p.moneyRaised / p.fundingGoal) * 100 AS double)) >= :minPercentageFunded) " +
-            "AND (:maxPercentageFunded IS NULL OR (CAST((p.moneyRaised / p.fundingGoal) * 100 AS double)) <= :maxPercentageFunded) " +
-            "ORDER BY " +
-            "CASE WHEN :sortBy = 'dateCreated' THEN p.dateCreated END DESC, " +
-            "CASE WHEN :sortBy = 'percentageFunded' THEN CAST((p.moneyRaised / p.fundingGoal) * 100 AS double) END DESC")
-    Page<ProjectEntity> getAllProjectsWithFiltersAndPagination(@Param("type") String type,
-                                                               @Param("minPercentageFunded") Double minPercentageFunded,
-                                                               @Param("maxPercentageFunded") Double maxPercentageFunded,
-                                                               @Param("sortBy") String sortBy,
-                                                               Pageable pageable);
+            "AND (:minPercentageFunded IS NULL OR CAST((p.moneyRaised / p.fundingGoal) * 100 AS float) >= :minPercentageFunded) " +
+            "AND (:maxPercentageFunded IS NULL OR CAST((p.moneyRaised / p.fundingGoal) * 100 AS float) <= :maxPercentageFunded)")
+    Page<ProjectEntity> getAllProjectsWithFiltersAndPagination(
+            @Param("type") String type,
+            @Param("minPercentageFunded") Double minPercentageFunded,
+            @Param("maxPercentageFunded") Double maxPercentageFunded,
+            Pageable pageable
+    );
+
+
+
 
 }
