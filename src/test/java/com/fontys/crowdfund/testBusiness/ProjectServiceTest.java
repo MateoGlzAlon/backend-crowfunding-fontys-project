@@ -11,6 +11,9 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
+
+import org.springframework.data.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +46,8 @@ class ProjectServiceTest {
 
     private static ProjectEntity project1;
     private static ProjectEntity project2;
+    private static ProjectEntity project3;
+    private static ProjectEntity project4;
     private static ProjectImageEntity projectImage;
     private static UserEntity user;
 
@@ -79,6 +84,30 @@ class ProjectServiceTest {
                 .user(user)
                 .fundingGoal(2000f)
                 .moneyRaised(500f)
+                .build();
+
+        project3 = ProjectEntity.builder()
+                .id(3)
+                .name("Project Three")
+                .description("Description of project three")
+                .location("Location Three")
+                .type("Type 3")
+                .dateCreated(new Date())
+                .user(user)
+                .fundingGoal(1000f)
+                .moneyRaised(500f) // Within percentage funded range
+                .build();
+
+        project4 = ProjectEntity.builder()
+                .id(4)
+                .name("Project Four")
+                .description("Description of project four")
+                .location("Location Four")
+                .type("Type 4")
+                .dateCreated(new Date())
+                .user(user)
+                .fundingGoal(1000f)
+                .moneyRaised(200f) // Within percentage funded range
                 .build();
 
         projectImage = ProjectImageEntity.builder()
@@ -172,28 +201,13 @@ class ProjectServiceTest {
     @Test
     @DisplayName("Should get all projects close to funding goal")
     void get_close_to_funding_all_projects() {
-        // Arrange
-        ProjectEntity project3 = ProjectEntity.builder()
-                .id(3)
-                .name("Project Three")
-                .description("Description of project three")
-                .location("Location Three")
-                .type("Type Three")
-                .dateCreated(new Date())
-                .user(user)
-                .fundingGoal(1000f)
-                .moneyRaised(950f) // Close to funding goal
-                .build();
-
         when(projectRepository.getCloseToFundingProjects()).thenReturn(List.of(project3));
 
         // Act
-        List<OutputDTOProject> projects = projectService.getCloseToFundingAllProjects();
+        List<ProjectOnlyCoverLandingPage> projects = projectService.getCloseToFundingAllProjects();
 
         // Assert
         assertEquals(1, projects.size());
-        assertEquals("Project Three", projects.get(0).getName());
-        assertEquals(3, projects.get(0).getId());
         verify(projectRepository, times(1)).getCloseToFundingProjects();
     }
 
@@ -202,27 +216,13 @@ class ProjectServiceTest {
     @DisplayName("Should get all projects close to funding goal")
     void get_new_all_projects() {
         // Arrange
-        ProjectEntity project3 = ProjectEntity.builder()
-                .id(3)
-                .name("Project Three")
-                .description("Description of project three")
-                .location("Location Three")
-                .type("Type Three")
-                .dateCreated(new Date())
-                .user(user)
-                .fundingGoal(1000f)
-                .moneyRaised(950f) // Close to funding goal
-                .build();
-
         when(projectRepository.getNewProjects()).thenReturn(List.of(project3));
 
         // Act
-        List<OutputDTOProject> projects = projectService.getNewProjects();
+        List<ProjectOnlyCoverLandingPage> projects = projectService.getNewProjects();
 
         // Assert
         assertEquals(1, projects.size());
-        assertEquals("Project Three", projects.get(0).getName());
-        assertEquals(3, projects.get(0).getId());
         verify(projectRepository, times(1)).getNewProjects();
     }
 
@@ -318,6 +318,209 @@ class ProjectServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getId());
         verify(projectImageRepository, times(1)).save(any(ProjectImageEntity.class));
+    }
+
+
+    @Test
+    @DisplayName("Should get paginated and filtered projects for landing page with the sorting dateCreatedDesc")
+    void get_all_projects_for_landing_page_dateCreatedDesc() {
+        // Arrange
+        Double minPercentageFunded = 10.0;
+        Double maxPercentageFunded = 90.0;
+        String sortBy = "dateCreatedDesc";
+        int page = 0;
+        int size = 2;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+
+        Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
+
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+                .thenReturn(mockPage);
+
+        when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
+        when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
+
+        // Act
+        Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+
+        ProjectOnlyCoverLandingPage projectResult1 = result.getContent().get(0);
+        assertEquals(3, projectResult1.getId());
+        assertEquals("Project Three", projectResult1.getName());
+        assertEquals("imageURL1", projectResult1.getImageCover());
+
+        ProjectOnlyCoverLandingPage projectResult2 = result.getContent().get(1);
+        assertEquals(4, projectResult2.getId());
+        assertEquals("Project Four", projectResult2.getName());
+        assertEquals("imageURL2", projectResult2.getImageCover());
+
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
+    }
+
+
+    @Test
+    @DisplayName("Should get paginated and filtered projects for landing page with the sorting dateCreatedDesc")
+    void get_all_projects_for_landing_page_dateCreatedAsc() {
+        // Arrange
+        Double minPercentageFunded = 10.0;
+        Double maxPercentageFunded = 90.0;
+        String sortBy = "dateCreatedAsc";
+        int page = 0;
+        int size = 2;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "dateCreated"));
+
+        Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
+
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+                .thenReturn(mockPage);
+
+        when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
+        when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
+
+        // Act
+        Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+
+        ProjectOnlyCoverLandingPage projectResult1 = result.getContent().get(0);
+        assertEquals(3, projectResult1.getId());
+        assertEquals("Project Three", projectResult1.getName());
+        assertEquals("imageURL1", projectResult1.getImageCover());
+
+        ProjectOnlyCoverLandingPage projectResult2 = result.getContent().get(1);
+        assertEquals(4, projectResult2.getId());
+        assertEquals("Project Four", projectResult2.getName());
+        assertEquals("imageURL2", projectResult2.getImageCover());
+
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
+    }
+
+
+    @Test
+    @DisplayName("Should get paginated and filtered projects for landing page with the sorting dateCreatedDesc")
+    void get_all_projects_for_landing_page_percentageFundedDesc() {
+        // Arrange
+        Double minPercentageFunded = 10.0;
+        Double maxPercentageFunded = 90.0;
+        String sortBy = "percentageFundedDesc";
+        int page = 0;
+        int size = 2;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "percentageFunded"));
+
+        Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
+
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+                .thenReturn(mockPage);
+
+        when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
+        when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
+
+        // Act
+        Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+
+        ProjectOnlyCoverLandingPage projectResult1 = result.getContent().get(0);
+        assertEquals(3, projectResult1.getId());
+        assertEquals("Project Three", projectResult1.getName());
+        assertEquals("imageURL1", projectResult1.getImageCover());
+
+        ProjectOnlyCoverLandingPage projectResult2 = result.getContent().get(1);
+        assertEquals(4, projectResult2.getId());
+        assertEquals("Project Four", projectResult2.getName());
+        assertEquals("imageURL2", projectResult2.getImageCover());
+
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
+    }
+
+    @Test
+    @DisplayName("Should get nothing with an error in filter")
+    void get_all_projects_for_landing_page_default() {
+        // Arrange
+        Double minPercentageFunded = 10.0;
+        Double maxPercentageFunded = 90.0;
+        String sortBy = "random";
+        int page = 0;
+        int size = 2;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "percentageFunded"));
+
+        Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
+
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+                .thenReturn(null);
+
+        when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
+        when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
+
+        // Act
+        Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    @DisplayName("Should get paginated and filtered projects for landing page with percentageFundedAsc sorting")
+    void get_all_projects_for_landing_page_percentageFundedAsc() {
+        // Arrange
+        Double minPercentageFunded = 10.0;
+        Double maxPercentageFunded = 90.0;
+        String sortBy = "percentageFundedAsc";
+        int page = 0;
+        int size = 2;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "percentageFunded"));
+
+        Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
+
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+                .thenReturn(mockPage);
+
+        when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
+        when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
+
+        // Act
+        Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+
+        ProjectOnlyCoverLandingPage projectResult1 = result.getContent().get(0);
+        assertEquals(3, projectResult1.getId());
+        assertEquals("Project Three", projectResult1.getName());
+        assertEquals("imageURL1", projectResult1.getImageCover());
+
+        ProjectOnlyCoverLandingPage projectResult2 = result.getContent().get(1);
+        assertEquals(4, projectResult2.getId());
+        assertEquals("Project Four", projectResult2.getName());
+        assertEquals("imageURL2", projectResult2.getImageCover());
+
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
+        verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
     }
 
 }

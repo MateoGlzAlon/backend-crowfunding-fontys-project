@@ -60,7 +60,6 @@ public class PaymentServiceImpl implements PaymentService {
 
 
         ProjectEntity project = projectRepository.findById(paymentDTO.getProjectId()).orElse(null);
-        assert project != null;
         project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
         projectRepository.save(project);
 

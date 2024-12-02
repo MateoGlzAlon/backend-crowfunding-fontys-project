@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
+import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -152,22 +153,52 @@ class UserServiceTest {
 
     }
 
-        @Test
-        @DisplayName("Should return all users")
-        void get_all_users() {
+    @Test
+    @DisplayName("Should return all users")
+    void get_all_users() {
 
-            List<UserEntity> userRepositoryList = new ArrayList<>();
-            userRepositoryList.add(savedUser);
+        List<UserEntity> userRepositoryList = new ArrayList<>();
+        userRepositoryList.add(savedUser);
 
-            // Arrange
-            when(userRepository.findAll()).thenReturn(userRepositoryList);
+        // Arrange
+        when(userRepository.findAll()).thenReturn(userRepositoryList);
 
-            // Act
-            List<OutputDTOUser> userList = userService.getAllUsers();
+        // Act
+        List<OutputDTOUser> userList = userService.getAllUsers();
 
-            // Assert
-            assertEquals(1, userList.size() );
-        }
+        // Assert
+        assertEquals(1, userList.size() );
+    }
 
+    @Test
+    @DisplayName("Should a specialDTO (userDataDTO)by a user Id")
+    void get_userData_for_project() {
 
+        UserProjectDTO userProjectDTO = UserProjectDTO.builder()
+                .name("userProjectName")
+                .build();
+
+        // Arrange
+        when(userRepository.getUserDataForProject(1)).thenReturn(userProjectDTO);
+
+        // Act
+        UserProjectDTO u1 = userService.getUserDataForProject(1);
+
+        // Assert
+        assertEquals(u1.getName(), "userProjectName");
+    }
+
+    @Test
+    @DisplayName("Should return id from user email")
+    void get_userId_from_email() {
+
+        // Arrange
+        when(userRepository.getUserIdFromEmail("newuser@example.com")).thenReturn(1);
+
+        // Act
+        int u1_Id = userService.getUserIdFromEmail("newuser@example.com");
+
+        // Assert
+        assertEquals(1,u1_Id );
+    }
 }

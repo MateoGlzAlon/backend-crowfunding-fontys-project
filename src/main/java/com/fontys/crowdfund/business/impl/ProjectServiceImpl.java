@@ -172,8 +172,29 @@ public class ProjectServiceImpl implements ProjectService {
             int page,
             int size) {
 
-        // Create Pageable object with sorting
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
+        Pageable pageable = null;
+
+        switch(sortBy){
+            case "dateCreatedDesc":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+                break;
+
+            case "dateCreatedAsc":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "dateCreated"));
+                break;
+
+            case "percentageFundedDesc":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "percentageFunded"));
+                break;
+
+            case "percentageFundedAsc":
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "percentageFunded"));
+                break;
+
+            default:
+                return null;
+        }
+
 
         // Fetch paginated data from the repository
         Page<ProjectEntity> projectEntitiesPage = projectRepository.getAllProjectsWithFiltersAndPagination(

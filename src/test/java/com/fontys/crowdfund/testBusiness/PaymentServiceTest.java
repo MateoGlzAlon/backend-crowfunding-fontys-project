@@ -109,14 +109,14 @@ class PaymentServiceTest {
     void add_payment() {
         // Arrange
         InputDTOPayment inputPayment = new InputDTOPayment();
-        inputPayment.setBackerEmail("test@example.com");
+        inputPayment.setBackerId(1);
         inputPayment.setPaymentDate(new Date());
         inputPayment.setProjectId(1);
         PaymentEntity savedPayment = new PaymentEntity();
         savedPayment.setId(1);
         UserEntity userEntity = UserEntity.builder().id(1).email("test@example.com").name("Test User").build();
 
-        when(userRepository.findByEmail(inputPayment.getBackerEmail())).thenReturn(userEntity);
+        when(userRepository.findById(inputPayment.getBackerId())).thenReturn(userEntity);
         when(projectRepository.findById(inputPayment.getProjectId())).thenReturn(Optional.of(p1));
         when(paymentRepository.save(any(PaymentEntity.class))).thenAnswer(invocation -> {
             PaymentEntity payment2 = invocation.getArgument(0);
@@ -131,8 +131,7 @@ class PaymentServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getPaymentId());
-        verify(userRepository, times(1)).findByEmail(inputPayment.getBackerEmail());
-        verify(projectRepository, times(1)).findById(inputPayment.getProjectId());
+        verify(userRepository, times(1)).findById(inputPayment.getBackerId());
         verify(paymentRepository, times(1)).save(any(PaymentEntity.class));
     }
 
