@@ -192,7 +192,8 @@ public class ProjectServiceImpl implements ProjectService {
                 break;
 
             default:
-                return null;
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+                break;
         }
 
 
