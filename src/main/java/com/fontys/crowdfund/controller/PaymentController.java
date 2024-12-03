@@ -31,6 +31,6 @@ public interface PaymentController {
     ResponseEntity<OutputDTOPayment> createPayment(@RequestBody InputDTOPayment paymentDTO);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<OutputDTOPayment> deletePayment(@PathVariable int id);
+    ResponseEntity<Void> deletePayment(@PathVariable int id);
 
 }

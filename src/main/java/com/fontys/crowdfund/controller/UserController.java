@@ -27,5 +27,5 @@ public interface UserController {
     ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<OutputDTOUser> deleteProject(@PathVariable int id);
+    ResponseEntity<Void> deleteUser(@PathVariable int id);
 }

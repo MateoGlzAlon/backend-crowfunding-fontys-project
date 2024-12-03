@@ -57,7 +57,8 @@ public class PaymentControllerImpl implements PaymentController {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<OutputDTOPayment> deletePayment(@PathVariable int id) {
+    public ResponseEntity<Void> deletePayment(@PathVariable int id) {
+        paymentService.deletePaymentById(id);
         return ResponseEntity.ok().build();
     }
 }

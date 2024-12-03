@@ -471,13 +471,14 @@ class ProjectServiceTest {
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
         when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
-
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(any(String.class),any(Double.class) , any(Double.class), any(Pageable.class)))
+                .thenReturn(mockPage);
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
                 project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
 
         // Assert
-        assertNull(result);
+        assertNotNull(result);
     }
 
     @Test
