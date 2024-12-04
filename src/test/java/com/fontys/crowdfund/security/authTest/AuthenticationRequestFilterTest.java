@@ -1,4 +1,4 @@
-/*package com.fontys.crowdfund.security.authTest;
+package com.fontys.crowdfund.security.authTest;
 
 import com.fontys.crowdfund.config.security.auth.AuthenticationRequestFilter;
 import com.fontys.crowdfund.config.security.token.AccessToken;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AuthenticationRequestFilterTest {
-
+/*
     @Mock
     private AccessTokenDecoder accessTokenDecoder;
 
@@ -131,5 +131,6 @@ class AuthenticationRequestFilterTest {
         assertTrue(securityContext.getAuthentication().getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_USER")));
     }
+    */
+
 }
- */

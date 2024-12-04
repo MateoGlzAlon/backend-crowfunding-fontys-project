@@ -1,5 +1,5 @@
 package com.fontys.crowdfund.testPersistence;
-/*
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 class TestH2Database {
+    /*
 
     @Autowired
     private UserRepository userRepository;
@@ -65,8 +66,6 @@ class TestH2Database {
     void testName() {
         assertEquals("Matthew Stone", u1.getName());
     }
-
-
+*/
 
 }
-        */
