@@ -74,7 +74,7 @@ class PaymentControllerTest {
         ResponseEntity<OutputDTOPayment> response = paymentController.getPaymentById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("test@example.com", response.getBody().getBackerEmail());
         verify(paymentService, times(1)).getPaymentById(1);
     }
@@ -88,7 +88,7 @@ class PaymentControllerTest {
         ResponseEntity<List<OutputDTOPayment>> response = paymentController.getPaymentsToProjectById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         verify(paymentService, times(1)).getPaymentsByProjectId(1);
     }
@@ -107,7 +107,7 @@ class PaymentControllerTest {
         ResponseEntity<List<OutputDonationNotification>> response = paymentController.getPaymentNotificationsToProjectById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("John Doe", response.getBody().get(0).getBackerName());
         verify(paymentService, times(1)).getPaymentNotificationsByProjectId(1);
@@ -130,7 +130,7 @@ class PaymentControllerTest {
         ResponseEntity<List<ProfilePaymentDTO>> response = paymentController.getPaymentsByUserIdForProfile(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("Test Project", response.getBody().get(0).getProjectName());
         verify(paymentService, times(1)).getPaymentsByUserIdForProfile(1);
@@ -145,7 +145,7 @@ class PaymentControllerTest {
         ResponseEntity<OutputDTOPayment> response = paymentController.createPayment(inputPayment);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("test@example.com", response.getBody().getBackerEmail());
         verify(paymentService, times(1)).createPayment(inputPayment);
     }
@@ -159,7 +159,7 @@ class PaymentControllerTest {
         ResponseEntity<Void> response = paymentController.deletePayment(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         verify(paymentService, times(1)).deletePaymentById(1);
     }
 }

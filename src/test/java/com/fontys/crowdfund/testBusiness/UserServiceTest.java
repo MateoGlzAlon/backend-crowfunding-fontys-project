@@ -185,7 +185,7 @@ class UserServiceTest {
         UserProjectDTO u1 = userService.getUserDataForProject(1);
 
         // Assert
-        assertEquals(u1.getName(), "userProjectName");
+        assertEquals("userProjectName", u1.getName());
     }
 
     @Test
@@ -196,9 +196,9 @@ class UserServiceTest {
         when(userRepository.getUserIdFromEmail("newuser@example.com")).thenReturn(1);
 
         // Act
-        int u1_Id = userService.getUserIdFromEmail("newuser@example.com");
+        int u1Id = userService.getUserIdFromEmail("newuser@example.com");
 
         // Assert
-        assertEquals(1,u1_Id );
+        assertEquals(1,u1Id );
     }
 }

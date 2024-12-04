@@ -1,6 +1,7 @@
-package com.fontys.crowdfund.controller.impl;
+package com.fontys.crowdfund.testController;
 
 import com.fontys.crowdfund.business.UserService;
+import com.fontys.crowdfund.controller.impl.UserControllerImpl;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -64,7 +64,7 @@ class UserControllerTest {
         ResponseEntity<OutputDTOUser> response = userController.getUserById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("John Doe", response.getBody().getName());
         verify(userService, times(1)).getUserById(1);
     }
@@ -79,7 +79,7 @@ class UserControllerTest {
         ResponseEntity<UserProjectDTO> response = userController.getUserDataForProject(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("name", response.getBody().getName());
         verify(userService, times(1)).getUserDataForProject(1);
     }
@@ -94,7 +94,7 @@ class UserControllerTest {
         ResponseEntity<Integer> response = userController.getUserIdFromEmail(email);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody());
         verify(userService, times(1)).getUserIdFromEmail(email);
     }
@@ -109,7 +109,7 @@ class UserControllerTest {
         ResponseEntity<OutputDTOUser> response = userController.createUser(inputDTOUser);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("John Doe", response.getBody().getName());
         verify(userService, times(1)).createUser(inputDTOUser);
     }
@@ -123,7 +123,7 @@ class UserControllerTest {
         ResponseEntity<Void> response = userController.deleteUser(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         verify(userService, times(1)).deleteUser(1);
     }
 }

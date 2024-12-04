@@ -66,7 +66,7 @@ class ProjectControllerTest {
         ResponseEntity<List<OutputDTOProject>> response = projectController.getAllProjects();
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("Test Project", response.getBody().get(0).getName());
         verify(projectService, times(1)).getAllProjects();
@@ -81,7 +81,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProject> response = projectController.getProjectById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("Test Project", response.getBody().getName());
         verify(projectService, times(1)).getProjectById(1);
     }
@@ -100,7 +100,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProject> response = projectController.createProject(inputDTOProject);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("Test Project", response.getBody().getName());
         verify(projectService, times(1)).createProject(inputDTOProject);
     }
@@ -114,7 +114,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProject> response = projectController.deleteProject(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         verify(projectService, times(1)).deleteProject(1);
     }
 
@@ -128,7 +128,7 @@ class ProjectControllerTest {
         ResponseEntity<List<ProjectOnlyCoverLandingPage>> response = projectController.getCloseToFundingProjects();
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("Test Project", response.getBody().get(0).getName());
         verify(projectService, times(1)).getCloseToFundingAllProjects();
@@ -144,7 +144,7 @@ class ProjectControllerTest {
         ResponseEntity<List<ProjectOnlyCoverLandingPage>> response = projectController.getNewProjects();
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("New Project", response.getBody().get(0).getName());
         verify(projectService, times(1)).getNewProjects();
@@ -160,7 +160,7 @@ class ProjectControllerTest {
         ResponseEntity<Map<String, Object>> response = projectController.getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(0, ((List<?>) response.getBody().get("content")).size());
         verify(projectService, times(1)).getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6);
     }
@@ -174,7 +174,7 @@ class ProjectControllerTest {
         ResponseEntity<List<OutputDTOProject>> response = projectController.getProjectsFromUserID(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("Test Project", response.getBody().get(0).getName());
         verify(projectService, times(1)).getProjectsFromUserId(1);
@@ -189,7 +189,7 @@ class ProjectControllerTest {
         ResponseEntity<List<OutputDTOProjectImage>> response = projectController.getAllProjectImages();
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("image1.jpg", response.getBody().get(0).getImageURL());
         verify(projectService, times(1)).getAllProjectImages();
@@ -205,7 +205,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProjectImage> response = projectController.createProjectImage(inputDTOProjectImage);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("image1.jpg", response.getBody().getImageURL());
         verify(projectService, times(1)).createProjectImage(inputDTOProjectImage);
     }
@@ -219,7 +219,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProjectImage> response = projectController.getProjectImageById(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertEquals("image1.jpg", response.getBody().getImageURL());
         verify(projectService, times(1)).getProjectImageById(1);
     }
@@ -233,7 +233,7 @@ class ProjectControllerTest {
         ResponseEntity<OutputDTOProjectImage> response = projectController.deleteProjectImage(1);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         verify(projectService, times(1)).deleteProjectImage(1);
     }
 }

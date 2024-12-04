@@ -1,5 +1,5 @@
-/*package com.fontys.crowdfund.testPersistence;
-
+package com.fontys.crowdfund.testPersistence;
+/*
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
