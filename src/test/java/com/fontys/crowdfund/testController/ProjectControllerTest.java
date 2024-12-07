@@ -93,7 +93,7 @@ class ProjectControllerTest {
         // Arrange
         InputDTOProject inputDTOProject = new InputDTOProject(
                 "Test Project", "Test Description", "Test Location",
-                "Test Type", new Date(), 1000.0F, "test@user.com", images);
+                "Test Type", new Date(), 1000.0F, 1, images);
         when(projectService.createProject(inputDTOProject)).thenReturn(testProject);
 
         // Act

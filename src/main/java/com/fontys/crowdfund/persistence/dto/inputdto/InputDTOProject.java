@@ -20,7 +20,7 @@ public class InputDTOProject {
     private String type;
     private Date dateCreated;
     private float fundingGoal;
-    private String userEmail;
+    private int userId;
     private List<String> images;
 
 }

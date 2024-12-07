@@ -58,6 +58,4 @@ public class ProjectEntity {
     @Column(name = "percentage_funded", insertable = false, updatable = false)
     private Double percentageFunded;
 
-
-
 }
