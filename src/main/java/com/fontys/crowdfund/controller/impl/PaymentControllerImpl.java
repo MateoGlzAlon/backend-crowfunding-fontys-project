@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.business.PaymentService;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

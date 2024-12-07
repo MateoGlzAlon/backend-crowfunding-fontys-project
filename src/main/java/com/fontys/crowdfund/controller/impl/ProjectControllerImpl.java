@@ -7,6 +7,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,7 @@ public class ProjectControllerImpl implements ProjectController {
 
     @Override
     @DeleteMapping("/{id}")
+    @RolesAllowed({"admin"})
     public ResponseEntity<OutputDTOProject> deleteProject(@PathVariable int id) {
         projectService.deleteProject(id);
         return ResponseEntity.ok().build();
