@@ -153,16 +153,16 @@ class ProjectControllerTest {
     @Test
     void testGetAllProjectsForLandingPage() {
         // Arrange
-        when(projectService.getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6))
+        when(projectService.getAllProjectsForLandingPage(null, null, null, "dateCreated", "",0, 6))
                 .thenReturn(Page.empty());
 
         // Act
-        ResponseEntity<Map<String, Object>> response = projectController.getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6);
+        ResponseEntity<Map<String, Object>> response = projectController.getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6, "");
 
         // Assert
         assertEquals(200, response.getStatusCode().value());
         assertEquals(0, ((List<?>) response.getBody().get("content")).size());
-        verify(projectService, times(1)).getAllProjectsForLandingPage(null, null, null, "dateCreated", 0, 6);
+        verify(projectService, times(1)).getAllProjectsForLandingPage(null, null, null, "dateCreated", "",0, 6);
     }
 
     @Test

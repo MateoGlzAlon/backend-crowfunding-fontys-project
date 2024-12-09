@@ -330,12 +330,13 @@ class ProjectServiceTest {
         String sortBy = "dateCreatedDesc";
         int page = 0;
         int size = 2;
+        String name = "";
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
 
         Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
 
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable ))
                 .thenReturn(mockPage);
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
@@ -343,7 +344,7 @@ class ProjectServiceTest {
 
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
-                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, name,page, size);
 
         // Assert
         assertNotNull(result);
@@ -359,7 +360,7 @@ class ProjectServiceTest {
         assertEquals("Project Four", projectResult2.getName());
         assertEquals("imageURL2", projectResult2.getImageCover());
 
-        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded,name, pageable);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
     }
@@ -374,12 +375,13 @@ class ProjectServiceTest {
         String sortBy = "dateCreatedAsc";
         int page = 0;
         int size = 2;
+        String name = "";
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "dateCreated"));
 
         Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
 
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable))
                 .thenReturn(mockPage);
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
@@ -387,7 +389,7 @@ class ProjectServiceTest {
 
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
-                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, name,page, size);
 
         // Assert
         assertNotNull(result);
@@ -403,7 +405,7 @@ class ProjectServiceTest {
         assertEquals("Project Four", projectResult2.getName());
         assertEquals("imageURL2", projectResult2.getImageCover());
 
-        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
     }
@@ -418,12 +420,13 @@ class ProjectServiceTest {
         String sortBy = "percentageFundedDesc";
         int page = 0;
         int size = 2;
+        String name = "";
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "percentageFunded"));
 
         Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
 
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable))
                 .thenReturn(mockPage);
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
@@ -431,7 +434,7 @@ class ProjectServiceTest {
 
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
-                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, name, page, size);
 
         // Assert
         assertNotNull(result);
@@ -447,7 +450,7 @@ class ProjectServiceTest {
         assertEquals("Project Four", projectResult2.getName());
         assertEquals("imageURL2", projectResult2.getImageCover());
 
-        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded,name, pageable);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
     }
@@ -461,21 +464,22 @@ class ProjectServiceTest {
         String sortBy = "random";
         int page = 0;
         int size = 2;
+        String name = "";
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "percentageFunded"));
 
         Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
 
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded,name, pageable))
                 .thenReturn(null);
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
         when(projectImageRepository.getImagesFromProjectId(4)).thenReturn(List.of("imageURL2"));
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(any(String.class),any(Double.class) , any(Double.class), any(Pageable.class)))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(any(String.class),any(Double.class) , any(Double.class), any(String.class),any(Pageable.class)))
                 .thenReturn(mockPage);
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
-                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, name,page, size);
 
         // Assert
         assertNotNull(result);
@@ -490,12 +494,13 @@ class ProjectServiceTest {
         String sortBy = "percentageFundedAsc";
         int page = 0;
         int size = 2;
+        String name = "";
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "percentageFunded"));
 
         Page<ProjectEntity> mockPage = new PageImpl<>(List.of(project3, project4), pageable, 2);
 
-        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable))
+        when(projectRepository.getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable))
                 .thenReturn(mockPage);
 
         when(projectImageRepository.getImagesFromProjectId(3)).thenReturn(List.of("imageURL1"));
@@ -503,7 +508,7 @@ class ProjectServiceTest {
 
         // Act
         Page<ProjectOnlyCoverLandingPage> result = projectService.getAllProjectsForLandingPage(
-                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                project3.getType(), minPercentageFunded, maxPercentageFunded, sortBy, name, page, size);
 
         // Assert
         assertNotNull(result);
@@ -519,7 +524,7 @@ class ProjectServiceTest {
         assertEquals("Project Four", projectResult2.getName());
         assertEquals("imageURL2", projectResult2.getImageCover());
 
-        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, pageable);
+        verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
     }
