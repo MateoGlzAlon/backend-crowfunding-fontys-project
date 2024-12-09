@@ -7,6 +7,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.UserRepository;
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer getUserIdFromEmail(String email) {
         return userRepository.getUserIdFromEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateProfilePicture(String newPicture, int id) {
+        int rowsUpdated = userRepository.updateProfilePicture(newPicture, id);
+        return rowsUpdated > 0;
+    }
+
+    @Override
+    public String getProfilePicture(int id) {
+        return userRepository.getProfilePicture(id);
     }
 
 

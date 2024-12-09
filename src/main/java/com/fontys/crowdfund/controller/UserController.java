@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserController {
 
@@ -25,6 +26,12 @@ public interface UserController {
 
     @PostMapping
     ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO);
+
+    @PostMapping("/picture/{id}")
+    ResponseEntity<Boolean> updateProfilePicture(@RequestBody Map<String, String> requestBody, @PathVariable int id);
+
+    @GetMapping("/picture/{id}")
+    String getProfilePicture(@PathVariable int id);
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteUser(@PathVariable int id);

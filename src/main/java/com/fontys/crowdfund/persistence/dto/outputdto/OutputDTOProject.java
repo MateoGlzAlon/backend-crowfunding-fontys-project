@@ -16,7 +16,7 @@ public class OutputDTOProject {
 
     private int id;
     private String name;
-    private String userEmail;
+    private int userId;
     private float fundingGoal;
     private float moneyRaised;
     private List<String> images;

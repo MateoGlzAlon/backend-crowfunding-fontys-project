@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -50,6 +51,23 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<OutputDTOUser> createUser(@RequestBody InputDTOUser userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
+
+    @Override
+    @PostMapping("/picture/{id}")
+    public ResponseEntity<Boolean> updateProfilePicture(@RequestBody Map<String, String> requestBody, @PathVariable int id) {
+        String newPicture = requestBody.get("newPicture");
+
+        System.out.println("Request received with newPicture: " + newPicture);
+
+        boolean isUpdated = userService.updateProfilePicture(newPicture, id);
+        return ResponseEntity.ok(isUpdated);
+    }
+
+    @Override
+    public String getProfilePicture(int id) {
+        return userService.getProfilePicture(id);
+    }
+
 
     @Override
     @DeleteMapping("/{id}")

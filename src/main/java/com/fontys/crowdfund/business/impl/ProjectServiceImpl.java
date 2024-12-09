@@ -233,7 +233,7 @@ public class ProjectServiceImpl implements ProjectService {
         return OutputDTOProject.builder()
                 .id(projectEntity.getId())
                 .name(projectEntity.getName())
-                .userEmail(projectEntity.getUser().getEmail()) //CHECK : Ensure user is not null and has an email.
+                .userId(projectEntity.getUser().getId()) //CHECK : Ensure user is not null and has an email.
                 .fundingGoal(projectEntity.getFundingGoal())
                 .moneyRaised(projectEntity.getMoneyRaised())
                 .images(projectImagesRepository.getImagesFromProjectId(projectEntity.getId())) //CHECK : Ensure images list is not null or empty.

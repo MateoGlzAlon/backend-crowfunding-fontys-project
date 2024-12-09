@@ -22,4 +22,8 @@ public interface UserService {
     UserProjectDTO getUserDataForProject(int id);
 
     Integer getUserIdFromEmail(String email);
+
+    boolean updateProfilePicture(String newPicture, int id);
+
+    String getProfilePicture(int id);
 }

@@ -2,6 +2,7 @@ package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,15 +21,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
         // Find a user by email
         @Query("SELECT u " +
-                        "FROM UserEntity u " +
-                        "WHERE u.email = :userEmail")
+                "FROM UserEntity u " +
+                "WHERE u.email = :userEmail")
         UserEntity findByEmail(@Param("userEmail") String userEmail);
 
         // Delete a user by ID
         @Modifying
         @Query("DELETE " +
-                        "FROM UserEntity u " +
-                        "WHERE u.id = :userId")
+                "FROM UserEntity u " +
+                "WHERE u.id = :userId")
         void deleteById(@Param("userId") int userId);
 
 
@@ -41,5 +42,19 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
         @Query("SELECT u.id " +
                 "FROM UserEntity u " +
                 "WHERE u.email = :userEmail")
-        Integer getUserIdFromEmail(@Param("userEmail")String email);
+        Integer getUserIdFromEmail(@Param("userEmail") String email);
+
+
+        @Modifying
+        @Transactional
+        @Query("UPDATE UserEntity u " +
+                "SET u.profilePicture = :newPicture " +
+                "WHERE u.id = :id")
+        int updateProfilePicture(@Param("newPicture") String newPicture, @Param("id") int id);
+
+
+        @Query("SELECT u.profilePicture " +
+                "FROM UserEntity u " +
+                "WHERE u.id = :userId")
+        String getProfilePicture(@Param("userId")int id);
 }
