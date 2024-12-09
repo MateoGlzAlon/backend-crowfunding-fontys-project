@@ -5,6 +5,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +40,17 @@ public interface ProjectController {
             @RequestParam(required = false) Double maxPercentageFunded,
             @RequestParam(defaultValue = "dateCreated") String sortBy,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size);
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "") String name);
 
     @GetMapping("/new")
     ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(int userId);
+
+
+    @GetMapping("/details/{id}")
+    ResponseEntity<ProjectDetailsDTO> getProjectDetailsByID(@PathVariable int id);
+
+
 
 
     //=================================00

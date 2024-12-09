@@ -1,6 +1,7 @@
 package com.fontys.crowdfund.persistence;
 
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -50,19 +51,27 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
 
 
 
+
+
     @Query("SELECT p " +
             "FROM ProjectEntity p " +
             "WHERE (:type IS NULL OR p.type = :type) " +
             "AND (:minPercentageFunded IS NULL OR CAST((p.moneyRaised / p.fundingGoal) * 100 AS float) >= :minPercentageFunded) " +
-            "AND (:maxPercentageFunded IS NULL OR CAST((p.moneyRaised / p.fundingGoal) * 100 AS float) <= :maxPercentageFunded)")
+            "AND (:maxPercentageFunded IS NULL OR CAST((p.moneyRaised / p.fundingGoal) * 100 AS float) <= :maxPercentageFunded) " +
+            "AND (:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))) "
+    )
     Page<ProjectEntity> getAllProjectsWithFiltersAndPagination(
             @Param("type") String type,
             @Param("minPercentageFunded") Double minPercentageFunded,
             @Param("maxPercentageFunded") Double maxPercentageFunded,
+            @Param("name") String name,
             Pageable pageable
     );
 
 
 
-
+    @Query("SELECT p "+
+            "FROM ProjectEntity p " +
+            "WHERE p.id = :projectId")
+    ProjectEntity getProjectDetailsById(@Param("projectId")int id);
 }

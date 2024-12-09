@@ -4,6 +4,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.data.domain.Page;
 
@@ -41,7 +42,10 @@ public interface ProjectService {
             Double minPercentageFunded,
             Double maxPercentageFunded,
             String sortBy,
+            String name,
             int page,
             int size
     );
+
+    ProjectDetailsDTO getProjectDetailsById(int id);
 }

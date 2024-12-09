@@ -9,6 +9,7 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -178,8 +179,10 @@ public class ProjectServiceImpl implements ProjectService {
             Double minPercentageFunded,
             Double maxPercentageFunded,
             String sortBy,
+            String name,
             int page,
-            int size) {
+            int size
+    ) {
 
         Pageable pageable = null;
 
@@ -211,7 +214,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Fetch paginated data from the repository
         Page<ProjectEntity> projectEntitiesPage = projectRepository.getAllProjectsWithFiltersAndPagination(
-                type, minPercentageFunded, maxPercentageFunded, pageable);
+                type, minPercentageFunded, maxPercentageFunded, name, pageable);
 
         //CHECK : Ensure projectEntitiesPage is not null before processing.
         // Transform each ProjectEntity into ProjectOnlyCoverLandingPage using Page.map()
@@ -226,6 +229,27 @@ public class ProjectServiceImpl implements ProjectService {
                         projectEntity.getDescription()
                 )
         );
+    }
+
+    @Override
+    public ProjectDetailsDTO getProjectDetailsById(int id) {
+
+        ProjectEntity projectEntity = projectRepository.getProjectDetailsById(id);
+
+        return ProjectDetailsDTO.builder()
+                .id(projectEntity.getId())
+                .name(projectEntity.getName())
+                .userId(projectEntity.getUser().getId())
+                .ownerName(projectEntity.getUser().getName())
+                .ownerProfilePicture(projectEntity.getUser().getProfilePicture())
+                .fundingGoal(projectEntity.getFundingGoal())
+                .moneyRaised(projectEntity.getMoneyRaised())
+                .images(projectImagesRepository.getImagesFromProjectId(projectEntity.getId()))
+                .description(projectEntity.getDescription())
+                .location(projectEntity.getLocation())
+                .type(projectEntity.getType())
+                .dateCreated(projectEntity.getDateCreated())
+                .build();
     }
 
     public OutputDTOProject createOutputDTOProject(ProjectEntity projectEntity) {

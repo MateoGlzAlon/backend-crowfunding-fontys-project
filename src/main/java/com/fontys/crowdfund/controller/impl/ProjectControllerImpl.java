@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -71,10 +72,12 @@ public class ProjectControllerImpl implements ProjectController {
             @RequestParam(required = false) Double maxPercentageFunded,
             @RequestParam(defaultValue = "dateCreated") String sortBy,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "") String name) {
+
 
         Page<ProjectOnlyCoverLandingPage> projectsPage = projectService.getAllProjectsForLandingPage(
-                type, minPercentageFunded, maxPercentageFunded, sortBy, page, size);
+                type, minPercentageFunded, maxPercentageFunded, sortBy,name, page, size);
 
         Map<String, Object> response = new HashMap<>();
         response.put("content", projectsPage.getContent());
@@ -92,6 +95,11 @@ public class ProjectControllerImpl implements ProjectController {
     @GetMapping("/users/{id}")
     public ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(@PathVariable int id) {
         return ResponseEntity.ok(projectService.getProjectsFromUserId(id));
+    }
+
+    @Override
+    public ResponseEntity<ProjectDetailsDTO> getProjectDetailsByID(int id) {
+        return ResponseEntity.ok(projectService.getProjectDetailsById(id));
     }
 
 

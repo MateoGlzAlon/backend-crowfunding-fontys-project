@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                         registry.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/users", "/tokens", "/ws").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/projects/highlighted", "/projects/new" , "/projects", "/projects/{id}",
-                                        "/payments/projects/notifications/{id}", "/projects/filters/pagination").permitAll()
+                                        "/payments/projects/notifications/{id}", "/projects/filters/pagination", "/projects/details/{id}").permitAll()
                                 .requestMatchers(SWAGGER_UI_RESOURCES).permitAll()
                                 .requestMatchers(HttpMethod.GET,"/ws").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/ws").permitAll()
