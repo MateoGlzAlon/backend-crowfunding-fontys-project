@@ -48,4 +48,6 @@ public interface ProjectService {
     );
 
     ProjectDetailsDTO getProjectDetailsById(int id);
+
+    List<Integer> getProjectIdsFromUserID(int id);
 }

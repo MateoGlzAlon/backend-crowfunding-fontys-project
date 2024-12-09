@@ -74,4 +74,10 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
             "FROM ProjectEntity p " +
             "WHERE p.id = :projectId")
     ProjectEntity getProjectDetailsById(@Param("projectId")int id);
+
+
+    @Query("SELECT p.id " +
+            "FROM ProjectEntity p " +
+            "WHERE p.user.id = :userId")
+    List<Integer> getProjectIdsFromUserID(@Param("userId")int id);
 }

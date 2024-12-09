@@ -252,6 +252,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .build();
     }
 
+    @Override
+    public List<Integer> getProjectIdsFromUserID(int id) {
+        return projectRepository.getProjectIdsFromUserID(id);
+    }
+
     public OutputDTOProject createOutputDTOProject(ProjectEntity projectEntity) {
         //CHECK : Ensure projectEntity is not null to avoid NullPointerException.
         return OutputDTOProject.builder()

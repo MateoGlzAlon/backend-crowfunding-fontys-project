@@ -43,9 +43,11 @@ public interface ProjectController {
             @RequestParam(defaultValue = "6") int size,
             @RequestParam(defaultValue = "") String name);
 
-    @GetMapping("/new")
+    @GetMapping("/users/{id}")
     ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(int userId);
 
+    @GetMapping("/users/id/{id}")
+    ResponseEntity<List<Integer>> getProjectIdsFromUserID(int userId);
 
     @GetMapping("/details/{id}")
     ResponseEntity<ProjectDetailsDTO> getProjectDetailsByID(@PathVariable int id);

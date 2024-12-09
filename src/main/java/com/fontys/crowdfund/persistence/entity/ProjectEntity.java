@@ -48,9 +48,6 @@ public class ProjectEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectImageEntity> projectImages;
-
     @NotNull
     @Column(name = "fundingGoal", nullable = false)
     private Float fundingGoal;

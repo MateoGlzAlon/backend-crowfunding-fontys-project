@@ -89,12 +89,16 @@ public class ProjectControllerImpl implements ProjectController {
         return ResponseEntity.ok(response);
     }
 
-
-
     @Override
     @GetMapping("/users/{id}")
     public ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(@PathVariable int id) {
         return ResponseEntity.ok(projectService.getProjectsFromUserId(id));
+    }
+
+    @Override
+    @GetMapping("/users/id/{id}")
+    public ResponseEntity<List<Integer>> getProjectIdsFromUserID(@PathVariable int id) {
+        return ResponseEntity.ok(projectService.getProjectIdsFromUserID(id));
     }
 
     @Override
