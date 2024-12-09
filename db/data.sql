@@ -29,11 +29,10 @@ CREATE TABLE IF NOT EXISTS `payments` (
   PRIMARY KEY (`id`),
   KEY `FK7h0as5hqhn845eewc7usiy0x3` (`project_id`),
   KEY `FKj94hgy9v5fw1munb90tar2eje` (`user_id`),
-  CONSTRAINT `FK7h0as5hqhn845eewc7usiy0x3` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`),
-  CONSTRAINT `FKj94hgy9v5fw1munb90tar2eje` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FK7h0as5hqhn845eewc7usiy0x3` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table crowdfund_db.payments: ~13 rows (approximately)
+-- Dumping data for table crowdfund_db.payments: ~11 rows (approximately)
 INSERT INTO `payments` (`id`, `amount`, `payment_date`, `project_id`, `user_id`) VALUES
 	(1, 50, '2024-09-25 16:15:00.000000', 1, 2),
 	(2, 75.5, '2024-09-26 12:30:00.000000', 1, 2),
@@ -45,39 +44,33 @@ INSERT INTO `payments` (`id`, `amount`, `payment_date`, `project_id`, `user_id`)
 	(8, 90, '2024-10-02 17:00:00.000000', 1, 5),
 	(9, 110, '2024-10-03 18:20:00.000000', 1, 5),
 	(10, 125, '2024-10-04 19:40:00.000000', 2, 5),
-	(11, 1, '2024-11-30 19:48:05.267000', 1, 1),
-	(12, 150, '2024-11-30 19:48:44.989000', 1, 1),
-	(13, 10, '2024-11-30 19:49:06.335000', 1, 1),
-	(14, 1, '2024-11-30 19:51:45.643000', 1, 1),
-	(15, 15, '2024-11-30 19:57:34.473000', 1, 1),
-	(16, 25, '2024-12-01 22:42:15.067000', 7, 1);
+	(11, 15, '2024-12-09 10:11:45.737000', 1, 1);
 
 -- Dumping structure for table crowdfund_db.projects
 CREATE TABLE IF NOT EXISTS `projects` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `description` text,
   `funding_goal` float NOT NULL,
   `location` varchar(255) DEFAULT NULL,
   `money_raised` float NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `percentage_funded` double GENERATED ALWAYS AS (((`money_raised` / `funding_goal`) * 100)) VIRTUAL,
   `user_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKhswfwa3ga88vxv1pmboss6jhm` (`user_id`),
-  CONSTRAINT `FKhswfwa3ga88vxv1pmboss6jhm` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `FKhswfwa3ga88vxv1pmboss6jhm` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table crowdfund_db.projects: ~7 rows (approximately)
-INSERT INTO `projects` (`id`, `date_created`, `description`, `funding_goal`, `location`, `money_raised`, `name`, `type`, `user_id`) VALUES
-	(1, '2024-09-15 12:00:00', 'This initiative focuses on establishing a sustainable community garden designed to address multiple issues such as food insecurity, urban environmental challenges, and community engagement. By transforming vacant lots and underutilized urban spaces into vibrant, productive gardens, the project aims to provide fresh, organic produce to local families while promoting environmentally friendly practices. Educational workshops will teach residents about composting, crop rotation, and organic pest control, empowering them to grow their own food and reduce their carbon footprint. Additionally, the garden will serve as a hub for community interaction, fostering stronger social ties and offering opportunities for volunteerism, skill-sharing, and outdoor recreation.', 12000, 'Downtown Area', 1742.75, 'Community Garden Project', 'Environment', 1),
-	(2, '2024-09-20 13:30:00', 'This fundraiser is dedicated to transforming the school library into a modern learning center that meets the diverse needs of students in the 21st century. With the funds raised, the project will renovate the library\'s physical space, creating dedicated zones for collaborative work, quiet study, and digital learning. A significant portion of the funds will go toward expanding the collection of books, e-books, and audiobooks, ensuring students have access to a wide range of educational and recreational materials. Additionally, new technology, including tablets, computers, and interactive whiteboards, will be introduced to enhance the learning experience. The project also aims to host literacy programs, author visits, and workshops to inspire a lifelong love of reading and learning among students.', 5000, 'Springfield High School', 125, 'School Library Fundraiser', 'Education', 2),
-	(3, '2024-09-25 16:15:00', 'This vital initiative addresses the urgent need for access to clean and safe drinking water in communities that suffer from contaminated or insufficient water supplies. The project plans to implement sustainable water solutions, including drilling wells, installing filtration systems, and repairing existing infrastructure. Beyond providing immediate access to potable water, the initiative will educate community members on proper sanitation practices, water conservation, and maintenance of the systems to ensure long-term success. By targeting rural and underserved regions, the program seeks to drastically reduce waterborne diseases, improve overall health outcomes, and enhance the quality of life for thousands of people. This initiative underscores the belief that access to clean water is a fundamental human right, and it aims to create lasting change for future generations.', 20000, 'Various Locations', 15000, 'Clean Water Initiative', 'Health', 3),
-	(4, '2024-09-30 11:45:00', 'This comprehensive renovation project seeks to transform the local animal shelter into a state-of-the-art facility that can better meet the needs of rescued animals and the community. The proposed upgrades include replacing outdated kennels with spacious, climate-controlled units to provide comfort and safety for the animals. Veterinary facilities will be expanded and modernized to allow for on-site medical care and spay/neuter programs. Outdoor exercise and play areas will be developed to promote the animals’ physical and emotional well-being, and a new adoption center will create a welcoming environment for prospective pet owners. The project will also introduce community outreach programs to raise awareness about responsible pet ownership and support the shelter\'s mission of finding loving homes for every animal in their care.', 15000, 'Animal Shelter, City Center', 0, 'Animal Shelter Renovation', 'Animal Welfare', 4),
-	(5, '2024-10-05 14:00:00', 'This forward-thinking campaign is dedicated to accelerating the adoption of renewable energy technologies across the community, with a focus on sustainability, cost savings, and environmental impact. The project plans to install solar panels on public buildings, provide subsidies for residential solar systems, and introduce community wind and geothermal projects to reduce dependency on fossil fuels. Educational workshops and seminars will be conducted to inform residents about the benefits of renewable energy, including long-term savings and reduced carbon emissions. Additionally, the campaign aims to collaborate with local businesses and policymakers to create incentives for adopting green energy solutions. By fostering a culture of sustainability, the project envisions a future where renewable energy is not only accessible but also embraced as the norm in every household and organization in the community.', 25000, 'Citywide', 0, 'Renewable Energy Campaign', 'Energy', 5),
-	(6, '2024-09-20 11:30:00', 'This initiative seeks to transform underutilized urban spaces into thriving community gardens. The project will create green spaces in vacant lots, rooftops, and public parks, providing residents with the opportunity to grow their own fruits and vegetables, fostering a sense of community, and promoting environmental sustainability. Workshops on urban farming, composting, and sustainable agriculture will be organized to educate participants about cultivating healthy, organic produce. In addition to improving food security, the initiative aims to address urban heat islands and enhance air quality. Collaborations with local schools will incorporate gardening into educational curriculums, instilling environmental consciousness in young minds. The project\'s ultimate goal is to create a network of urban gardens that supply fresh produce to the community while promoting healthy lifestyles and environmental stewardship.', 15000, 'Downtown District', 0, 'Urban Gardening Initiative', 'Community Development', 1),
-	(7, '2024-11-10 16:45:00', 'This program is designed to bridge the digital divide by equipping underprivileged youth with essential technological skills. The project will provide free access to laptops, software, and internet connectivity, ensuring students have the tools needed to succeed in an increasingly tech-driven world. Through coding bootcamps, robotics workshops, and digital literacy courses, participants will gain hands-on experience in cutting-edge technologies such as artificial intelligence, web development, and data science. The program also aims to offer mentorship opportunities with industry professionals and internships at local tech companies, paving the way for future career opportunities. By empowering young minds with tech skills, this initiative envisions a more inclusive and digitally proficient community.', 30000, 'Eastside Neighborhood', 25, 'Youth Tech Empowerment Program', 'Education', 1);
+-- Dumping data for table crowdfund_db.projects: ~6 rows (approximately)
+INSERT INTO `projects` (`id`, `name`, `date_created`, `description`, `funding_goal`, `location`, `money_raised`, `type`, `user_id`) VALUES
+	(1, 'Community Garden Project', '2024-09-15 12:00:00', 'This initiative focuses on establishing a sustainable community garden designed to address multiple issues such as food insecurity, urban environmental challenges, and community engagement. By transforming vacant lots and underutilized urban spaces into vibrant, productive gardens, the project aims to provide fresh, organic produce to local families while promoting environmentally friendly practices. Educational workshops will teach residents about composting, crop rotation, and organic pest control, empowering them to grow their own food and reduce their carbon footprint. Additionally, the garden will serve as a hub for community interaction, fostering stronger social ties and offering opportunities for volunteerism, skill-sharing, and outdoor recreation.', 12000, 'Downtown Area', 930.5, 'Environment', 1),
+	(2, 'School Library Fundraiser', '2024-09-20 13:30:00', 'This fundraiser is dedicated to transforming the school library into a modern learning center that meets the diverse needs of students in the 21st century. With the funds raised, the project will renovate the library\'s physical space, creating dedicated zones for collaborative work, quiet study, and digital learning. A significant portion of the funds will go toward expanding the collection of books, e-books, and audiobooks, ensuring students have access to a wide range of educational and recreational materials. Additionally, new technology, including tablets, computers, and interactive whiteboards, will be introduced to enhance the learning experience. The project also aims to host literacy programs, author visits, and workshops to inspire a lifelong love of reading and learning among students.', 5000, 'Springfield High School', 125, 'Education', 1),
+	(3, 'Clean Water Initiative', '2024-09-25 16:15:00', 'This vital initiative addresses the urgent need for access to clean and safe drinking water in communities that suffer from contaminated or insufficient water supplies. The project plans to implement sustainable water solutions, including drilling wells, installing filtration systems, and repairing existing infrastructure. Beyond providing immediate access to potable water, the initiative will educate community members on proper sanitation practices, water conservation, and maintenance of the systems to ensure long-term success. By targeting rural and underserved regions, the program seeks to drastically reduce waterborne diseases, improve overall health outcomes, and enhance the quality of life for thousands of people. This initiative underscores the belief that access to clean water is a fundamental human right, and it aims to create lasting change for future generations.', 20000, 'Various Locations', 0, 'Health', 2),
+	(5, 'Renewable Energy Campaign', '2024-10-05 14:00:00', 'This forward-thinking campaign is dedicated to accelerating the adoption of renewable energy technologies across the community, with a focus on sustainability, cost savings, and environmental impact. The project plans to install solar panels on public buildings, provide subsidies for residential solar systems, and introduce community wind and geothermal projects to reduce dependency on fossil fuels. Educational workshops and seminars will be conducted to inform residents about the benefits of renewable energy, including long-term savings and reduced carbon emissions. Additionally, the campaign aims to collaborate with local businesses and policymakers to create incentives for adopting green energy solutions. By fostering a culture of sustainability, the project envisions a future where renewable energy is not only accessible but also embraced as the norm in every household and organization in the community.', 25000, 'Citywide', 0, 'Energy', 4),
+	(6, 'Tech for All Initiative', '2024-12-08 01:55:32', 'This innovative campaign focuses on bridging the digital divide by providing access to technology, digital literacy training, and career development resources to underserved communities. The project aims to distribute refurbished laptops, offer free coding and software development bootcamps, and create mentorship programs connecting tech professionals with aspiring students. Public tech hubs equipped with high-speed internet and learning materials will be established in local libraries and community centers. In collaboration with educational institutions and tech companies, the campaign will facilitate job placement programs and internships to empower individuals with employable digital skills. By fostering tech inclusivity, the project envisions a future where technological advancement is a shared opportunity for all.', 30000, 'Community Centers and Schools', 0, 'Education', 1),
+	(7, 'Green City Gardens Project', '2024-12-08 01:56:28', 'This eco-friendly campaign aims to transform underutilized urban spaces into thriving community gardens, promoting food security, sustainability, and environmental stewardship. The project will establish rooftop gardens, vertical farms, and community plots where residents can grow fruits, vegetables, and herbs. Workshops on organic farming, composting, and water conservation will be conducted to educate participants on sustainable gardening practices. The initiative plans to partner with local restaurants, schools, and community organizations to distribute surplus produce and reduce food waste. By fostering a culture of urban agriculture, the project envisions greener neighborhoods, healthier diets, and stronger community bonds through shared gardening experiences.', 8000, 'Urban Neighborhoods and Public Spaces', 0, 'Environment', 1);
 
 -- Dumping structure for table crowdfund_db.project_images
 CREATE TABLE IF NOT EXISTS `project_images` (
@@ -87,32 +80,25 @@ CREATE TABLE IF NOT EXISTS `project_images` (
   `project_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKoej10untas4roy2rqxcmbdj42` (`project_id`),
-  CONSTRAINT `FKoej10untas4roy2rqxcmbdj42` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `FKoej10untas4roy2rqxcmbdj42` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table crowdfund_db.project_images: ~21 rows (approximately)
+-- Dumping data for table crowdfund_db.project_images: ~16 rows (approximately)
 INSERT INTO `project_images` (`id`, `image_order`, `image_url`, `project_id`) VALUES
-	(1, 1, 'https://placehold.co/600x400?text=p1.1', 1),
-	(2, 2, 'https://placehold.co/600x400?text=p1.2', 1),
-	(3, 3, 'https://placehold.co/600x400?text=p1.3', 1),
-	(4, 1, 'https://placehold.co/600x400?text=p2.1', 2),
-	(5, 2, 'https://placehold.co/600x400?text=p2.2', 2),
-	(6, 3, 'https://placehold.co/600x400?text=p2.3', 2),
-	(7, 1, 'https://placehold.co/600x400?text=p3.1', 3),
-	(8, 2, 'https://placehold.co/600x400?text=p3.2', 3),
-	(9, 3, 'https://placehold.co/600x400?text=p3.3', 3),
-	(10, 1, 'https://placehold.co/600x400?text=p4.1', 4),
-	(11, 2, 'https://placehold.co/600x400?text=p4.2', 4),
-	(12, 3, 'https://placehold.co/600x400?text=p4.3', 4),
-	(13, 1, 'https://placehold.co/600x400?text=p5.1', 5),
-	(14, 2, 'https://placehold.co/600x400?text=p5.2', 5),
-	(15, 3, 'https://placehold.co/600x400?text=p5.3', 5),
-	(16, 1, 'https://placehold.co/600x400?text=p6.1', 6),
-	(17, 2, 'https://placehold.co/600x400?text=p6.2', 6),
-	(18, 3, 'https://placehold.co/600x400?text=p6.3', 6),
-	(19, 1, 'https://placehold.co/600x400?text=p7.1', 7),
-	(20, 2, 'https://placehold.co/600x400?text=p7.2', 7),
-	(21, 3, 'https://placehold.co/600x400?text=p7.3', 7);
+	(1, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/community-garden-1.jpg', 1),
+	(2, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/community-garden-2.jpg', 1),
+	(3, 3, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/community-garden-3.jpg', 1),
+	(4, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/school-library-1.jpg', 2),
+	(5, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/school-library-2.jpg', 2),
+	(6, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/clean-water-1.png', 3),
+	(7, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/clean-water-2.jpg', 3),
+	(8, 3, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/clean-water-3.jpg', 3),
+	(11, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/renewable-energy-1.jpg', 5),
+	(12, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/renewable-energy-2.webp', 5),
+	(16, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/01d7ba7683552438f121d27552193424b11f57e6e568dde00ba8792feecb17bd', 6),
+	(17, 3, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/fdac2894253ebe972e098e94aad6fa028435d63dba6b308849ff7e67fd6da980', 7),
+	(18, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/0d584c7016d7d722ff9f0b62eba4245b7647de9636e8a738669ca77e6d47ed52', 7),
+	(19, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/f60c94be8315b7ec442c90b04096e0509d22cf7ccb6de25404fa1be4f75593a3', 7);
 
 -- Dumping structure for table crowdfund_db.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -125,14 +111,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table crowdfund_db.users: ~6 rows (approximately)
+-- Dumping data for table crowdfund_db.users: ~5 rows (approximately)
 INSERT INTO `users` (`id`, `email`, `name`, `password`, `profile_picture`, `role`) VALUES
-	(1, 'user@example.com', 'Matthew Stone', '$2a$10$lzA58GjJKsdTF4kW0ECW0OjM3OMXMlLMHmCLZ31zg/LaBSPt98GhO', 'https://avatar.iran.liara.run/public', 'user'),
-	(2, 'emilyjohnson@example.com', 'Emily Johnson', '$2a$10$8joaASWeJWGr.X8y31g0X.IJnmYixv2ANwIaHftw3Lu7pu/QTClbq', 'https://avatar.iran.liara.run/public', 'user'),
-	(3, 'michaelbrown@example.com', 'Michael Brown', '$2a$10$mafApnlvJjdsD2MMCz0cp.kNr3MBNP0BJRajc2lXnyn4sRU4oIFjy', 'https://avatar.iran.liara.run/public', 'user'),
-	(4, 'sophiadavis@example.com', 'Sophia Davis', '$2a$10$DSHXnKXg3qlf5fXDaeHj3e6Aq.iNdCxff1lA0.ErMkp/XE7lg0phC', 'https://avatar.iran.liara.run/public', 'user'),
-	(5, 'jameswilson@example.com', 'James Wilson', '$2a$10$n9P7Yx4iKOD9jDXGrd205OjpzSmVBhkr.crFy/2mzSD2pt20ssis2', 'https://avatar.iran.liara.run/public', 'user'),
-	(6, 'admin@example.com', 'The Admin', '$2a$10$Pl4NfZP5D0DFBOeVusmM5.iK0M3JmgXi0nVRQI.fQzPUkS2w2CU2O', 'https://avatar.iran.liara.run/public', 'admin');
+	(1, 'user@example.com', 'Matthew Stone', '$2a$10$tayjd4zSddcQfK6aa8NfGuiZNNcKhoog.evBJr78hIaZYRwqh8Am2', 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/6be5b05f00bd748bb65a13718ff4d8b19b4082488e573729d692f5427486ae1e', 'user'),
+	(2, 'emilyjohnson@example.com', 'Emily Johnson', '$2a$10$z7VycO.GbEroJXl.sQTTSO2pOdw6IWyC16QUeAYZGaUTj/YKnl0Lm', 'https://avatar.iran.liara.run/public', 'user'),
+	(4, 'sophiadavis@example.com', 'Sophia Davis', '$2a$10$eJ06/tu4u5pi70O1vaGscOko8lw83r3dUdOsxDRp.HRDrthyG5LRi', 'https://avatar.iran.liara.run/public', 'user'),
+	(5, 'jameswilson@example.com', 'James Wilson', '$2a$10$Ce0ipA5wFckulTIEHpQkV.AEqVoIGQxDGUVLsG3fbybr8BYN.sBw6', 'https://avatar.iran.liara.run/public', 'user'),
+	(6, 'admin@example.com', 'The Admin', '$2a$10$pat943w6Gu9JjA5NSi.r2eKPFMV.8bjnYiDpw0/eStLn44Ods31D2', 'https://avatar.iran.liara.run/public', 'admin');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
