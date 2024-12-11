@@ -33,9 +33,9 @@ jacocoTestReport {
     // Exclude the package 'com.fontys.crowdfund.persistence' from the coverage report
     classDirectories.setFrom(files(classDirectories.files.collect{
         fileTree(dir: it, exclude: [
-                "**/persistence/dto/**",
-                "**/persistence/entity/**",
-                "**/persistence/specialdto/**",
+                "**/persistence/**",
+                "**/config/**",
+
         ])
     }
     ))
@@ -47,7 +47,9 @@ sonar {
         property "sonar.projectName", "Individual Crowfund"
         // Additional SonarQube properties can be added here
         property "sonar.exclusion",
-                "**/persistence/**"
+                "**/persistence/**",
+                "**/config/**"
+
     }
 }
 
