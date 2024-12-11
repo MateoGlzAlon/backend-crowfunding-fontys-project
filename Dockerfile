@@ -15,3 +15,7 @@ ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar build/libs/Crowdfund-0.0.1-SNAPS
 
 # I added this so that it uses the file application-docker.properties instead of the local setup
 ENV PROFILE=docker
+
+ENV JWT_SECRET=$JWT_SECRET
+ENV DB_USERNAME=$DB_USERNAME
+ENV DB_PASSWORD=$DB_PASSWORD
