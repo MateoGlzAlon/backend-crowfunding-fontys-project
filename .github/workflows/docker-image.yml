@@ -26,9 +26,9 @@ jobs:
       # Step 4: Debug JWT_SECRET
       - name: Debug JWT_SECRET
         run: |
-          echo "JWT_SECRET=${JWT_SECRET}"
+          echo "JWT_SECRET=${JWT_SECRET2}"
         env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET2: ${{ secrets.JWT_SECRET }}
 
       # Step 5: Build the Docker image
       - name: Build the Docker image
