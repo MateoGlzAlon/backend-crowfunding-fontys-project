@@ -21,6 +21,8 @@ jobs:
       # Step 3: Define IMAGE_TAG
       - name: Define IMAGE_TAG
         id: vars
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
 
       # Step 4: Display JWT_SECRET (for debugging purposes)
@@ -29,8 +31,6 @@ jobs:
 
       # Step 5: Build the Docker image
       - name: Build the Docker image
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: docker build . --file Dockerfile --tag raisehub_backend:${{ env.IMAGE_TAG }}
 
       # Step 6: Tag the Docker image with the repository name.
