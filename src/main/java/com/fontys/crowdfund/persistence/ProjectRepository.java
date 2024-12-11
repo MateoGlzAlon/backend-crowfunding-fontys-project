@@ -51,8 +51,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Integer>
 
 
 
-
-
+    
     @Query("SELECT p " +
             "FROM ProjectEntity p " +
             "WHERE (:type IS NULL OR p.type = :type) " +
