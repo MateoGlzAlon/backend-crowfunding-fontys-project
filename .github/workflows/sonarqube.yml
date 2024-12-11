@@ -1,45 +1,29 @@
-name: Sonarqube Analyze
+name: Run SonarQube with Gradle
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   build:
-    name: Build and analyze
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Check out the code
+      - uses: actions/checkout@v2
+
+      # Step 2: Set up JDK 11
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
-
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
-
-      - name: Grant execution permissions for Gradlew
-        run: chmod +x ./gradlew  # This adds the execution permission for the gradlew script
-
-      - name: Build and analyze
+      # Step 3: Run SonarQube Analysis with Gradle
+      - name: Run SonarQube with Gradle
+        run: ./gradlew build sonarqube \
+          -Dsonar.projectKey=javareachabilityy \
+          -Dsonar.organization=javareachabilityy \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=$SONARC_TOKEN
         env:
+          GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: ./gradlew build sonar --info
