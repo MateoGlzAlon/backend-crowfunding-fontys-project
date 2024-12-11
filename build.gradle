@@ -25,20 +25,21 @@ jacoco {
 jacocoTestReport {
     dependsOn test // Ensure JaCoCo runs after tests
 
+    afterEvaluate {
+        // Exclude the package 'com.fontys.crowdfund.persistence' from the coverage report
+        classDirectories.setFrom(files(classDirectories.files.collect{
+            fileTree(dir: it, exclude: [
+                "**/persistence/**",
+                "**/config/**"
+            ])
+        }
+        ))
+    }
+
     reports {
         xml.required.set(true)  // Enable XML report for SonarQube or CI
         html.required.set(true) // Enable HTML report for local inspection
     }
-
-    // Exclude the package 'com.fontys.crowdfund.persistence' from the coverage report
-    classDirectories.setFrom(files(classDirectories.files.collect{
-        fileTree(dir: it, exclude: [
-                "**/persistence/**",
-                "**/config/**",
-
-        ])
-    }
-    ))
 }
 
 sonar {
@@ -47,9 +48,8 @@ sonar {
         property "sonar.projectName", "Individual Crowfund"
         // Additional SonarQube properties can be added here
         property "sonar.exclusion",
-                "**/persistence/**",
+                "**/persistence/**" +
                 "**/config/**"
-
     }
 }
 
