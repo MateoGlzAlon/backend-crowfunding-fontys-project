@@ -17,13 +17,16 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      # Step 3: Run SonarQube Analysis with Gradle
+      # Step 3: Grant execute permissions to Gradle wrapper
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      # Step 4: Run SonarQube Analysis with Gradle
       - name: Run SonarQube with Gradle
         run: ./gradlew build sonarqube \
           -Dsonar.projectKey=javareachabilityy \
           -Dsonar.organization=javareachabilityy \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$SONARC_TOKEN
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
