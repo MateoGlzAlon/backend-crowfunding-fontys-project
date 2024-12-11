@@ -23,11 +23,9 @@ jobs:
         id: vars
         run: echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
 
-      # Step 4: Debug JWT_SECRET
-      - name: Debug JWT_SECRET
-        run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | head -c 8 && echo "****"
-        shell: /usr/bin/bash -e {0}
-      
+      # Step 4: Display JWT_SECRET (for debugging purposes)
+      - name: Echo JWT_SECRET
+        run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"  # Avoid this step in production if JWT_SECRET is sensitive
 
       # Step 5: Build the Docker image
       - name: Build the Docker image
