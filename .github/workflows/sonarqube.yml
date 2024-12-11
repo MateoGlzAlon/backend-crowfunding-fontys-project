@@ -25,10 +25,6 @@ jobs:
 
       # Step 4: Run SonarQube Analysis with Gradle
       - name: Run SonarQube with Gradle
-        run: ./gradlew build sonarqube \
-          -Dsonar.projectKey=javareachabilityy \
-          -Dsonar.organization=javareachabilityy \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonarqube       
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
