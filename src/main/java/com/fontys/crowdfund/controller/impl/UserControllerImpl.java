@@ -57,8 +57,6 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<Boolean> updateProfilePicture(@RequestBody Map<String, String> requestBody, @PathVariable int id) {
         String newPicture = requestBody.get("newPicture");
 
-        System.out.println("Request received with newPicture: " + newPicture);
-
         boolean isUpdated = userService.updateProfilePicture(newPicture, id);
         return ResponseEntity.ok(isUpdated);
     }

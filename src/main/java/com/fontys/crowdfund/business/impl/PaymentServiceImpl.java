@@ -59,7 +59,12 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
 
-        ProjectEntity project = projectRepository.findById(paymentDTO.getProjectId()).orElse(null);
+        ProjectEntity project = projectRepository.findById(paymentDTO.getProjectId())
+                .orElseThrow(() -> new IllegalArgumentException("Project not found"));
+
+        project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
+        projectRepository.save(project);
+
         project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
         projectRepository.save(project);
 

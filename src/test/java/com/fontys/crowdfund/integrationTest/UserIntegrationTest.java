@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-public class UserIntegrationTest {
+class UserIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
