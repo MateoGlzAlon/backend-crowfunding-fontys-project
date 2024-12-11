@@ -47,7 +47,7 @@ sonar {
         property "sonar.projectKey", "Individual-Crowfund"
         property "sonar.projectName", "Individual Crowfund"
         // Additional SonarQube properties can be added here
-        property "sonar.exclusion","**/persistence/** , **/config/**"
+        property "sonar.exclusions", "**/persistence/**,**/config/**"
     }
 }
 
