@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.NotificationController;
-import com.fontys.crowdfund.persistence.WebSocketNotification.NotificationMessage;
+import com.fontys.crowdfund.persistence.websocketnotification.NotificationMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence.WebSocketNotification;
+package com.fontys.crowdfund.persistence.websocketnotification;
 
 import lombok.Data;
 
