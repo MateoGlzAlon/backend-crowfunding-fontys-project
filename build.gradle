@@ -41,13 +41,13 @@ jacocoTestReport {
         html.required.set(true) // Enable HTML report for local inspection
     }
 }
-
-properties {
-    property "sonar.projectKey", "fontys-leon_individual-crowfund"
-    property "sonar.organization", "fontys-leon"
-    property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.exclusions", "**/persistence/**,**/config/**"
-
+sonar {
+    properties {
+        property "sonar.projectKey", "fontys-leon_individual-crowfund"
+        property "sonar.organization", "fontys-leon"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.exclusions", "**/persistence/**,**/config/**"
+    }
 }
 
 configurations {
