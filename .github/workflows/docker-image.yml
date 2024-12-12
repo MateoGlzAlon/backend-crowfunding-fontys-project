@@ -30,9 +30,8 @@ jobs:
       # Step 4: Build the Docker image
       - name: Build Docker Image
         run: docker build . \
-            --file Dockerfile \
-            --tag raisehub_be:${{ env.IMAGE_TAG }}
-
+          --file Dockerfile \
+          --tag raisehub_be:${{ env.IMAGE_TAG }}
 
       # Step 5: Tag the Docker image with the repository name
       - name: Tag the Docker image
@@ -46,9 +45,9 @@ jobs:
       # Step 7: Run the Docker container with secrets
       - name: Run the Docker container
         run: |
-              docker run -d \
-                    -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-                    -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-                    -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-                    -p 8080:8080 \
-                    raisehub_backend:${{ env.IMAGE_TAG }}
+          docker run -d \
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            -p 8080:8080 \
+            ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
