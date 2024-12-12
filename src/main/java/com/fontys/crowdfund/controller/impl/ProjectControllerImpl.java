@@ -47,7 +47,7 @@ public class ProjectControllerImpl implements ProjectController {
     @Override
     @DeleteMapping("/{id}")
     @RolesAllowed({"admin"})
-    public ResponseEntity<OutputDTOProject> deleteProject(@PathVariable int id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable int id) {
         projectService.deleteProject(id);
         return ResponseEntity.ok().build();
     }

@@ -25,7 +25,7 @@ public interface ProjectController {
     ResponseEntity<OutputDTOProject> createProject(@RequestBody InputDTOProject projectDTO);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<OutputDTOProject> deleteProject(@PathVariable int id);
+    ResponseEntity<Void> deleteProject(@PathVariable int id);
 
     @GetMapping("/highlighted")
     ResponseEntity<List<ProjectOnlyCoverLandingPage>> getCloseToFundingProjects();

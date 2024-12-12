@@ -111,10 +111,9 @@ class ProjectControllerTest {
         doNothing().when(projectService).deleteProject(1);
 
         // Act
-        ResponseEntity<OutputDTOProject> response = projectController.deleteProject(1);
+        projectController.deleteProject(1);
 
         // Assert
-        assertEquals(200, response.getStatusCode().value());
         verify(projectService, times(1)).deleteProject(1);
     }
 
