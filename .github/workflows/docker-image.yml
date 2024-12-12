@@ -25,16 +25,23 @@ jobs:
       # Step 3: Define IMAGE_TAG
       - name: Define IMAGE_TAG
         id: vars
-        run: echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(date '+%d/%m/%Y-%H:%M')" >> $GITHUB_ENV
 
       # Step 4: Build the Docker image
       - name: Build Docker Image
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/crowdfund-backend:${{ env.IMAGE_TAG }}
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+
 
       # Step 5: Push the Docker image to Docker Hub
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/crowdfund-backend:${{ env.IMAGE_TAG }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+
+          # Step 6: Run the Docker container with secrets
+      - name: Run the Docker container
+        run: |
+              docker run -d \
+                    -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+                    -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+                    -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+                    -p 3000:3000 \
+                    raisehub_fe:${{ env.IMAGE_TAG }}
