@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@TestPropertySource(properties = "jwt.secret=thisisaverysecurejwtsecretkey1234567")
 
 class UserIntegrationTest {
 
