@@ -43,5 +43,5 @@ jobs:
                     -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
                     -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
                     -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-                    -p 3000:3000 \
-                    raisehub_fe:${{ env.IMAGE_TAG }}
+                    -p 8080:8080 \
+                    raisehub_backend:${{ env.IMAGE_TAG }}
