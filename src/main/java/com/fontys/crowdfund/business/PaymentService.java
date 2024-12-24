@@ -26,4 +26,5 @@ public interface PaymentService {
 
     List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id);
 
+    Integer getTotalPaymentsByUserId(int userId, String time);
 }

@@ -1,9 +1,9 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.ProjectServiceImpl;
-import com.fontys.crowdfund.persistence.ProjectRepository;
-import com.fontys.crowdfund.persistence.ProjectImagesRepository;
-import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.repository.ProjectRepository;
+import com.fontys.crowdfund.repository.ProjectImagesRepository;
+import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;

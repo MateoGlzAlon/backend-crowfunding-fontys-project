@@ -2,7 +2,7 @@ package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.UserServiceImpl;
 import com.fontys.crowdfund.exception.EmailAlreadyExists;
-import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
 import com.fontys.crowdfund.persistence.entity.UserEntity;

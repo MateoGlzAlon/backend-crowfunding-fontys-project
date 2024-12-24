@@ -1,10 +1,10 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.PaymentServiceImpl;
-import com.fontys.crowdfund.persistence.PaymentRepository;
-import com.fontys.crowdfund.persistence.ProjectImagesRepository;
-import com.fontys.crowdfund.persistence.ProjectRepository;
-import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.repository.PaymentRepository;
+import com.fontys.crowdfund.repository.ProjectImagesRepository;
+import com.fontys.crowdfund.repository.ProjectRepository;
+import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;

@@ -27,10 +27,15 @@ public interface PaymentController {
     @GetMapping("/projects/profile/{id}")
     ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id);
 
+    @GetMapping("/totalPayments/{userId}")
+    ResponseEntity<Integer> getTotalPaymentsByUserId(@PathVariable int userId, @RequestParam(defaultValue = "") String time);
+
     @PostMapping
     ResponseEntity<OutputDTOPayment> createPayment(@RequestBody InputDTOPayment paymentDTO);
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deletePayment(@PathVariable int id);
+
+
 
 }

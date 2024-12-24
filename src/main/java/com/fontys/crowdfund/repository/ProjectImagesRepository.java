@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence;
+package com.fontys.crowdfund.repository;
 
 import com.fontys.crowdfund.persistence.entity.ProjectImageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

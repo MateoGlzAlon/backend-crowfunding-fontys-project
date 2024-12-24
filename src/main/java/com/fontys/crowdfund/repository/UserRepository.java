@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence;
+package com.fontys.crowdfund.repository;
 
 import com.fontys.crowdfund.persistence.entity.UserEntity;
 import com.fontys.crowdfund.persistence.specialdto.UserProjectDTO;

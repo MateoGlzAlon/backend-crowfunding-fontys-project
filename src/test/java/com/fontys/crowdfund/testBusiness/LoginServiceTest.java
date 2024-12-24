@@ -4,7 +4,7 @@ import com.fontys.crowdfund.business.impl.LoginServiceImpl;
 import com.fontys.crowdfund.config.security.token.AccessTokenEncoder;
 import com.fontys.crowdfund.config.security.token.impl.AccessTokenImpl;
 import com.fontys.crowdfund.exception.InvalidCredentialsException;
-import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOLogin;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOLogin;
 import com.fontys.crowdfund.persistence.entity.UserEntity;

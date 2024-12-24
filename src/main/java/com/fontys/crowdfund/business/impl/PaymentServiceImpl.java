@@ -1,10 +1,10 @@
 package com.fontys.crowdfund.business.impl;
 
-import com.fontys.crowdfund.persistence.PaymentRepository;
+import com.fontys.crowdfund.repository.PaymentRepository;
 
 import com.fontys.crowdfund.business.PaymentService;
-import com.fontys.crowdfund.persistence.ProjectRepository;
-import com.fontys.crowdfund.persistence.UserRepository;
+import com.fontys.crowdfund.repository.ProjectRepository;
+import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
@@ -130,6 +130,19 @@ public class PaymentServiceImpl implements PaymentService {
 
         return profilePaymentDTOs;
     }
+
+    @Override
+    public Integer getTotalPaymentsByUserId(int userId, String time) {
+        String timeVar = switch (time) {
+            case "All_time" -> null;
+            case "This_month" -> "month";
+            case "This_year" -> "year";
+            default -> null;
+        };
+
+        return paymentRepository.getTotalPaymentsByUserId(userId, timeVar);
+    }
+
 
 
     private OutputDTOPayment createOutputDTOPayment(PaymentEntity paymentEntity) {

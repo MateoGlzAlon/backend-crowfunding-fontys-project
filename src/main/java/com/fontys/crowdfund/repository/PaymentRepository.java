@@ -1,4 +1,4 @@
-package com.fontys.crowdfund.persistence;
+package com.fontys.crowdfund.repository;
 
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,5 +38,16 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
             "FROM ProjectImageEntity i " +
             "WHERE i.project.id = :projectId AND i.imageOrder = 1")
     String getImageCover(@Param("projectId") int id);
+
+
+    @Query("SELECT COALESCE(SUM(p.amount), 0) " +
+            "FROM PaymentEntity p " +
+            "WHERE p.user.id = :userId " +
+            "AND (:time IS NULL OR " +
+            "( (:time = 'month' AND MONTH(p.paymentDate) = MONTH(CURRENT_DATE) AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE)) " +
+            "OR (:time = 'year' AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE)) ))")
+    Integer getTotalPaymentsByUserId(@Param("userId") int userId, @Param("time") String time);
+
+
 
 }

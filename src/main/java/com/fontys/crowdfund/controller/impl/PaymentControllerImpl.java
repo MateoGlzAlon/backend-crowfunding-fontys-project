@@ -50,6 +50,12 @@ public class PaymentControllerImpl implements PaymentController {
     }
 
     @Override
+    @GetMapping("/totalPayments/{userId}")
+    public ResponseEntity<Integer> getTotalPaymentsByUserId(@PathVariable int userId, String time) {
+        return ResponseEntity.ok(paymentService.getTotalPaymentsByUserId(userId, time));
+    }
+
+    @Override
     @PostMapping
     public ResponseEntity<OutputDTOPayment> createPayment(@RequestBody InputDTOPayment paymentDTO) {
         return ResponseEntity.ok(paymentService.createPayment(paymentDTO));
