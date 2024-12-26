@@ -1,20 +1,3 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Versión del servidor:         9.1.0 - MySQL Community Server - GPL
--- SO del servidor:              Linux
--- HeidiSQL Versión:             12.8.0.6908
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
--- Volcando datos para la tabla crowdfund_db.payments: ~16 rows (aproximadamente)
 INSERT INTO `payments` (`id`, `amount`, `payment_date`, `project_id`, `user_id`) VALUES
 	(1, 85, '2024-12-20 18:44:53.397000', 6, 1),
 	(2, 5, '2024-12-20 18:45:10.971000', 6, 4),
@@ -33,7 +16,6 @@ INSERT INTO `payments` (`id`, `amount`, `payment_date`, `project_id`, `user_id`)
 	(15, 12, '2024-12-20 20:24:42.526000', 1, 5),
 	(16, 15, '2024-12-20 21:12:38.548000', 9, 3);
 
--- Volcando datos para la tabla crowdfund_db.projects: ~9 rows (aproximadamente)
 INSERT INTO `projects` (`id`, `name`, `date_created`, `description`, `funding_goal`, `location`, `money_raised`, `type`, `user_id`) VALUES
 	(1, 'Community Garden Project', '2024-09-15 12:00:00', 'This initiative focuses on establishing a sustainable community garden designed to address multiple issues such as food insecurity, urban environmental challenges, and community engagement. By transforming vacant lots and underutilized urban spaces into vibrant, productive gardens, the project aims to provide fresh, organic produce to local families while promoting environmentally friendly practices. Educational workshops will teach residents about composting, crop rotation, and organic pest control, empowering them to grow their own food and reduce their carbon footprint. Additionally, the garden will serve as a hub for community interaction, fostering stronger social ties and offering opportunities for volunteerism, skill-sharing, and outdoor recreation.', 12000, 'Downtown Area', 12, 'Environment', 1),
 	(2, 'School Library Fundraiser', '2024-09-20 13:30:00', 'This fundraiser is dedicated to transforming the school library into a modern learning center that meets the diverse needs of students in the 21st century. With the funds raised, the project will renovate the library\'s physical space, creating dedicated zones for collaborative work, quiet study, and digital learning. A significant portion of the funds will go toward expanding the collection of books, e-books, and audiobooks, ensuring students have access to a wide range of educational and recreational materials. Additionally, new technology, including tablets, computers, and interactive whiteboards, will be introduced to enhance the learning experience. The project also aims to host literacy programs, author visits, and workshops to inspire a lifelong love of reading and learning among students.', 5000, 'Springfield High School', 3100, 'Education', 1),
@@ -45,7 +27,6 @@ INSERT INTO `projects` (`id`, `name`, `date_created`, `description`, `funding_go
 	(8, 'Eco-Friendly Housing Initiative', '2024-12-20 20:17:48', 'An innovative effort to construct eco-friendly, affordable housing units using sustainable materials and energy-efficient designs. The project targets low-income families to provide safe, green homes.', 25000, 'Greenwood Residential Area', 0, 'Environment', 5),
 	(9, 'Local History Preservation Project', '2024-12-20 20:21:42', 'This project aims to document and preserve the local community\'s rich historical heritage through archival work, oral histories, and cultural exhibitions, ensuring future generations learn about their roots.', 6000, 'City Archives and Museums', 15, 'Culture', 1);
 
--- Volcando datos para la tabla crowdfund_db.project_images: ~21 rows (aproximadamente)
 INSERT INTO `project_images` (`id`, `image_order`, `image_url`, `project_id`) VALUES
 	(1, 1, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/community-garden-1.jpg', 1),
 	(2, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/community-garden-2.jpg', 1),
@@ -69,16 +50,9 @@ INSERT INTO `project_images` (`id`, `image_order`, `image_url`, `project_id`) VA
 	(20, 2, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/8f2080a9b108a5034cf9e0461f96b92c2a44df876b2a613231be3e8e2e1beead', 9),
 	(21, 3, 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/2e09f384d55063f9ec0d92042606008a617118caa21e61d5d581f8f9ac71de0e', 9);
 
--- Volcando datos para la tabla crowdfund_db.users: ~5 rows (aproximadamente)
 INSERT INTO `users` (`id`, `email`, `name`, `password`, `profile_picture`, `role`) VALUES
 	(1, 'user@example.com', 'Mateo Gonzalez', '$2a$10$h3Zw3WLE/6R0wF2.h.l/ZeubLSjCu1doyLe9Mqkfsuwttm1S5KF12', 'https://raisehub-crowdfunding-bucket.s3.eu-west-3.amazonaws.com/f92830967c5c0cd3514cb2ef821f1718e3fa79f16682b2ae204dd5e65064f83d', 'user'),
 	(2, 'emilyjohnson@example.com', 'Emily Johnson', '$2a$10$wTXVMuYycfB/VWB0p6iLMeYNoOk6qhLHpWbPw61.Wlgx6oEVHv.pi', 'https://avatar.iran.liara.run/public/boy?username=Emily Johnson', 'user'),
 	(3, 'albertanderson@example.com', 'Albert Anderson', '$2a$10$554qcpFTmL7So3iv7JWa4.n8U1O2LdGdJAS.ypTX0PDb1p/uXKJKe', 'https://avatar.iran.liara.run/public/boy?username=Albert Anderson', 'user'),
 	(4, 'sophiadavis@example.com', 'Sophia Davis', '$2a$10$v8/Pv34ERCb20X3ptnX0XeZZNg2wh1v2uEarLDGswjWVVRmZpsTRe', 'https://avatar.iran.liara.run/public/boy?username=Sophia Davis', 'user'),
 	(5, 'jameswilson@example.com', 'James Wilson', '$2a$10$ZrszqlQPBWHLK7mcioj9Fe4yJ5No4E/5maEJBvRt0DD10XvWr6nBO', 'https://avatar.iran.liara.run/public/boy?username=James Wilson', 'user');
-
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
