@@ -65,9 +65,6 @@ public class PaymentServiceImpl implements PaymentService {
         project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
         projectRepository.save(project);
 
-        project.setMoneyRaised(project.getMoneyRaised() + paymentDTO.getAmountFunded());
-        projectRepository.save(project);
-
         return createOutputDTOPayment(paymentRepository.save(payment));
     }
 
