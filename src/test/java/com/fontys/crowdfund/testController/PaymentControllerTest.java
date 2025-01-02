@@ -137,6 +137,19 @@ class PaymentControllerTest {
     }
 
     @Test
+    void testGetTotalPayments() {
+        when(paymentService.getTotalPaymentsByUserId(1, "Time")).thenReturn(100);
+
+        // Act
+        ResponseEntity<Integer> response = paymentController.getTotalPaymentsByUserId(1, "Time");
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(100, response.getBody());
+        verify(paymentService, times(1)).getTotalPaymentsByUserId(1, "Time");
+    }
+
+    @Test
     void testCreatePayment() {
         // Arrange
         when(paymentService.createPayment(inputPayment)).thenReturn(testPayment);

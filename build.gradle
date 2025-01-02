@@ -32,6 +32,7 @@ jacocoTestReport {
                 "**/persistence/**",
                 "**/config/**",
                 "**/exception/**",
+                "**/CrowdfundingApplication.java"
             ])
         }
         ))
@@ -47,7 +48,7 @@ sonar {
         property "sonar.projectKey", "MateoGlzAlon_backend-crowfunding-fontys-project"
         property "sonar.organization", "mateoglzalon"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.exclusions", "**/persistence/**,**/config/**,**/exception/**"
+        property "sonar.exclusions", "**/persistence/**,**/config/**,**/exception/**,**/CrowdfundingApplication.java"
     }
 }
 

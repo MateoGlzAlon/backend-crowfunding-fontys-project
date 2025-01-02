@@ -535,6 +535,16 @@ class ProjectServiceTest {
         ProjectEntity projectEntity = mock(ProjectEntity.class);
         UserEntity userEntity = mock(UserEntity.class);
         List<String> images = Arrays.asList("image1.png", "image2.png");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2025);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY); // January is 0 in Calendar
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date date = calendar.getTime();
+
 
         // Set up mock values for the project entity and user entity
         when(projectRepository.getProjectDetailsById(projectId)).thenReturn(projectEntity);
@@ -550,7 +560,7 @@ class ProjectServiceTest {
         when(projectEntity.getDescription()).thenReturn("This is a description.");
         when(projectEntity.getLocation()).thenReturn("Test Location");
         when(projectEntity.getType()).thenReturn("Crowdfunding");
-        when(projectEntity.getDateCreated()).thenReturn(new Date(2025,1,1));
+        when(projectEntity.getDateCreated()).thenReturn(date);
 
         // Act
         ProjectDetailsDTO result = projectService.getProjectDetailsById(projectId);
@@ -568,7 +578,7 @@ class ProjectServiceTest {
         assertEquals("This is a description.", result.getDescription(), "The description should match.");
         assertEquals("Test Location", result.getLocation(), "The location should match.");
         assertEquals("Crowdfunding", result.getType(), "The type should match.");
-        assertEquals(new Date(2025, 1,1), result.getDateCreated(), "The creation date should match.");
+        assertEquals(date, result.getDateCreated(), "The creation date should match.");
     }
 
     @Test

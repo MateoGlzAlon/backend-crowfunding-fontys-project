@@ -3,7 +3,6 @@ package com.fontys.crowdfund.testController;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.fontys.crowdfund.controller.NotificationController;
 import com.fontys.crowdfund.controller.impl.NotificationsControllerImpl;
 import com.fontys.crowdfund.persistence.websocketnotification.NotificationMessage;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import java.util.Map;
 
 class NotificationControllerTest {
 

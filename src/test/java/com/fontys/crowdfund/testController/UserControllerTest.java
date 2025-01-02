@@ -150,7 +150,7 @@ class UserControllerTest {
     @Test
     void testGetProfilePicture() {
         // Arrange
-        when(userService.getProfilePicture(1)).thenReturn("picture.png");;
+        when(userService.getProfilePicture(1)).thenReturn("picture.png");
 
         // Act
         ResponseEntity<String> response = userController.getProfilePicture(1);
@@ -159,5 +159,4 @@ class UserControllerTest {
         assertEquals(200, response.getStatusCode().value());
         verify(userService, times(1)).getProfilePicture(1);
     }
-
 }

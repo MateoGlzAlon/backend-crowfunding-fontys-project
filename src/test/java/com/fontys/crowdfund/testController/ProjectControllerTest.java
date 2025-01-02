@@ -6,6 +6,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -234,5 +235,36 @@ class ProjectControllerTest {
         // Assert
         assertEquals(200, response.getStatusCode().value());
         verify(projectService, times(1)).deleteProjectImage(1);
+    }
+
+
+    @Test
+    void getProjectIdsFromUserID_ShouldReturnProjectIds() {
+        // Arrange
+        int userId = 1;
+        List<Integer> mockProjectIds = Arrays.asList(101, 102, 103);
+        when(projectService.getProjectIdsFromUserID(userId)).thenReturn(mockProjectIds);
+
+        // Act
+        ResponseEntity<List<Integer>> response = projectController.getProjectIdsFromUserID(userId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(mockProjectIds, response.getBody());
+    }
+
+    @Test
+    void getProjectDetailsByID_ShouldReturnProjectDetails() {
+        // Arrange
+        int projectId = 101;
+        ProjectDetailsDTO mockProjectDetails = new ProjectDetailsDTO(); // Populate with mock data if needed
+        when(projectService.getProjectDetailsById(projectId)).thenReturn(mockProjectDetails);
+
+        // Act
+        ResponseEntity<ProjectDetailsDTO> response = projectController.getProjectDetailsByID(projectId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(mockProjectDetails, response.getBody());
     }
 }
