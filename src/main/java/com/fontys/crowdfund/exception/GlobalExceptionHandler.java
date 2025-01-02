@@ -27,11 +27,10 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>("Invalid credentials: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
   }
 
-  @ExceptionHandler(EmailAlreadyExists.class)
+  @ExceptionHandler(EmailAlreadyExistsException.class)
   @ResponseStatus(HttpStatus.CONFLICT) //409
   public ResponseEntity<String> handleEmailAlreadyExistsException(Exception ex) {
     return new ResponseEntity<>("Email is already registered: " + ex.getMessage(), HttpStatus.CONFLICT);
   }
-
 
 }

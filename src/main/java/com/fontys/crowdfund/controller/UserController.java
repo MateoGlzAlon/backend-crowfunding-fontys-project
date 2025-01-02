@@ -31,7 +31,7 @@ public interface UserController {
     ResponseEntity<Boolean> updateProfilePicture(@RequestBody Map<String, String> requestBody, @PathVariable int id);
 
     @GetMapping("/picture/{id}")
-    String getProfilePicture(@PathVariable int id);
+    ResponseEntity<String> getProfilePicture(@PathVariable int id);
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteUser(@PathVariable int id);

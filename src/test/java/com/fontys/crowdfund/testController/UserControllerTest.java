@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -126,4 +127,37 @@ class UserControllerTest {
         assertEquals(200, response.getStatusCode().value());
         verify(userService, times(1)).deleteUser(1);
     }
+
+
+    @Test
+    void testUpdateProfilePicture_Success() {
+        // Arrange
+        int userId = 1;
+        String newPicture = "newProfilePic.png";
+        Map<String, String> requestBody = Map.of("newPicture", newPicture);
+
+        // Mock userService behavior to return true for the update
+        when(userService.updateProfilePicture(newPicture, userId)).thenReturn(true);
+
+        // Act
+        ResponseEntity<Boolean> response = userController.updateProfilePicture(requestBody, userId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value(), "The response status should be 200 OK.");
+        verify(userService, times(1)).updateProfilePicture(newPicture, userId);  // Ensure the service method was called once
+    }
+
+    @Test
+    void testGetProfilePicture() {
+        // Arrange
+        when(userService.getProfilePicture(1)).thenReturn("picture.png");;
+
+        // Act
+        ResponseEntity<String> response = userController.getProfilePicture(1);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        verify(userService, times(1)).getProfilePicture(1);
+    }
+
 }

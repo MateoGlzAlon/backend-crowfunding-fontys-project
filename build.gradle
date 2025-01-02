@@ -30,7 +30,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect{
             fileTree(dir: it, exclude: [
                 "**/persistence/**",
-                "**/config/**"
+                "**/config/**",
+                "**/exception/**"
             ])
         }
         ))
@@ -46,7 +47,7 @@ sonar {
         property "sonar.projectKey", "fontys-leon_individual-crowfund"
         property "sonar.organization", "fontys-leon"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.exclusions", "**/persistence/**,**/config/**"
+        property "sonar.exclusions", "**/persistence/**,**/config/**,**/exception/**"
     }
 }
 

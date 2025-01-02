@@ -1,6 +1,7 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.ProjectServiceImpl;
+import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.repository.ProjectRepository;
 import com.fontys.crowdfund.repository.ProjectImagesRepository;
 import com.fontys.crowdfund.repository.UserRepository;
@@ -21,10 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -527,6 +525,101 @@ class ProjectServiceTest {
         verify(projectRepository, times(1)).getAllProjectsWithFiltersAndPagination(project3.getType(), minPercentageFunded, maxPercentageFunded, name, pageable);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(3);
         verify(projectImageRepository, times(1)).getImagesFromProjectId(4);
+    }
+
+
+    @Test
+    void testGetProjectDetailsById_Success() {
+        // Arrange
+        int projectId = 1;
+        ProjectEntity projectEntity = mock(ProjectEntity.class);
+        UserEntity userEntity = mock(UserEntity.class);
+        List<String> images = Arrays.asList("image1.png", "image2.png");
+
+        // Set up mock values for the project entity and user entity
+        when(projectRepository.getProjectDetailsById(projectId)).thenReturn(projectEntity);
+        when(projectEntity.getId()).thenReturn(projectId);
+        when(projectEntity.getName()).thenReturn("Test Project");
+        when(projectEntity.getUser()).thenReturn(userEntity);
+        when(userEntity.getId()).thenReturn(100);
+        when(userEntity.getName()).thenReturn("Owner Name");
+        when(userEntity.getProfilePicture()).thenReturn("profilePic.png");
+        when(projectEntity.getFundingGoal()).thenReturn(1000.0F);
+        when(projectEntity.getMoneyRaised()).thenReturn(500.0F);
+        when(projectImageRepository.getImagesFromProjectId(projectId)).thenReturn(images);
+        when(projectEntity.getDescription()).thenReturn("This is a description.");
+        when(projectEntity.getLocation()).thenReturn("Test Location");
+        when(projectEntity.getType()).thenReturn("Crowdfunding");
+        when(projectEntity.getDateCreated()).thenReturn(new Date(2025,1,1));
+
+        // Act
+        ProjectDetailsDTO result = projectService.getProjectDetailsById(projectId);
+
+        // Assert
+        assertNotNull(result, "The project details should not be null.");
+        assertEquals(projectId, result.getId(), "The project ID should match.");
+        assertEquals("Test Project", result.getName(), "The project name should match.");
+        assertEquals(100, result.getUserId(), "The user ID should match.");
+        assertEquals("Owner Name", result.getOwnerName(), "The owner name should match.");
+        assertEquals("profilePic.png", result.getOwnerProfilePicture(), "The owner profile picture should match.");
+        assertEquals(1000.0, result.getFundingGoal(), "The funding goal should match.");
+        assertEquals(500.0, result.getMoneyRaised(), "The money raised should match.");
+        assertEquals(images, result.getImages(), "The images list should match.");
+        assertEquals("This is a description.", result.getDescription(), "The description should match.");
+        assertEquals("Test Location", result.getLocation(), "The location should match.");
+        assertEquals("Crowdfunding", result.getType(), "The type should match.");
+        assertEquals(new Date(2025, 1,1), result.getDateCreated(), "The creation date should match.");
+    }
+
+    @Test
+    void testGetProjectDetailsById_ProjectNotFound() {
+        // Arrange
+        int projectId = 1;
+
+        // Mock the repository to return null when project is not found
+        when(projectRepository.getProjectDetailsById(projectId)).thenReturn(null);
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> {
+            projectService.getProjectDetailsById(projectId);  // This should throw an exception
+        }, "Expected NullPointerException when the project is not found.");
+    }
+
+    @Test
+    void testGetProjectIdsFromUserID_WithProjects() {
+        // Arrange
+        int userId = 1;
+        List<Integer> projectIds = Arrays.asList(1, 2, 3);
+
+        // Mock the repository to return project IDs for the user
+        when(projectRepository.getProjectIdsFromUserID(userId)).thenReturn(projectIds);
+
+        // Act
+        List<Integer> result = projectService.getProjectIdsFromUserID(userId);
+
+        // Assert
+        assertNotNull(result, "The project IDs list should not be null.");
+        assertEquals(3, result.size(), "The project IDs list size should match.");
+        assertTrue(result.contains(1), "The project IDs list should contain project ID 1.");
+        assertTrue(result.contains(2), "The project IDs list should contain project ID 2.");
+        assertTrue(result.contains(3), "The project IDs list should contain project ID 3.");
+    }
+
+    @Test
+    void testGetProjectIdsFromUserID_NoProjects() {
+        // Arrange
+        int userId = 1;
+        List<Integer> projectIds = Collections.emptyList();
+
+        // Mock the repository to return an empty list
+        when(projectRepository.getProjectIdsFromUserID(userId)).thenReturn(projectIds);
+
+        // Act
+        List<Integer> result = projectService.getProjectIdsFromUserID(userId);
+
+        // Assert
+        assertNotNull(result, "The project IDs list should not be null.");
+        assertTrue(result.isEmpty(), "The project IDs list should be empty.");
     }
 
 }

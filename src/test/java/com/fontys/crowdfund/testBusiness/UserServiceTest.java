@@ -1,7 +1,7 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.UserServiceImpl;
-import com.fontys.crowdfund.exception.EmailAlreadyExists;
+import com.fontys.crowdfund.exception.EmailAlreadyExistsException;
 import com.fontys.crowdfund.repository.UserRepository;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOUser;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOUser;
@@ -104,7 +104,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(inputUser.getEmail())).thenReturn(true);
 
         // Act & Assert
-        assertThrows(EmailAlreadyExists.class, () -> userService.createUser(inputUser));
+        assertThrows(EmailAlreadyExistsException.class, () -> userService.createUser(inputUser));
         verify(userRepository, times(1)).existsByEmail(inputUser.getEmail());
         verify(passwordEncoder, never()).encode(anyString());
         verify(userRepository, never()).save(any(UserEntity.class));
@@ -200,5 +200,53 @@ class UserServiceTest {
 
         // Assert
         assertEquals(1,u1Id );
+    }
+
+    @Test
+    void testUpdateProfilePicture_Success() {
+        // Arrange
+        String newPicture = "newProfilePic.png";
+        int userId = 1;
+
+        // Mock the repository method to simulate a successful update (1 row updated)
+        when(userRepository.updateProfilePicture(newPicture, userId)).thenReturn(1);
+
+        // Act
+        boolean result = userService.updateProfilePicture(newPicture, userId);
+
+        // Assert
+        assertTrue(result, "Profile picture update should be successful");
+    }
+
+    @Test
+    void testUpdateProfilePicture_Failure() {
+        // Arrange
+        String newPicture = "newProfilePic.png";
+        int userId = 1;
+
+        // Mock the repository method to simulate no rows updated (0 rows)
+        when(userRepository.updateProfilePicture(newPicture, userId)).thenReturn(0);
+
+        // Act
+        boolean result = userService.updateProfilePicture(newPicture, userId);
+
+        // Assert
+        assertFalse(result, "Profile picture update should fail when no rows are updated");
+    }
+
+    @Test
+    void testGetProfilePicture() {
+        // Arrange
+        int userId = 1;
+        String expectedProfilePicture = "profilePic.png";
+
+        // Mock the repository method to return a profile picture
+        when(userRepository.getProfilePicture(userId)).thenReturn(expectedProfilePicture);
+
+        // Act
+        String result = userService.getProfilePicture(userId);
+
+        // Assert
+        assertEquals(expectedProfilePicture, result, "Profile picture should be retrieved correctly");
     }
 }

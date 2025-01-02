@@ -220,4 +220,94 @@ class PaymentServiceTest {
         assertEquals(1, payments.getPaymentId());
     }
 
+    @Test
+    void testGetTotalPaymentsByUserId_AllTime() {
+        // Arrange
+        int userId = 1;
+        String time = "All_time";
+        Integer expectedTotal = 100;  // Example expected value
+
+        // Mock the repository method for "All_time"
+        when(paymentRepository.getTotalPaymentsByUserId(userId, null)).thenReturn(expectedTotal);
+
+        // Act
+        Integer result = paymentService.getTotalPaymentsByUserId(userId, time);
+
+        // Assert
+        assertEquals(expectedTotal, result, "Total payments for All_time should be returned");
+        verify(paymentRepository).getTotalPaymentsByUserId(userId, null);  // Verify the call
+    }
+
+    @Test
+    void testGetTotalPaymentsByUserId_ThisMonth() {
+        // Arrange
+        int userId = 1;
+        String time = "This_month";
+        Integer expectedTotal = 50;  // Example expected value
+
+        // Mock the repository method for "This_month"
+        when(paymentRepository.getTotalPaymentsByUserId(userId, "month")).thenReturn(expectedTotal);
+
+        // Act
+        Integer result = paymentService.getTotalPaymentsByUserId(userId, time);
+
+        // Assert
+        assertEquals(expectedTotal, result, "Total payments for This_month should be returned");
+        verify(paymentRepository).getTotalPaymentsByUserId(userId, "month");  // Verify the call
+    }
+
+    @Test
+    void testGetTotalPaymentsByUserId_ThisYear() {
+        // Arrange
+        int userId = 1;
+        String time = "This_year";
+        Integer expectedTotal = 200;  // Example expected value
+
+        // Mock the repository method for "This_year"
+        when(paymentRepository.getTotalPaymentsByUserId(userId, "year")).thenReturn(expectedTotal);
+
+        // Act
+        Integer result = paymentService.getTotalPaymentsByUserId(userId, time);
+
+        // Assert
+        assertEquals(expectedTotal, result, "Total payments for This_year should be returned");
+        verify(paymentRepository).getTotalPaymentsByUserId(userId, "year");  // Verify the call
+    }
+
+    @Test
+    void testGetTotalPaymentsByUserId_Default() {
+        // Arrange
+        int userId = 1;
+        String time = "Invalid_time";  // An invalid time value
+        Integer expectedTotal = 0;  // Example expected value for default case
+
+        // Mock the repository method for an invalid time
+        when(paymentRepository.getTotalPaymentsByUserId(userId, null)).thenReturn(expectedTotal);
+
+        // Act
+        Integer result = paymentService.getTotalPaymentsByUserId(userId, time);
+
+        // Assert
+        assertEquals(expectedTotal, result, "Total payments for an invalid time should be returned");
+        verify(paymentRepository).getTotalPaymentsByUserId(userId, null);  // Verify the call
+    }
+
+    @Test
+    void testCreatePayment_ProjectNotFound() {
+        // Arrange
+        InputDTOPayment paymentDTO = mock(InputDTOPayment.class);
+        when(paymentDTO.getProjectId()).thenReturn(1);  // Provide projectId
+
+        // Mocking the behavior when the project is not found
+        when(projectRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            paymentService.createPayment(paymentDTO);  // This should throw an exception
+        });
+
+        assertEquals("Project not found", exception.getMessage(), "The exception message should match.");
+        verify(projectRepository, times(2)).findById(1);  // Allow the method to be called twice
+    }
+
 }

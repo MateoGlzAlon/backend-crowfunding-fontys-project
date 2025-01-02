@@ -62,8 +62,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public String getProfilePicture(int id) {
-        return userService.getProfilePicture(id);
+    @GetMapping("/picture/{id}")
+    public ResponseEntity<String> getProfilePicture(@PathVariable int id) {
+        return ResponseEntity.ok(userService.getProfilePicture(id));
     }
 
 
