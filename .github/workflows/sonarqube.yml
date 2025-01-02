@@ -7,16 +7,32 @@ on:
       - completed  # The workflow runs after the previous workflow has finished
 
 jobs:
-  sonarqube:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
-    name: SonarQube
+  sonarcloud:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
-          fetch-depth: 0
-      - name: SonarQubeScan
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Cache SonarCloud Scanner
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar-scanner
+
+      - name: Run SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY}}
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION_KEY}}
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.sources=src
+            -Dsonar.tests=test
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
