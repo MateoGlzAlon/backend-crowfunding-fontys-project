@@ -31,7 +31,7 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                 "**/persistence/**",
                 "**/config/**",
-                "**/exception/**"
+                "**/exception/**",
             ])
         }
         ))
@@ -47,6 +47,7 @@ sonar {
         property "sonar.projectKey", "MateoGlzAlon_backend-crowfunding-fontys-project"
         property "sonar.organization", "mateoglzalon"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.exclusions", "**/persistence/**,**/config/**,**/exception/**"
     }
 }
 
