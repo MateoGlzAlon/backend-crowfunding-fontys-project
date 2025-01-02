@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fontys.crowdfund.controller.NotificationController;
+import com.fontys.crowdfund.controller.impl.NotificationsControllerImpl;
 import com.fontys.crowdfund.persistence.websocketnotification.NotificationMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class NotificationControllerTest {
     private SimpMessagingTemplate messagingTemplate;
 
     @InjectMocks
-    private NotificationController notificationController;
+    private NotificationsControllerImpl notificationController;
 
     @BeforeEach
     void setUp() {
@@ -35,8 +36,7 @@ class NotificationControllerTest {
         doNothing().when(messagingTemplate).convertAndSend("/project/payment", message);
 
         // Act
-        ResponseEntity<Void> response = notificationController.sendNotificationToUsers(message);  // Call the method
-
+        ResponseEntity<Void> response = notificationController.sendNotificationToUsers(message);
         // Assert
         assertEquals(201, response.getStatusCode().value());  // Verify that the status code is 201 Created.
         verify(messagingTemplate, times(1)).convertAndSend("/project/payment", message);  // Verify the interaction with SimpMessagingTemplate.
