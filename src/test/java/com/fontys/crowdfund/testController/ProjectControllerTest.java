@@ -2,13 +2,16 @@ package com.fontys.crowdfund.testController;
 
 import com.fontys.crowdfund.business.ProjectService;
 import com.fontys.crowdfund.controller.impl.ProjectControllerImpl;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class ProjectControllerTest {
@@ -34,6 +38,8 @@ class ProjectControllerTest {
 
     private OutputDTOProject testProject;
     private OutputDTOProjectImage testProjectImage;
+    private ProjectOnlyCoverLandingPage testProjectCover;
+    private OutputDTOBookmark testOutputDTOBookmark;
 
     @BeforeEach
     void setUp() {
@@ -55,6 +61,22 @@ class ProjectControllerTest {
                 .projectId(1)
                 .imageURL("image1.jpg")
                 .imageOrder(1)
+                .build();
+
+        testProjectCover = ProjectOnlyCoverLandingPage.builder()
+                .id(1)
+                .name("Test Project")
+                .imageCover("image1.jpg")
+                .moneyRaised(500.0F)
+                .fundingGoal(1000.0F)
+                .dateCreated(null)  // You can pass `null` if appropriate
+                .description("Test Description")
+                .build();
+
+        testOutputDTOBookmark = OutputDTOBookmark.builder()
+                .id(1)
+                .userId(1)
+                .projectId(1)
                 .build();
     }
 
@@ -266,5 +288,72 @@ class ProjectControllerTest {
         // Assert
         assertEquals(200, response.getStatusCode().value());
         assertEquals(mockProjectDetails, response.getBody());
+    }
+
+    @Test
+    @DisplayName("Should get bookmarked projects for a user")
+    void get_bookmarked_projects() {
+        // Arrange
+        int userId = 1;
+        when(projectService.getBookmarkedProjects(userId)).thenReturn(Arrays.asList(testProjectCover));
+
+        // Act
+        ResponseEntity<List<ProjectOnlyCoverLandingPage>> response = projectController.getBookmarkedProjects(userId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(1, response.getBody().size());
+        assertEquals("Test Project", response.getBody().get(0).getName());
+        verify(projectService, times(1)).getBookmarkedProjects(userId);
+    }
+
+    @Test
+    @DisplayName("Should check if a project is bookmarked by the user")
+    void is_project_bookmarked() {
+        // Arrange
+        int userId = 1;
+        int projectId = 1;
+        when(projectService.isProjectBookmarked(userId, projectId)).thenReturn(true);
+
+        // Act
+        ResponseEntity<Boolean> response = projectController.isProjectBookmarked(userId, projectId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertTrue(response.getBody());
+        verify(projectService, times(1)).isProjectBookmarked(userId, projectId);
+    }
+
+    @Test
+    @DisplayName("Should add a bookmark to a project")
+    void add_project_bookmark() {
+        // Arrange
+        InputDTOBookmark bookmarkDTO = new InputDTOBookmark(1, 1);
+        when(projectService.addProjectBookmark(bookmarkDTO)).thenReturn(testOutputDTOBookmark);
+
+        // Act
+        ResponseEntity<OutputDTOBookmark> response = projectController.addProjectBookmark(bookmarkDTO);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(1, response.getBody().getId());
+        assertEquals(1, response.getBody().getUserId());
+        verify(projectService, times(1)).addProjectBookmark(bookmarkDTO);
+    }
+
+    @Test
+    @DisplayName("Should remove bookmark for a project")
+    void remove_project_bookmark() {
+        // Arrange
+        int projectId = 1;
+        int userId = 1;
+        doNothing().when(projectService).removeProjectBookmark(projectId, userId);
+
+        // Act
+        ResponseEntity<Void> response = projectController.removeProjectBookmark(projectId, userId);
+
+        // Assert
+        assertEquals(200, response.getStatusCode().value());
+        verify(projectService, times(1)).removeProjectBookmark(projectId, userId);
     }
 }

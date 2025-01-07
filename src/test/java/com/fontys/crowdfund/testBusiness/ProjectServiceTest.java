@@ -1,7 +1,11 @@
 package com.fontys.crowdfund.testBusiness;
 
 import com.fontys.crowdfund.business.impl.ProjectServiceImpl;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOBookmark;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOBookmark;
+import com.fontys.crowdfund.persistence.entity.BookmarkEntity;
 import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
+import com.fontys.crowdfund.repository.ProjectBookmarksRepository;
 import com.fontys.crowdfund.repository.ProjectRepository;
 import com.fontys.crowdfund.repository.ProjectImagesRepository;
 import com.fontys.crowdfund.repository.UserRepository;
@@ -38,6 +42,9 @@ class ProjectServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ProjectBookmarksRepository projectBookmarksRepository;
 
     @InjectMocks
     private ProjectServiceImpl projectService;
@@ -630,6 +637,127 @@ class ProjectServiceTest {
         // Assert
         assertNotNull(result, "The project IDs list should not be null.");
         assertTrue(result.isEmpty(), "The project IDs list should be empty.");
+    }
+
+
+    @Test
+    @DisplayName("Should get bookmarked projects for a user")
+    void get_bookmarked_projects() {
+        // Arrange
+        int userId = 1;
+        BookmarkEntity bookmark1 = mock(BookmarkEntity.class);
+        ProjectEntity project1 = mock(ProjectEntity.class);
+        ProjectOnlyCoverLandingPage projectCover = mock(ProjectOnlyCoverLandingPage.class);
+
+        when(projectBookmarksRepository.getBookmarkedProjects(userId)).thenReturn(List.of(bookmark1));
+        when(bookmark1.getProject()).thenReturn(project1);
+        when(project1.getId()).thenReturn(1);
+        when(projectRepository.findById(1)).thenReturn(Optional.of(project1));
+        when(projectImageRepository.getImagesFromProjectId(1)).thenReturn(List.of("imageCover"));
+        when(project1.getName()).thenReturn("Project 1");
+        when(project1.getMoneyRaised()).thenReturn(1000.0F);
+        when(project1.getFundingGoal()).thenReturn(2000.0F);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2025);
+        calendar.set(Calendar.MONTH, Calendar.JANUARY); // January is 0 in Calendar
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date date = calendar.getTime();
+        when(project1.getDateCreated()).thenReturn(date);
+        when(project1.getDescription()).thenReturn("Project description");
+
+        // Act
+        List<ProjectOnlyCoverLandingPage> result = projectService.getBookmarkedProjects(userId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(projectRepository, times(1)).findById(1);
+    }
+
+    @Test
+    @DisplayName("Should check if a project is bookmarked by the user")
+    void is_project_bookmarked() {
+        // Arrange
+        int userId = 1;
+        int projectId = 1;
+        when(projectBookmarksRepository.isProjectBookmarked(userId, projectId)).thenReturn(true);
+
+        // Act
+        Boolean result = projectService.isProjectBookmarked(userId, projectId);
+
+        // Assert
+        assertTrue(result);
+        verify(projectBookmarksRepository, times(1)).isProjectBookmarked(userId, projectId);
+    }
+
+    @Test
+    @DisplayName("Should remove bookmark for a project")
+    void remove_project_bookmark() {
+        // Arrange
+        int projectId = 1;
+        int userId = 1;
+        doNothing().when(projectBookmarksRepository).removeProjectBookmark(projectId, userId);
+
+        // Act
+        projectService.removeProjectBookmark(projectId, userId);
+
+        // Assert
+        verify(projectBookmarksRepository, times(1)).removeProjectBookmark(projectId, userId);
+    }
+
+    @Test
+    @DisplayName("Should add bookmark for a project")
+    void add_project_bookmark() {
+        // Arrange
+        InputDTOBookmark bookmarkDTO = new InputDTOBookmark(1, 1);
+        ProjectEntity project = mock(ProjectEntity.class);
+        UserEntity user = mock(UserEntity.class);
+        BookmarkEntity bookmark = mock(BookmarkEntity.class);
+
+        when(userRepository.findById(bookmarkDTO.getUserId())).thenReturn(user);
+        when(projectRepository.findById(bookmarkDTO.getProjectId())).thenReturn(Optional.of(project));
+        when(projectBookmarksRepository.save(any(BookmarkEntity.class))).thenReturn(bookmark);
+        when(bookmark.getBookmarkId()).thenReturn(1);
+        when(bookmark.getUser()).thenReturn(user);
+        when(bookmark.getProject()).thenReturn(project);
+        when(user.getId()).thenReturn(1);
+        when(project.getId()).thenReturn(1);
+
+        // Act
+        OutputDTOBookmark result = projectService.addProjectBookmark(bookmarkDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getId());
+        verify(projectBookmarksRepository, times(1)).save(any(BookmarkEntity.class));
+    }
+
+
+    @Test
+    void testGetBookmarkedProjects_withNullProjectEntity() {
+
+        BookmarkEntity bookmark = BookmarkEntity.builder()
+                .project(project2)  // Set a placeholder project entity (can be mocked further if needed)
+                .build();
+
+
+        // Arrange:
+        when(projectBookmarksRepository.getBookmarkedProjects(1)).thenReturn(Arrays.asList(bookmark));
+        when(projectRepository.findById(anyInt())).thenReturn(Optional.empty()); // Simulating the null projectEntity scenario
+
+        // Act:
+        List<ProjectOnlyCoverLandingPage> projects = projectService.getBookmarkedProjects(1);
+
+        // Assert:
+        assertTrue(projects.isEmpty(), "The projects list should be empty if projectEntity is null");
+
+        // Verify interactions
+        verify(projectRepository, times(1)).findById(anyInt()); // Ensure findById was called once
+        verify(projectBookmarksRepository, times(1)).getBookmarkedProjects(1); // Ensure getBookmarkedProjects was called once
     }
 
 }
