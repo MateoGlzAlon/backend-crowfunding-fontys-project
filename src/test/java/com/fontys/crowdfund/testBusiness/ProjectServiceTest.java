@@ -646,8 +646,7 @@ class ProjectServiceTest {
         // Arrange
         int userId = 1;
         BookmarkEntity bookmark1 = mock(BookmarkEntity.class);
-        ProjectEntity project1 = mock(ProjectEntity.class);
-        ProjectOnlyCoverLandingPage projectCover = mock(ProjectOnlyCoverLandingPage.class);
+        project1 = mock(ProjectEntity.class);
 
         when(projectBookmarksRepository.getBookmarkedProjects(userId)).thenReturn(List.of(bookmark1));
         when(bookmark1.getProject()).thenReturn(project1);
@@ -715,7 +714,7 @@ class ProjectServiceTest {
         // Arrange
         InputDTOBookmark bookmarkDTO = new InputDTOBookmark(1, 1);
         ProjectEntity project = mock(ProjectEntity.class);
-        UserEntity user = mock(UserEntity.class);
+        user = mock(UserEntity.class);
         BookmarkEntity bookmark = mock(BookmarkEntity.class);
 
         when(userRepository.findById(bookmarkDTO.getUserId())).thenReturn(user);
