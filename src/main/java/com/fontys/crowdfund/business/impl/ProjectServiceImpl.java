@@ -20,12 +20,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -272,17 +270,21 @@ public class ProjectServiceImpl implements ProjectService {
         for(BookmarkEntity bookmark : bookmarks){
 
             ProjectEntity projectEntity = projectRepository.findById(bookmark.getProject().getId()).orElse(null);
-            ProjectOnlyCoverLandingPage projectOnlyCoverLandingPage = ProjectOnlyCoverLandingPage.builder()
-                    .id(projectEntity.getId())
-                    .name(projectEntity.getName())
-                    .imageCover(projectImagesRepository.getImagesFromProjectId(projectEntity.getId()).get(0))
-                    .moneyRaised(projectEntity.getMoneyRaised())
-                    .fundingGoal(projectEntity.getFundingGoal())
-                    .dateCreated(projectEntity.getDateCreated())
-                    .description(projectEntity.getDescription())
-                    .build();
 
-            projects.add(projectOnlyCoverLandingPage);
+            if (projectEntity != null) {
+                ProjectOnlyCoverLandingPage projectOnlyCoverLandingPage = ProjectOnlyCoverLandingPage.builder()
+                        .id(projectEntity.getId())
+                        .name(projectEntity.getName())
+                        .imageCover(projectImagesRepository.getImagesFromProjectId(projectEntity.getId()).get(0))
+                        .moneyRaised(projectEntity.getMoneyRaised())
+                        .fundingGoal(projectEntity.getFundingGoal())
+                        .dateCreated(projectEntity.getDateCreated())
+                        .description(projectEntity.getDescription())
+                        .build();
+
+                projects.add(projectOnlyCoverLandingPage);
+            }
+
         }
 
         return projects;

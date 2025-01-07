@@ -9,7 +9,6 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.fontys.crowdfund.repository;
 
 import com.fontys.crowdfund.persistence.entity.ProjectEntity;
-import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
