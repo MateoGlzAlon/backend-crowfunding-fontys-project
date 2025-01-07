@@ -1,6 +1,10 @@
 package com.fontys.crowdfund.business.impl;
 
 import com.fontys.crowdfund.business.ProjectService;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOBookmark;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOBookmark;
+import com.fontys.crowdfund.persistence.entity.BookmarkEntity;
+import com.fontys.crowdfund.repository.ProjectBookmarksRepository;
 import com.fontys.crowdfund.repository.ProjectImagesRepository;
 import com.fontys.crowdfund.repository.ProjectRepository;
 import com.fontys.crowdfund.repository.UserRepository;
@@ -16,10 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +37,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final ProjectImagesRepository projectImagesRepository;
+    private final ProjectBookmarksRepository projectBookmarksRepository;
+
 
     // Get all projects and convert them to DTOs
     public List<OutputDTOProject> getAllProjects() {
@@ -255,6 +263,57 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Integer> getProjectIdsFromUserID(int id) {
         return projectRepository.getProjectIdsFromUserID(id);
+    }
+
+    @Override
+    public List<ProjectOnlyCoverLandingPage> getBookmarkedProjects(int userId) {
+        List<BookmarkEntity> bookmarks = projectBookmarksRepository.getBookmarkedProjects(userId);
+        List<ProjectOnlyCoverLandingPage> projects = new ArrayList<>();
+        for(BookmarkEntity bookmark : bookmarks){
+
+            ProjectEntity projectEntity = projectRepository.findById(bookmark.getProject().getId()).orElse(null);
+            ProjectOnlyCoverLandingPage projectOnlyCoverLandingPage = ProjectOnlyCoverLandingPage.builder()
+                    .id(projectEntity.getId())
+                    .name(projectEntity.getName())
+                    .imageCover(projectImagesRepository.getImagesFromProjectId(projectEntity.getId()).get(0))
+                    .moneyRaised(projectEntity.getMoneyRaised())
+                    .fundingGoal(projectEntity.getFundingGoal())
+                    .dateCreated(projectEntity.getDateCreated())
+                    .description(projectEntity.getDescription())
+                    .build();
+
+            projects.add(projectOnlyCoverLandingPage);
+        }
+
+        return projects;
+
+    }
+
+    @Override
+    public Boolean isProjectBookmarked(int userId, int projectId) {
+        return projectBookmarksRepository.isProjectBookmarked(userId, projectId);
+    }
+
+    @Override
+    public void removeProjectBookmark(int projectId, int userId) {
+        projectBookmarksRepository.removeProjectBookmark(projectId, userId) ;
+    }
+
+    @Override
+    public OutputDTOBookmark addProjectBookmark(InputDTOBookmark bookmarkDTO) {
+
+        BookmarkEntity bookmark = BookmarkEntity.builder()
+                .user(userRepository.findById(bookmarkDTO.getUserId()))
+                .project(projectRepository.findById(bookmarkDTO.getProjectId()).orElse(null))
+                .build();
+
+        BookmarkEntity b = projectBookmarksRepository.save(bookmark);
+
+        return OutputDTOBookmark.builder()
+                .id(b.getBookmarkId())
+                .userId(b.getUser().getId())
+                .projectId(b.getProject().getId())
+                .build();
     }
 
     public OutputDTOProject createOutputDTOProject(ProjectEntity projectEntity) {

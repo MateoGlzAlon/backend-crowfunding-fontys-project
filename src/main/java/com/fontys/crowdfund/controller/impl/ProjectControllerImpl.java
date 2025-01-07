@@ -1,7 +1,9 @@
 package com.fontys.crowdfund.controller.impl;
 
 import com.fontys.crowdfund.controller.ProjectController;
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.business.ProjectService;
@@ -45,8 +47,20 @@ public class ProjectControllerImpl implements ProjectController {
     }
 
     @Override
+    @PostMapping("/bookmark")
+    public ResponseEntity<OutputDTOBookmark> addProjectBookmark(InputDTOBookmark bookmarkDTO) {
+        return ResponseEntity.ok(projectService.addProjectBookmark(bookmarkDTO));
+    }
+
+    @Override
+    public ResponseEntity<Void> removeProjectBookmark(int projectId, int userId) {
+        projectService.removeProjectBookmark(projectId, userId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     @RolesAllowed({"admin"})
+    @Override
     public ResponseEntity<Void> deleteProject(@PathVariable int id) {
         projectService.deleteProject(id);
         return ResponseEntity.ok().build();
@@ -62,6 +76,18 @@ public class ProjectControllerImpl implements ProjectController {
     @GetMapping("/new")
     public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getNewProjects() {
         return ResponseEntity.ok(projectService.getNewProjects());
+    }
+
+    @Override
+    @GetMapping("/bookmarks/{userId}")
+    public ResponseEntity<List<ProjectOnlyCoverLandingPage>> getBookmarkedProjects(@PathVariable int userId) {
+        return ResponseEntity.ok(projectService.getBookmarkedProjects(userId));
+    }
+
+    @Override
+    @GetMapping("/bookmark/{userId}/{projectId}")
+    public ResponseEntity<Boolean> isProjectBookmarked(@PathVariable int userId,@PathVariable int projectId) {
+        return ResponseEntity.ok(projectService.isProjectBookmarked(userId,projectId));
     }
 
     @Override

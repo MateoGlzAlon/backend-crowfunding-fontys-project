@@ -1,12 +1,15 @@
 package com.fontys.crowdfund.business;
 
+import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProjectImage;
+import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOBookmark;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProject;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOProject;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOProjectImage;
 import com.fontys.crowdfund.persistence.specialdto.ProjectDetailsDTO;
 import com.fontys.crowdfund.persistence.specialdto.ProjectOnlyCoverLandingPage;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -50,4 +53,12 @@ public interface ProjectService {
     ProjectDetailsDTO getProjectDetailsById(int id);
 
     List<Integer> getProjectIdsFromUserID(int id);
+
+    List<ProjectOnlyCoverLandingPage> getBookmarkedProjects(int userId);
+
+    Boolean isProjectBookmarked(int userId, int projectId);
+
+    void removeProjectBookmark(int projectId, int userId);
+
+    OutputDTOBookmark addProjectBookmark(InputDTOBookmark bookmarkDTO);
 }
