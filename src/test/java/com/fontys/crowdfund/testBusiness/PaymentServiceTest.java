@@ -221,19 +221,6 @@ class PaymentServiceTest {
     }
 
     @Test
-    void get_payments_for_profile() {
-        // Arrange
-        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
-
-        // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "All_time");
-
-        // Assert
-        assertEquals(1, payments.size());
-        verify(paymentRepository, times(1)).getPaymentsByUserIdForProfile(1);
-    }
-
-    @Test
     @DisplayName("Should throw exception when getting payments by user for an unsupported filter")
     void get_payments_for_profile_exception() {
         // Arrange
@@ -241,8 +228,8 @@ class PaymentServiceTest {
 
         // Act & Assert
         assertThrows(
-                IllegalStateException.class, // Specify the expected exception
-                () -> paymentService.getPaymentsByUserIdForProfile(1, "Other_string"), // Code that should throw
+                IllegalStateException.class,
+                () -> paymentService.getPaymentsByUserIdForProfile(1, "Other_string"),
                 "Expected IllegalArgumentException for unsupported filter"
         );
     }

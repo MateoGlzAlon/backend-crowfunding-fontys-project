@@ -125,7 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
                         .amountFunded(paymentEntity.getAmount())
                         .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
                         .build())
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
