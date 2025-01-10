@@ -200,7 +200,7 @@ class PaymentServiceTest {
         when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
 
         // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1);
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "TO-DO");
 
         // Assert
         assertEquals(1, payments.size());

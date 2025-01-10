@@ -45,9 +45,12 @@ public class PaymentControllerImpl implements PaymentController {
 
     @Override
     @GetMapping("/profile/{id}")
-    public ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id) {
-        return ResponseEntity.ok(paymentService.getPaymentsByUserIdForProfile(id));
+    public ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(
+            @PathVariable int id,
+            @RequestParam String filter) {
+        return ResponseEntity.ok(paymentService.getPaymentsByUserIdForProfile(id, filter));
     }
+
 
     @Override
     @GetMapping("/totalPayments/{userId}")

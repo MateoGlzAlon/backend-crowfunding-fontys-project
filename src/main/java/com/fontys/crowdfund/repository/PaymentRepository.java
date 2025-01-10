@@ -30,6 +30,20 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     @Query("SELECT p " +
             "FROM PaymentEntity p " +
+            "WHERE p.user.id = :userId AND MONTH(p.paymentDate) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE) " +
+            "ORDER BY p.paymentDate DESC")
+    List<PaymentEntity> getPaymentsForThisMonthByUserId(@Param("userId") int userId);
+
+    @Query("SELECT p " +
+            "FROM PaymentEntity p " +
+            "WHERE p.user.id = :userId AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE) " +
+            "ORDER BY p.paymentDate DESC")
+    List<PaymentEntity> getPaymentsForThisYearByUserId(@Param("userId") int userId);
+
+
+    @Query("SELECT p " +
+            "FROM PaymentEntity p " +
             "WHERE p.user.id = :userId " +
             "ORDER BY p.paymentDate DESC")
     List<PaymentEntity> getPaymentsByUserIdForProfile(@Param("userId") int userId);

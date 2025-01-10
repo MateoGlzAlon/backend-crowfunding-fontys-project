@@ -24,7 +24,7 @@ public interface PaymentService {
 
     List<OutputDonationNotification> getPaymentNotificationsByProjectId(int id);
 
-    List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id);
+    List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter);
 
     Integer getTotalPaymentsByUserId(int userId, String time);
 }

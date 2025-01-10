@@ -1,4 +1,3 @@
-// PaymentController.java
 package com.fontys.crowdfund.controller;
 
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
@@ -25,7 +24,7 @@ public interface PaymentController {
     ResponseEntity<List<OutputDonationNotification>> getPaymentNotificationsToProjectById(@PathVariable int id);
 
     @GetMapping("/projects/profile/{id}")
-    ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id);
+    ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id, @RequestParam String filter);
 
     @GetMapping("/totalPayments/{userId}")
     ResponseEntity<Integer> getTotalPaymentsByUserId(@PathVariable int userId, @RequestParam(defaultValue = "") String time);

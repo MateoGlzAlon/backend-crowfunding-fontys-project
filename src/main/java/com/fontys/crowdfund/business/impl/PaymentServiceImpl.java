@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -106,27 +107,27 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id) {
-        List<ProfilePaymentDTO> profilePaymentDTOs = new ArrayList<>();
+    public List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter) {
+        List<PaymentEntity> paymentEntities = switch (filter) {
+            case "This_month" -> paymentRepository.getPaymentsForThisMonthByUserId(id);
+            case "This_year" -> paymentRepository.getPaymentsForThisYearByUserId(id);
+            case "All_time" -> paymentRepository.getPaymentsByUserIdForProfile(id);
+            default -> throw new IllegalStateException("Unexpected value: " + filter);
+        };
 
-        for (PaymentEntity paymentEntity : paymentRepository.getPaymentsByUserIdForProfile(id)) {
-
-            ProfilePaymentDTO profilePaymentDTO = ProfilePaymentDTO.builder()
-                    .id(paymentEntity.getId())
-                    .projectId(paymentEntity.getProject().getId())
-                    .projectName(paymentEntity.getProject().getName())
-                    .projectOwnerName(paymentEntity.getUser().getName())
-                    .paymentDate(paymentEntity.getPaymentDate())
-                    .amountFunded(paymentEntity.getAmount())
-                    .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
-                    .build();
-
-
-            profilePaymentDTOs.add(profilePaymentDTO);
-        }
-
-        return profilePaymentDTOs;
+        return paymentEntities.stream()
+                .map(paymentEntity -> ProfilePaymentDTO.builder()
+                        .id(paymentEntity.getId())
+                        .projectId(paymentEntity.getProject().getId())
+                        .projectName(paymentEntity.getProject().getName())
+                        .projectOwnerName(paymentEntity.getUser().getName())
+                        .paymentDate(paymentEntity.getPaymentDate())
+                        .amountFunded(paymentEntity.getAmount())
+                        .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
+                        .build())
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public Integer getTotalPaymentsByUserId(int userId, String time) {

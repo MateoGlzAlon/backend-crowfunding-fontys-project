@@ -47,10 +47,10 @@ public interface ProjectController {
             @RequestParam(defaultValue = "") String name);
 
     @GetMapping("/users/{id}")
-    ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(int userId);
+    ResponseEntity<List<OutputDTOProject>> getProjectsFromUserID(@PathVariable int id);
 
     @GetMapping("/users/id/{id}")
-    ResponseEntity<List<Integer>> getProjectIdsFromUserID(int userId);
+    ResponseEntity<List<Integer>> getProjectIdsFromUserID(@PathVariable int id);
 
     @GetMapping("/details/{id}")
     ResponseEntity<ProjectDetailsDTO> getProjectDetailsByID(@PathVariable int id);
