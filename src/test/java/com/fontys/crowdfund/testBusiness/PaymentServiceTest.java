@@ -194,18 +194,75 @@ class PaymentServiceTest {
     }
 
     @Test
-    @DisplayName("Should get payments by user to be used in profile")
-        void get_payments_for_profile() {
+    void get_payments_for_profile_this_month() {
+        // Arrange
+        when(paymentRepository.getPaymentsForThisMonthByUserId(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_month");
+
+        // Assert
+        assertEquals(1, payments.size());
+        verify(paymentRepository, times(1)).getPaymentsForThisMonthByUserId(1);
+    }
+
+
+    @Test
+    void get_payments_for_profile_this_year() {
+        // Arrange
+        when(paymentRepository.getPaymentsForThisYearByUserId(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_year");
+
+        // Assert
+        assertEquals(1, payments.size());
+        verify(paymentRepository, times(1)).getPaymentsForThisYearByUserId(1);
+    }
+
+    @Test
+    void get_payments_for_profile() {
         // Arrange
         when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
 
         // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "TO-DO");
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "All_time");
 
         // Assert
         assertEquals(1, payments.size());
         verify(paymentRepository, times(1)).getPaymentsByUserIdForProfile(1);
     }
+
+    @Test
+    @DisplayName("Should throw exception when getting payments by user for an unsupported filter")
+    void get_payments_for_profile_exception() {
+        // Arrange
+        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
+
+        // Act & Assert
+        assertThrows(
+                IllegalStateException.class, // Specify the expected exception
+                () -> paymentService.getPaymentsByUserIdForProfile(1, "Other_string"), // Code that should throw
+                "Expected IllegalArgumentException for unsupported filter"
+        );
+    }
+
+
+    @Test
+    @DisplayName("Should get payments by user to be used in profile")
+        void get_payments_for_profile_all_time() {
+        // Arrange
+        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
+
+        // Act
+        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "All_time");
+
+        // Assert
+        assertEquals(1, payments.size());
+        verify(paymentRepository, times(1)).getPaymentsByUserIdForProfile(1);
+    }
+
+
 
     @Test
     @DisplayName("Should get payment notifications by project Id")

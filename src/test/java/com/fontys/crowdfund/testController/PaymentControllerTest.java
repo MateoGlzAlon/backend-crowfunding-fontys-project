@@ -124,16 +124,16 @@ class PaymentControllerTest {
                 .paymentDate(new Date())
                 .amountFunded(100.0F)
                 .build();
-        when(paymentService.getPaymentsByUserIdForProfile(1)).thenReturn(Arrays.asList(profilePayment));
+        when(paymentService.getPaymentsByUserIdForProfile(1, "filter")).thenReturn(Arrays.asList(profilePayment));
 
         // Act
-        ResponseEntity<List<ProfilePaymentDTO>> response = paymentController.getPaymentsByUserIdForProfile(1);
+        ResponseEntity<List<ProfilePaymentDTO>> response = paymentController.getPaymentsByUserIdForProfile(1, "filter");
 
         // Assert
         assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().size());
         assertEquals("Test Project", response.getBody().get(0).getProjectName());
-        verify(paymentService, times(1)).getPaymentsByUserIdForProfile(1);
+        verify(paymentService, times(1)).getPaymentsByUserIdForProfile(1, "filter");
     }
 
     @Test
