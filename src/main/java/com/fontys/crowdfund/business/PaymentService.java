@@ -4,6 +4,7 @@ import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface PaymentService {
 
     List<OutputDonationNotification> getPaymentNotificationsByProjectId(int id);
 
-    List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter);
+    Page<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter, int page, int size);
 
     Integer getTotalPaymentsByUserId(int userId, String time);
 }

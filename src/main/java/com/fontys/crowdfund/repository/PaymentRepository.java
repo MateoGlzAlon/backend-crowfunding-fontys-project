@@ -1,6 +1,8 @@
 package com.fontys.crowdfund.repository;
 
 import com.fontys.crowdfund.persistence.entity.PaymentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,20 +35,19 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
             "WHERE p.user.id = :userId AND MONTH(p.paymentDate) = MONTH(CURRENT_DATE) " +
             "AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE) " +
             "ORDER BY p.paymentDate DESC")
-    List<PaymentEntity> getPaymentsForThisMonthByUserId(@Param("userId") int userId);
+    Page<PaymentEntity> getPaymentsForThisMonthByUserId(@Param("userId") int userId, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM PaymentEntity p " +
             "WHERE p.user.id = :userId AND YEAR(p.paymentDate) = YEAR(CURRENT_DATE) " +
             "ORDER BY p.paymentDate DESC")
-    List<PaymentEntity> getPaymentsForThisYearByUserId(@Param("userId") int userId);
-
+    Page<PaymentEntity> getPaymentsForThisYearByUserId(@Param("userId") int userId, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM PaymentEntity p " +
             "WHERE p.user.id = :userId " +
             "ORDER BY p.paymentDate DESC")
-    List<PaymentEntity> getPaymentsByUserIdForProfile(@Param("userId") int userId);
+    Page<PaymentEntity> getPaymentsForAllTimeByUser(@Param("userId") int userId, Pageable pageable);
 
     @Query("SELECT i.imageUrl " +
             "FROM ProjectImageEntity i " +

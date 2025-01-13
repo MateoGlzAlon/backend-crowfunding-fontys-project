@@ -26,7 +26,6 @@ jacocoTestReport {
     dependsOn test // Ensure JaCoCo runs after tests
 
     afterEvaluate {
-        // Exclude the package 'com.fontys.crowdfund.persistence' from the coverage report
         classDirectories.setFrom(files(classDirectories.files.collect{
             fileTree(dir: it, exclude: [
                 "**/persistence/**",

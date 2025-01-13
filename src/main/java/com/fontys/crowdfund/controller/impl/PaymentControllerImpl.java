@@ -7,6 +7,7 @@ import com.fontys.crowdfund.business.PaymentService;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +46,14 @@ public class PaymentControllerImpl implements PaymentController {
 
     @Override
     @GetMapping("/profile/{id}")
-    public ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(
+    public ResponseEntity<Page<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(
             @PathVariable int id,
-            @RequestParam String filter) {
-        return ResponseEntity.ok(paymentService.getPaymentsByUserIdForProfile(id, filter));
+            @RequestParam String filter,
+            @RequestParam int page,
+            @RequestParam int size) {
+        return ResponseEntity.ok(paymentService.getPaymentsByUserIdForProfile(id, filter, page, size));
     }
+
 
 
     @Override

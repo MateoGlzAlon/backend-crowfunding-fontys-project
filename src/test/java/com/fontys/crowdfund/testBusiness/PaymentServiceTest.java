@@ -16,6 +16,10 @@ import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -196,40 +200,43 @@ class PaymentServiceTest {
     @Test
     void get_payments_for_profile_this_month() {
         // Arrange
-        when(paymentRepository.getPaymentsForThisMonthByUserId(1)).thenReturn(List.of(payment));
+        Pageable pageable = PageRequest.of(0, 5); // Example pageable setup
+        when(paymentRepository.getPaymentsForThisMonthByUserId(1, pageable)).thenReturn(new PageImpl<>(List.of(payment)));
 
         // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_month");
+        Page<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_month", 0, 5);
 
         // Assert
-        assertEquals(1, payments.size());
-        verify(paymentRepository, times(1)).getPaymentsForThisMonthByUserId(1);
+        assertEquals(1, payments.getContent().size());
+        verify(paymentRepository, times(1)).getPaymentsForThisMonthByUserId(1, pageable);
     }
 
 
     @Test
     void get_payments_for_profile_this_year() {
         // Arrange
-        when(paymentRepository.getPaymentsForThisYearByUserId(1)).thenReturn(List.of(payment));
+        Pageable pageable = PageRequest.of(0, 5); // Example pageable setup
+        when(paymentRepository.getPaymentsForThisYearByUserId(1, pageable)).thenReturn(new PageImpl<>(List.of(payment)));
 
         // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_year");
+        Page<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "This_year", 0, 5);
 
         // Assert
-        assertEquals(1, payments.size());
-        verify(paymentRepository, times(1)).getPaymentsForThisYearByUserId(1);
+        assertEquals(1, payments.getContent().size());
+        verify(paymentRepository, times(1)).getPaymentsForThisYearByUserId(1, pageable);
     }
 
     @Test
     @DisplayName("Should throw exception when getting payments by user for an unsupported filter")
     void get_payments_for_profile_exception() {
         // Arrange
-        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
+        Pageable pageable = PageRequest.of(0, 5); // Example pageable setup
+        when(paymentRepository.getPaymentsForAllTimeByUser(1, pageable)).thenReturn(new PageImpl<>(List.of(payment)));
 
         // Act & Assert
         assertThrows(
                 IllegalStateException.class,
-                () -> paymentService.getPaymentsByUserIdForProfile(1, "Other_string"),
+                () -> paymentService.getPaymentsByUserIdForProfile(1, "Other_text", 0, 5),
                 "Expected IllegalArgumentException for unsupported filter"
         );
     }
@@ -237,16 +244,18 @@ class PaymentServiceTest {
 
     @Test
     @DisplayName("Should get payments by user to be used in profile")
-        void get_payments_for_profile_all_time() {
+    void get_payments_for_profile_all_time() {
         // Arrange
-        when(paymentRepository.getPaymentsByUserIdForProfile(1)).thenReturn(List.of(payment));
+        Pageable pageable = PageRequest.of(0, 5); // Example pageable setup
+        Page<PaymentEntity> paymentPage = new PageImpl<>(List.of(payment));
+        when(paymentRepository.getPaymentsForAllTimeByUser(1, pageable)).thenReturn(paymentPage);
 
         // Act
-        List<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "All_time");
+        Page<ProfilePaymentDTO> payments = paymentService.getPaymentsByUserIdForProfile(1, "All_time", 0, 5);
 
         // Assert
-        assertEquals(1, payments.size());
-        verify(paymentRepository, times(1)).getPaymentsByUserIdForProfile(1);
+        assertEquals(1, payments.getContent().size());
+        verify(paymentRepository, times(1)).getPaymentsForAllTimeByUser(1, pageable);
     }
 
 

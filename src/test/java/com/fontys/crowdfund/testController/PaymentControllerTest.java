@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -116,6 +118,11 @@ class PaymentControllerTest {
     @Test
     void testGetPaymentsByUserIdForProfile() {
         // Arrange
+        int userId = 1;
+        String filter = "This_month";
+        int page = 1;
+        int size = 5;
+
         ProfilePaymentDTO profilePayment = ProfilePaymentDTO.builder()
                 .id(1)
                 .projectId(1)
@@ -124,17 +131,24 @@ class PaymentControllerTest {
                 .paymentDate(new Date())
                 .amountFunded(100.0F)
                 .build();
-        when(paymentService.getPaymentsByUserIdForProfile(1, "filter")).thenReturn(Arrays.asList(profilePayment));
+
+        Page<ProfilePaymentDTO> profilePaymentPage = new PageImpl<>(List.of(profilePayment));
+        when(paymentService.getPaymentsByUserIdForProfile(userId, filter, page, size)).thenReturn(profilePaymentPage);
 
         // Act
-        ResponseEntity<List<ProfilePaymentDTO>> response = paymentController.getPaymentsByUserIdForProfile(1, "filter");
+        ResponseEntity<Page<ProfilePaymentDTO>> response = paymentController.getPaymentsByUserIdForProfile(userId, filter, page, size);
 
         // Assert
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(1, response.getBody().size());
-        assertEquals("Test Project", response.getBody().get(0).getProjectName());
-        verify(paymentService, times(1)).getPaymentsByUserIdForProfile(1, "filter");
+        assertEquals(1, response.getBody().getContent().size());
+        ProfilePaymentDTO returnedPayment = response.getBody().getContent().get(0);
+        assertEquals("Test Project", returnedPayment.getProjectName());
+        assertEquals(1, returnedPayment.getProjectId());
+        assertEquals("John Doe", returnedPayment.getProjectOwnerName());
+
+        verify(paymentService, times(1)).getPaymentsByUserIdForProfile(userId, filter, page, size);
     }
+
 
     @Test
     void testGetTotalPayments() {

@@ -4,6 +4,7 @@ import com.fontys.crowdfund.persistence.dto.outputdto.OutputDTOPayment;
 import com.fontys.crowdfund.persistence.dto.inputdto.InputDTOPayment;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public interface PaymentController {
     ResponseEntity<List<OutputDonationNotification>> getPaymentNotificationsToProjectById(@PathVariable int id);
 
     @GetMapping("/projects/profile/{id}")
-    ResponseEntity<List<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id, @RequestParam String filter);
+    ResponseEntity<Page<ProfilePaymentDTO>> getPaymentsByUserIdForProfile(@PathVariable int id, @RequestParam String filter, @RequestParam int page, @RequestParam int size);
 
     @GetMapping("/totalPayments/{userId}")
     ResponseEntity<Integer> getTotalPaymentsByUserId(@PathVariable int userId, @RequestParam(defaultValue = "") String time);

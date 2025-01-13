@@ -12,6 +12,9 @@ import com.fontys.crowdfund.persistence.entity.ProjectEntity;
 import com.fontys.crowdfund.persistence.specialdto.OutputDonationNotification;
 import com.fontys.crowdfund.persistence.specialdto.ProfilePaymentDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -106,26 +109,26 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter) {
-        List<PaymentEntity> paymentEntities = switch (filter) {
-            case "This_month" -> paymentRepository.getPaymentsForThisMonthByUserId(id);
-            case "This_year" -> paymentRepository.getPaymentsForThisYearByUserId(id);
-            case "All_time" -> paymentRepository.getPaymentsByUserIdForProfile(id);
+    public Page<ProfilePaymentDTO> getPaymentsByUserIdForProfile(int id, String filter, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PaymentEntity> paymentEntities = switch (filter) {
+            case "This_month" -> paymentRepository.getPaymentsForThisMonthByUserId(id, pageable);
+            case "This_year" -> paymentRepository.getPaymentsForThisYearByUserId(id, pageable);
+            case "All_time" -> paymentRepository.getPaymentsForAllTimeByUser(id, pageable);
             default -> throw new IllegalStateException("Unexpected value: " + filter);
         };
 
-        return paymentEntities.stream()
-                .map(paymentEntity -> ProfilePaymentDTO.builder()
-                        .id(paymentEntity.getId())
-                        .projectId(paymentEntity.getProject().getId())
-                        .projectName(paymentEntity.getProject().getName())
-                        .projectOwnerName(paymentEntity.getUser().getName())
-                        .paymentDate(paymentEntity.getPaymentDate())
-                        .amountFunded(paymentEntity.getAmount())
-                        .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
-                        .build())
-                .toList();
+        return paymentEntities.map(paymentEntity -> ProfilePaymentDTO.builder()
+                .id(paymentEntity.getId())
+                .projectId(paymentEntity.getProject().getId())
+                .projectName(paymentEntity.getProject().getName())
+                .projectOwnerName(paymentEntity.getUser().getName())
+                .paymentDate(paymentEntity.getPaymentDate())
+                .amountFunded(paymentEntity.getAmount())
+                .projectCoverImage(paymentRepository.getImageCover(paymentEntity.getProject().getId()))
+                .build());
     }
+
 
 
     @Override
