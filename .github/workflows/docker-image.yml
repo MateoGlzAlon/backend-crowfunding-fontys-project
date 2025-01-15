@@ -49,7 +49,7 @@ jobs:
       - name: Define IMAGE_TAG
         if: env.status == 'OK'
         id: vars
-        run: echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=$(date +'%d-%m-%Y_%H-%M')" >> $GITHUB_ENV
 
       # Step 6: Build the Docker image
       - name: Build Docker Image
@@ -57,26 +57,18 @@ jobs:
         run: |
           docker build . \
             --file Dockerfile \
-            --tag raisehub_be:${{ env.IMAGE_TAG }}
+            --tag raisehub_be:latest
 
-      # Step 7: Tag the Docker image with the repository name
-      - name: Tag the Docker image
+      # Step 7: Tag the Docker image with "patata" and "latest"
+      - name: Tag Docker Image
         if: env.status == 'OK'
         run: |
-          docker tag raisehub_be:${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+          docker tag raisehub_be:latest ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+          docker tag raisehub_be:latest ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:latest
 
-      # Step 8: Push the Docker image to Docker Hub
-      - name: Push Docker Image
-        if: env.status == 'OK'
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
-
-      # Step 9: Run the Docker container with secrets
-      - name: Run the Docker container
+      # Step 8: Push the Docker image with both tags
+      - name: Push Docker Images
         if: env.status == 'OK'
         run: |
-          docker run -d \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-            -p 8080:8080 \
-            ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/raisehub_backend:latest   
